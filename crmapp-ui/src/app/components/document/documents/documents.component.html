@@ -85,106 +85,118 @@
         </button> 
       </div>
   </p-header>
-  
-  <p-table #dt [columns]="columns" [responsive]="true" (sortFunction)="customSort($event)" [customSort]="false"
-      [value]="documents" [reorderableColumns]="true" [columnResizeMode]="expand" [autoLayout]="true"
-      [rows]="null" [rowHover]="true" [paginator]="false" [dataKey]="id" [loading]="false"
-      >
-      <ng-template pTemplate="caption">
-          <div style="text-align: right">
-              <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-              <input type="text" pInputText size="50" placeholder="Фильтр" style="width:auto" 
-                  (input)="dt.filterGlobal($event.target.value, 'contains')">
-          </div>
-      </ng-template>
-      <ng-template pTemplate="header" let-columns>
+
+    <p-table #dt
+             [columns]="columns"
+             [responsive]="true"
+             (sortFunction)="customSort($event)"
+             [customSort]="false"
+             [value]="documents"
+             [reorderableColumns]="true"
+             [columnResizeMode]="expand"
+             [autoLayout]="true"
+             [rows]="10"
+             [rowHover]="true"
+             [paginator]="true"
+             [rowsPerPageOptions]="[10, 20, 30, 40]"
+             [dataKey]="id"
+             [loading]="false"
+    >
+        <ng-template pTemplate="caption">
+            <div style="text-align: right">
+                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                <input type="text" pInputText size="50" placeholder="Фильтр" style="width:auto"
+                       (input)="dt.filterGlobal($event.target.value, 'contains')">
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
             <tr>
                 <th style="width: 2.25em"></th>
-                <th *ngFor="let column of columns" style="text-align:center" 
+                <th *ngFor="let column of columns" style="text-align:center"
                     [pSortableColumn]="column.field" pReorderableColumn>
                     {{column.header}}
                     <p-sortIcon [field]="column.field"></p-sortIcon>
                 </th>
                 <th></th>
             </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-document let-rowData let-expanded="expanded" let-columns="columns">
-          <tr [ngClass]="rowData.status.status == 'Оплачен' ? 'paid' : null" >
-              <td>
-                <a href="#" [pRowToggler]="rowData">
-                  <i [ngClass]="expanded ? 'fa fa-fw fa fa-chevron-circle-down' : 'fa fa-fw fa fa-chevron-circle-right'"></i>
-                </a>
-              </td>
-              
-              <td style="text-align:center" (click)="goToEntry(document?.url)">
+        </ng-template>
+        <ng-template pTemplate="body" let-document let-rowData let-expanded="expanded" let-columns="columns">
+            <tr [ngClass]="rowData.status.status == 'Оплачен' ? 'paid' : null">
+                <td>
+                    <a href="#" [pRowToggler]="rowData">
+                        <i [ngClass]="expanded ? 'fa fa-fw fa fa-chevron-circle-down' : 'fa fa-fw fa fa-chevron-circle-right'"></i>
+                    </a>
+                </td>
+
+                <td style="text-align:center" (click)="goToEntry(document?.url)">
                     {{document.id}}
                 </td>
-              <td style="text-align:left" (click)="goToEntry(document?.url)">
-                  {{document.docType.shortTitle}}
-              </td>
-              <td style="text-align:center" (click)="goToEntry(document?.url)">
-                  {{document.number}}
-              </td>
-              <td style="text-align:center" (click)="goToEntry(document?.url)">
-                  {{document.amount | number: '3.2-2'}}
-              </td>
-              <td style="text-align:center" (click)="goToEntry(document?.url)">
-                  {{document.dated == null ? '-' : document.dated | date: 'dd.MM.y'}}
-              </td>
-              <td style="text-align:center" (click)="goToEntry(document?.url)">
-                  {{document.paymentDate == null ? '-' : document.paymentDate | date: 'dd.MM.y'}}
-              </td>
-              <td style="text-align:center" (click)="goToEntry(document?.url)">
-                  {{document.status.status}}
-              </td>
-              
-              <!-- <td *ngFor="let column of columns" style="text-align:center"
-                  (click)="goToEntry(document?.url)">
-                  {{rowData[column.field]}} 
-              </td> -->
+                <td style="text-align:left" (click)="goToEntry(document?.url)">
+                    {{document.docType.shortTitle}}
+                </td>
+                <td style="text-align:center" (click)="goToEntry(document?.url)">
+                    {{document.number}}
+                </td>
+                <td style="text-align:center" (click)="goToEntry(document?.url)">
+                    {{document.amount | number: '3.2-2'}}
+                </td>
+                <td style="text-align:center" (click)="goToEntry(document?.url)">
+                    {{document.dated == null ? '-' : document.dated | date: 'dd.MM.y'}}
+                </td>
+                <td style="text-align:center" (click)="goToEntry(document?.url)">
+                    {{document.paymentDate == null ? '-' : document.paymentDate | date: 'dd.MM.y'}}
+                </td>
+                <td style="text-align:center" (click)="goToEntry(document?.url)">
+                    {{document.status.status}}
+                </td>
 
-              <td style="text-align:center">
-                  <button pButton type="button" class="ui-button-info" 
-                      icon="fa fa-arrow-circle-o-right"  
-                      (click)="goToEntry(document?.url)">
-                  </button>
-                  <p-tieredMenu #menu [model]="items" [popup]="true" 
-                      appendTo="body">
-                  </p-tieredMenu>
-                  <!-- <button #btn pButton type="button" icon="fa fa-list" class="ui-button-info" 
-                      (click)="menu.toggle($event)" (mousedown)="initMenu(document?.id)">
-                  </button> -->
-              </td>
-          </tr>
-      </ng-template>
-      <ng-template pTemplate="rowexpansion" let-rowData let-columns="columns">
-          <tr>
-              <td [attr.colspan]="columns.length + 2">
-                  <div class="ui-g-12 ui-md-12" >
-                          <p-card>
-                                <div class="ui-helper-clearfix">
+                <!-- <td *ngFor="let column of columns" style="text-align:center"
+                    (click)="goToEntry(document?.url)">
+                    {{rowData[column.field]}}
+                </td> -->
+
+                <td style="text-align:center">
+                    <button pButton type="button" class="ui-button-info"
+                            icon="fa fa-arrow-circle-o-right"
+                            (click)="goToEntry(document?.url)">
+                    </button>
+                    <p-tieredMenu #menu [model]="items" [popup]="true"
+                                  appendTo="body">
+                    </p-tieredMenu>
+                    <!-- <button #btn pButton type="button" icon="fa fa-list" class="ui-button-info"
+                        (click)="menu.toggle($event)" (mousedown)="initMenu(document?.id)">
+                    </button> -->
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-rowData let-columns="columns">
+            <tr>
+                <td [attr.colspan]="columns.length + 2">
+                    <div class="ui-g-12 ui-md-12">
+                        <p-card>
+                            <div class="ui-helper-clearfix">
                                     <span class="ui-panel-title" style="display:inline-block;margin-top:4px">
                                         <h5><b>Договор:</b> {{rowData.agreementNumber}}</h5>
-                                    </span>  
-                                    <button pButton type="button" class="ui-button-info" 
+                                    </span>
+                                <button pButton type="button" class="ui-button-info"
                                         icon="fa fa-arrow-circle-o-right" label="Перейти"
                                         [routerLink]="['/agreements', rowData.agreementId]">
-                                    </button>
-                                </div>
-                            </p-card>
-                  </div>
-              </td>
-          </tr>
-      </ng-template>
-      <ng-template pTemplate="emptymessage" let-columns>
-        <tr>
-            <td [attr.colspan]="columns.length + 2" style="text-align:center">
-                No records found
-            </td>
-        </tr>
-    </ng-template>
-      <ng-template pTemplate="summary">
-          Кол-во записей: {{documents?.length}}
-      </ng-template>
-  </p-table>
+                                </button>
+                            </div>
+                        </p-card>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="columns.length + 2" style="text-align:center">
+                    No records found
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            Кол-во записей: {{documents?.length}}
+        </ng-template>
+    </p-table>
 </p-panel>
