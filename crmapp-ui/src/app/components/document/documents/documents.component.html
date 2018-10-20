@@ -87,20 +87,20 @@
   </p-header>
 
     <p-table #dt
-             [columns]="columns"
-             [responsive]="true"
-             (sortFunction)="customSort($event)"
-             [customSort]="false"
-             [value]="documents"
-             [reorderableColumns]="true"
-             [columnResizeMode]="expand"
-             [autoLayout]="true"
-             [rows]="10"
-             [rowHover]="true"
-             [paginator]="true"
-             [rowsPerPageOptions]="[10, 20, 30, 40]"
-             [dataKey]="id"
-             [loading]="false"
+     [columns]="columns"
+     [responsive]="true"
+     (sortFunction)="customSort($event)"
+     [customSort]="false"
+     [value]="documents"
+     [reorderableColumns]="true"
+     [columnResizeMode]="expand"
+     [autoLayout]="true"
+     [rows]="10"
+     [rowHover]="true"
+     [paginator]="true"
+     [rowsPerPageOptions]="[10, 20, 30, 40]"
+     [dataKey]="id"
+     [loading]="false"
     >
         <ng-template pTemplate="caption">
             <div style="text-align: right">

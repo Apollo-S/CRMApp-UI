@@ -42,11 +42,11 @@
   </div>
   <div class="ui-g-2">
     <button pButton type="button" label="{{addButtonTitle}}" 
-      class="ui-button-primary btn-block" icon="fa fa-plus-circle"
+      class="ui-button-rounded ui-button-primary btn-block" icon="fa fa-plus-circle"
       [routerLink]="routerLinkUrl">
     </button>
     <button pButton type="button" label="{{editButtonTitle}}" 
-      class="ui-button-success btn-block" icon="fa fa-edit" [disabled]="!selectedItem"
+      class="ui-button-rounded ui-button-success btn-block" icon="fa fa-edit" [disabled]="!selectedItem"
       (click)="goToEntry(selectedItem?.url)">
     </button>
   </div>
