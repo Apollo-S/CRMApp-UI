@@ -86,7 +86,7 @@
       </div>
   </p-header>
 
-    <p-table #dt
+  <p-table #dt
      [columns]="columns"
      [responsive]="true"
      (sortFunction)="customSort($event)"
@@ -99,6 +99,7 @@
      [rowHover]="true"
      [paginator]="true"
      [rowsPerPageOptions]="[10, 20, 30, 40]"
+     [paginatorPosition]="'both'"
      [dataKey]="id"
      [loading]="false"
     >
