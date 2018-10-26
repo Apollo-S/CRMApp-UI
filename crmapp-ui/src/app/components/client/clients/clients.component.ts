@@ -9,25 +9,18 @@ import { MenuItem } from 'primeng/api';
   styleUrls: ['./clients.component.css']
 })
 export class ClientsComponent implements OnInit {
-  clients: Client[] = [];
   columns = [];
   items: MenuItem[] = [];
   
   constructor(public clientService: ClientService) {
+      this.initColumns();
+      this.initMenu();
   }
 
-  ngOnInit() {
-    debugger
-    this.getClients();
-    this.initColumns();
-    this.initMenu();
-  } 
+  ngOnInit() {}
 
-  private getClients() {
-    this.clientService.emitterClients
-      .subscribe(
-        clients => this.clients = clients
-      )
+  getClients() {
+      return this.clientService.getClients();
   }
 
   private initColumns() {

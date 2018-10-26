@@ -41,7 +41,7 @@
               <b>Клиент:*</b>
             </div>
             <div class="ui-grid-col-6">
-              <p-dropdown [options]="clients" [(ngModel)]="agreement.client"  
+              <p-dropdown [options]="getClients()" [(ngModel)]="agreement.client"
                 optionLabel="title" [autoWidth]="false" placeholder="Выберите клиента..." 
                 [filter]="true" formControlName="client">
               </p-dropdown>

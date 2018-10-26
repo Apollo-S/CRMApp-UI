@@ -16,7 +16,6 @@ import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms'
 export class AddAgreementComponent implements OnInit {
   tabs: MenuItem[];
   msgs: Message[] = [];
-  clients: Client[] = [];
   agreement: ClientAgreement = {};
   userform: FormGroup;
   years: string;
@@ -62,8 +61,8 @@ export class AddAgreementComponent implements OnInit {
     ];
   }
 
-  private getClients() {
-    this.clientService.getClientsList()
+  getClients() {
+    return this.clientService.getClients();
   }
 
   private initCalendarSettings() {

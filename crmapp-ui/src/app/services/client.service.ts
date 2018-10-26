@@ -14,6 +14,7 @@ export class ClientService {
 
   clientsUrl: string;
   emitterClients = new EventEmitter<any>();
+  clients: Client[] = [];
   headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
   private _property$: BehaviorSubject<Client> = new BehaviorSubject({});
@@ -32,30 +33,29 @@ export class ClientService {
     this.getClientsList();
   }
 
-  getClientsList() {
+  private getClientsList() {
     this.http.get<Client[]>(this.clientsUrl, { headers: this.headers })
       .subscribe(
-        clients => {
-          this.emitterClients.emit(clients);
-      })
+        clients => this.clients = clients
+      )
+  }
+
+  getClients() {
+    return this.clients;
   }
   
-  getClientById(id: number): Observable<Client> {
-    const url = `${this.clientsUrl}/${id}`;
+  getClientById(id: number) {
+    const url = this.clientsUrl + '/id}';
     return this.http
-      .get<Client>(url, { headers: this.headers })
-      .pipe(
-        tap(_ => console.log(`obtained client ID=${id}`)),
-        catchError(this.handleError<Client>('getClientById'))
-      ); 
+      .get<Client>(url, { headers: this.headers });
   }
   
-  addClient(client: Client): Observable<Client> {
+  addClient(client: Client) {
     const url = `${this.clientsUrl}`;
     return this.http
       .post<Client>(url, client, { headers: this.headers })
       .pipe(
-        tap(_ => console.log(`added client (alias=${client.alias})`)),
+        tap(() => console.log(`added client (alias=${client.alias})`)),
         catchError(this.handleError<Client>('addClient'))
       ); 
   }

@@ -19,7 +19,6 @@ export class DocumentsComponent implements OnInit {
   documents: Document[] = [];
   docTypes: DocumentType[] = [];
   docStatuses: DocumentStatus[] = [];
-  clients: Client[] = [];
   columns: any[] = [];
   items: MenuItem[] = [];
   showFilter: boolean = false;
@@ -131,7 +130,7 @@ export class DocumentsComponent implements OnInit {
   }
 
   private getClients() {
-    this.clientService.getClientsList()
+    return this.clientService.getClients();
   }
 
   private initColumns() {
