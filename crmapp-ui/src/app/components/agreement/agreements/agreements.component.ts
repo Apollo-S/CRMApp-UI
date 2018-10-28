@@ -14,19 +14,14 @@ export class AgreementsComponent implements OnInit {
   items: Array<MenuItem> = [];
 
   constructor(private agreementService: AgreementService) {
-    this.getAgreements();
-   }
-
-  ngOnInit() {
       this.initColumns();
       this.initMenu();
   }
 
-  private getAgreements() {
-    this.agreementService.getAgreements()
-      .subscribe(
-        agreements => this.agreements = agreements
-      );
+  ngOnInit() {}
+
+  getAgreements() {
+      return this.agreementService.getAgreements();
   }
 
   private initColumns() {

@@ -13,7 +13,6 @@ import { AppConst } from '../app-const';
 export class ClientService {
 
   clientsUrl: string;
-  emitterClients = new EventEmitter<any>();
   clients: Client[] = [];
   headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 

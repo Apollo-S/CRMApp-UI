@@ -4,11 +4,13 @@ import { Observable, of, BehaviorSubject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { ClientAgreement } from '../models/ClientAgreement';
 import { Document } from '../models/Document';
+import { AppConst } from "../app-const";
 
 @Injectable()
 export class AgreementService {
 
-  private agreementsUrl = '/api/agreements';
+  private readonly agreementsUrl: string;
+  private agreements = [];
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
   private _property$: BehaviorSubject<ClientAgreement> = new BehaviorSubject({});
@@ -21,15 +23,21 @@ export class AgreementService {
       return this._property$.asObservable();
   }
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private appConst: AppConst) {
+      this.agreementsUrl = appConst.baseUrl + appConst.agreementsUrl;
+      this.getAgreementsList();
+  }
 
-  getAgreements(): Observable<ClientAgreement[]> {
-    const url = `${this.agreementsUrl}`;
-    return this.http
-      .get<ClientAgreement[]>(url, { headers: this.headers })
-      .pipe(
-        catchError(this.handleError('getAgreements', []))
-      )
+  getAgreementsList() {
+      this.http.get<ClientAgreement[]>(this.agreementsUrl, { headers: this.headers })
+          .subscribe(
+              agreements => this.agreements = agreements
+          )
+  }
+
+  getAgreements() {
+      return this.agreements;
   }
 
   getAgreementById(id: number): Observable<ClientAgreement> {
