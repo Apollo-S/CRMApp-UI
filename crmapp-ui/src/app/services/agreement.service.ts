@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
@@ -9,45 +9,44 @@ import { AppConst } from "../app-const";
 @Injectable()
 export class AgreementService {
 
-  private readonly agreementsUrl: string;
-  private agreements = [];
-  private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    private readonly agreementsUrl: string;
+    private agreement: ClientAgreement;
+    emitterAgreement = new EventEmitter<ClientAgreement>();
+    private agreements = [];
+    private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  private _property$: BehaviorSubject<ClientAgreement> = new BehaviorSubject({});
-  
-  set property(value: ClientAgreement) {
-    this._property$.next(value);
-  }
+    constructor(private http: HttpClient,
+                private appConst: AppConst) {
+        this.agreementsUrl = appConst.baseUrl + appConst.agreementsUrl;
+        this.getAgreementsList();
+    }
 
-  get property$(): Observable<ClientAgreement> {
-      return this._property$.asObservable();
-  }
+    getAgreementsList() {
+        return this.http.get<ClientAgreement[]>(this.agreementsUrl, {headers: this.headers})
+            .subscribe(
+                agreements => {
+                    this.agreements = agreements;
+                }
+            )
+    }
 
-  constructor(private http: HttpClient,
-              private appConst: AppConst) {
-      this.agreementsUrl = appConst.baseUrl + appConst.agreementsUrl;
-      this.getAgreementsList();
-  }
+    getAgreements() {
+        return this.agreements;
+    }
 
-  getAgreementsList() {
-      this.http.get<ClientAgreement[]>(this.agreementsUrl, { headers: this.headers })
-          .subscribe(
-              agreements => this.agreements = agreements
-          )
-  }
+    getAgreementById(id: number) {
+        this.http.get(this.agreementsUrl + '/' + id, {headers: this.headers})
+            .subscribe(
+                (agreement: ClientAgreement) => {
+                    this.agreement = agreement;
+                    this.emitterAgreement.emit(agreement);
+                }
+            )
+    }
 
-  getAgreements() {
-      return this.agreements;
-  }
-
-  getAgreementById(id: number): Observable<ClientAgreement> {
-    const url = `${this.agreementsUrl}/${id}`;
-    return this.http
-      .get<ClientAgreement>(url, { headers: this.headers })
-      .pipe(
-        catchError(this.handleError<ClientAgreement>('getAgreementById'))
-      )
-  }
+    getAgreement() {
+        return this.agreement;
+    }
 
   getDocumentsByAgreementId(agreementId: number): Observable<Document[]> {
     const url = `${this.agreementsUrl}/${agreementId}/documents`;

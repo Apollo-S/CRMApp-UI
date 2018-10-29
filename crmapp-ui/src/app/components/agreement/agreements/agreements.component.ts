@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AgreementService } from '../../../services/agreement.service';
-import { ClientAgreement } from '../../../models/ClientAgreement';
 import { MenuItem } from 'primeng/api';
 
 @Component({
@@ -9,7 +8,6 @@ import { MenuItem } from 'primeng/api';
   styleUrls: ['./agreements.component.css']
 })
 export class AgreementsComponent implements OnInit {
-  agreements: Array<ClientAgreement> = [];
   columns: Array<any> = [];
   items: Array<MenuItem> = [];
 

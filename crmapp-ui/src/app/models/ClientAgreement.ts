@@ -1,14 +1,11 @@
-import { Document } from "./Document";
-import { Client } from "./Client";
-
-export class ClientAgreement {
-    public id?: number;
-    public client?: Client;
-    public clientId?: number;
-    public clientAlias?: string;
-    public clientTitle?: string;
-    public number?: string;
-    public dateStart?: Date;
-    public comment?: string;
-    public url?: string;
+export interface ClientAgreement {
+    id: number;
+    client: Object;
+    clientId: number;
+    clientAlias: string;
+    clientTitle: string;
+    number: string;
+    dateStart: Date;
+    comment: string;
+    url: string;
 }
