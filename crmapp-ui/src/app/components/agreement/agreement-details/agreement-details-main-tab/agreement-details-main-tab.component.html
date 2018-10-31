@@ -14,15 +14,15 @@
 <div class="ui-g-12">
     <div class="ui-g-10">
       <p-card>
-        <div class="ui-g">
+        <div class="ui-g" >
             <div class="ui-g-4 ui-sm-6"><b>Номер договора:</b></div>
-            <div class="ui-g-8 ui-sm-6">{{agreement?.number}}</div>
+            <div class="ui-g-8 ui-sm-6">{{getAgreement().number}}</div>
             <div class="ui-g-4 ui-sm-6"><b>Дата:</b></div>
-            <div class="ui-g-8 ui-sm-6">{{agreement?.dateStart | date: 'dd.MM.y'}}</div>
+            <div class="ui-g-8 ui-sm-6">{{getAgreement().dateStart | date: 'dd.MM.y'}}</div>
             <div class="ui-g-4 ui-sm-6"><b>Клиент:</b></div>
-            <div class="ui-g-8 ui-sm-6">{{agreement?.clientTitle}}</div>
+            <div class="ui-g-8 ui-sm-6">{{getAgreement().clientTitle}}</div>
             <div class="ui-g-4 ui-sm-6"><b>Примечание:</b></div>
-            <div class="ui-g-8 ui-sm-6"><i>{{agreement?.comment}}</i></div>
+            <div class="ui-g-8 ui-sm-6"><i>{{getAgreement().comment}}</i></div>
           </div>
       </p-card>
     </div>

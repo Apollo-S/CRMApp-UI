@@ -1,48 +1,38 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnChanges, OnInit} from '@angular/core';
 import { ClientAgreement } from '../../../models/ClientAgreement';
 import { AgreementService } from '../../../services/agreement.service';
-import { ActivatedRoute, Params } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-agreement-details',
   templateUrl: './agreement-details.component.html',
   styleUrls: ['./agreement-details.component.css']
 })
-export class AgreementDetailsComponent implements OnInit, OnDestroy {
-  private _agreementSubscribtion: Subscription;
-  agreement: ClientAgreement = {};
+export class AgreementDetailsComponent implements OnInit, OnChanges {
+    agreementId: number;
+    agreement: ClientAgreement;
 
-  constructor(private service: AgreementService,
-              private route: ActivatedRoute)  { }
+    constructor(private agreementService: AgreementService,
+                private route: ActivatedRoute) {
+        this.agreementId = +route.snapshot.params.id;
+        agreementService.getAgreementById(this.agreementId);
 
-  ngOnInit() {
-    let agreementId: number;
-    this.route.params
-      .subscribe(
-        (params: Params) => {
-          agreementId = +params['id'];
-          this.getAgreementById(agreementId);
-        }
-      );
-  }
+    }
 
-  private getAgreementById(id: number) {
-    this.service.getAgreementById(id)
-      .subscribe(
-        agreement => {
-          this.agreement = agreement;
-          this.service.property = this.agreement;
-          this._agreementSubscribtion = this.service.property$
+    ngOnInit() {
+        this.agreementService.emitterAgreement
             .subscribe(
-              p => this.agreement = p
+                agreement => this.agreement = agreement
             );
-        }
-      );
-  }
+    }
 
-  ngOnDestroy() {
-    this._agreementSubscribtion.unsubscribe();
-  }
+
+
+    ngOnChanges() {
+        debugger
+        console.log('Getting old agr = ' + this.agreement);
+        this.agreement = this.agreementService.getAgreement();
+        console.log('Getting new agr = ' + this.agreement);
+    }
 
 }

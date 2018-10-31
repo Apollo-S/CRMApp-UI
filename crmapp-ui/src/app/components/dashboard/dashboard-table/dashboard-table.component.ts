@@ -44,4 +44,8 @@ export class DashboardTableComponent implements OnInit {
     );
   }
 
+  refresh() {
+
+  }
+
 }

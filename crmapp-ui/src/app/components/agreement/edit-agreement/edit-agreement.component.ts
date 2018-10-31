@@ -17,7 +17,7 @@ import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms'
 export class EditAgreementComponent implements OnInit , OnDestroy {
   private _propertySubscribtion: Subscription;
   msgs: Message[] = [];
-  agreement: ClientAgreement = {};
+  agreement: ClientAgreement;
   userform: FormGroup;
   years: string;
   ru: any;
@@ -28,17 +28,17 @@ export class EditAgreementComponent implements OnInit , OnDestroy {
               private router: Router) { }
 
   ngOnInit() {
-    this._propertySubscribtion = this.agreementService.property$
-      .subscribe(
-        p => {
-          this.agreement = p;
-          this.agreement.dateStart = new Date(this.agreement.dateStart);
-          this.clientService.getClientById(this.agreement.clientId)
-            .subscribe(
-              client => this.agreement.client = client
-            );
-        }
-      );
+    // this._propertySubscribtion = this.agreementService.property$
+    //   .subscribe(
+    //     p => {
+    //       this.agreement = p;
+    //       this.agreement.dateStart = new Date(this.agreement.dateStart);
+    //       this.clientService.getClientById(this.agreement.clientId)
+    //         .subscribe(
+    //           client => this.agreement.client = client
+    //         );
+    //     }
+    //   );
     this.initUserForm();
     this.getClients();
     this.initCalendarSettings();

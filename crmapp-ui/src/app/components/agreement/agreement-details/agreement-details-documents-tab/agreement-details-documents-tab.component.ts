@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { ClientAgreement } from '../../../../models/ClientAgreement';
 import { AgreementService } from '../../../../services/agreement.service';
 import { Document } from '../../../../models/Document';
@@ -13,33 +12,29 @@ import { DocumentStatusService } from '../../../../services/document-status.serv
   styleUrls: ['./agreement-details-documents-tab.component.css']
 })
 export class AgreementDetailsDocumentsTabComponent implements OnInit {
-  private _agreementSubscribtion: Subscription;
-  agreement: ClientAgreement = {};
+  agreement: ClientAgreement;
   documents: Document[] = [];
   columns: any[] = [];
 
-  constructor(private service: AgreementService,
-              private docService: DocumentService,
-              private docTypeService: DocumentTypeService,
-              private docStatusService: DocumentStatusService)  { }
+    constructor(private agreementService: AgreementService,
+                private docService: DocumentService,
+                private docTypeService: DocumentTypeService,
+                private docStatusService: DocumentStatusService) {
+        // this.agreement = service.getAgreement();
+        agreementService.emitterAgreement.subscribe(
+            agreement => {
+                this.agreement = agreement;
+                this.getDocumentsByAgreementId(agreement.id);
+            }
+        )
+    }
 
   ngOnInit() { 
-    this._agreementSubscribtion = this.service.property$
-      .subscribe(
-        p => {
-          this.agreement = p;
-          this.getDocumentsByAgreementId(p.id);
-        }
-      );
     this.initColumns();
   }
 
-  ngOnDestroy() {
-    this._agreementSubscribtion.unsubscribe();
-  }
-
   private getDocumentsByAgreementId(agreementId: number) {
-    this.service.getDocumentsByAgreementId(agreementId)
+    this.agreementService.getDocumentsByAgreementId(agreementId)
       .subscribe(
         documents => this.documents = documents
       );

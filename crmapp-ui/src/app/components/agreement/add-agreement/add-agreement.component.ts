@@ -16,7 +16,7 @@ import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms'
 export class AddAgreementComponent implements OnInit {
   tabs: MenuItem[];
   msgs: Message[] = [];
-  agreement: ClientAgreement = {};
+  agreement: ClientAgreement;
   userform: FormGroup;
   years: string;
   ru: any;

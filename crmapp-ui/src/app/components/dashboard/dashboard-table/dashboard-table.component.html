@@ -8,12 +8,12 @@
     </p-header>
     <p-table #dt [columns]="columns" [responsive]="responsive" [sortField]="sortField" [sortOrder]="1"
         [value]="datasource" [reorderableColumns]="reorderableColumns" [autoLayout]="autoLayout"
-        [rows]="rows" [rowHover]="rowHover" [paginator]="paginator" selectionMode="single" [(selection)]="selectedItem"
-        [loading]="loading" dataKey="id">
+        [rows]="rows" [rowHover]="rowHover" [paginator]="paginator" [selectionMode]="'single'"
+        [(selection)]="selectedItem" [loading]="loading" dataKey="id">
         <ng-template pTemplate="caption">
             <div>
                 <button pButton type="button" [label]="addButtonTitle" style="margin-top:2px;float:left"
-                    [routerLink]="['add']" icon="fa fa-plus">
+                    [routerLink]="['add']" icon="fa fa-plus" class="ui-button-rounded ui-button-primary">
                 </button>
                 <button pButton type="button" [label]="editButtonTitle" style="margin-left:2px;margin-top:2px;float:left"
                     (click)="goToEntry(selectedItem?.url)" icon="fa fa-edit" class="ui-button-rounded ui-button-success" [disabled]="!selectedItem">
@@ -22,9 +22,14 @@
                     appendTo="body">
                 </p-tieredMenu>
                 <button *ngIf="menuModel?.length > 0"
-                    #btn pButton type="button" icon="fa fa-list" class="ui-button-rounded ui-button-info"
-                    style="margin-left:2px;margin-top:2px;float:left" [label]="additionalButtonTitle"
-                    (click)="menu.toggle($event)" (mousedown)="initMenu(selectedItem?.id)" [disabled]="!selectedItem">
+                        #btn pButton type="button" icon="fa fa-list" class="ui-button-rounded ui-button-info"
+                        style="margin-left:2px;margin-top:2px;float:left" [label]="additionalButtonTitle"
+                        (click)="menu.toggle($event)" (mousedown)="initMenu(selectedItem?.id)"
+                        [disabled]="!selectedItem">
+                </button>
+                <button pButton type="button" [label]="'Обновить'" style="margin-left:2px;margin-top:2px;float:left"
+                        icon="fa fa-refresh" class="ui-button-rounded ui-button-primary"
+                        (click)="refresh()">
                 </button>
             </div>
             <div style="text-align: right">
@@ -55,6 +60,10 @@
             <tr>
                 <td [attr.colspan]="columns.length + 2" style="text-align:center">
                     Записи не найдены
+                    <button pButton type="button" [label]="'Обновить'"
+                            icon="fa fa-refresh" class="ui-button-rounded ui-button-primary"
+                            click)="refresh()">
+                    </button>
                 </td>
             </tr>
         </ng-template>
