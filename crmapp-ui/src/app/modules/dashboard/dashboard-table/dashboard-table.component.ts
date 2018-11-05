@@ -45,7 +45,7 @@ export class DashboardTableComponent implements OnInit {
   }
 
   refresh() {
-
+  //TODO implement refreshing of table (new request)
   }
 
 }

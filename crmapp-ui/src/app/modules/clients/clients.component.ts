@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ClientService } from '../../../services/client.service';
+import { ClientService } from '../../services/client.service';
 import { MenuItem } from 'primeng/api';
+import {Client} from "../../models/Client";
 
 @Component({
   selector: 'app-clients',
@@ -10,8 +11,15 @@ import { MenuItem } from 'primeng/api';
 export class ClientsComponent implements OnInit {
   columns = [];
   items: MenuItem[] = [];
+  clients: Client[] = [];
+  loading: boolean = true;
   
   constructor(public clientService: ClientService) {
+      clientService.getClientsList().subscribe(
+          clients => {
+              this.clients = clients;
+              this.loading = false;
+          });
       this.initColumns();
       this.initMenu();
   }

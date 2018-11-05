@@ -6,6 +6,9 @@
             </span>  
         </div>
     </p-header>
+
+    <!--<app-loading-status *ngIf="loading && !datasource"></app-loading-status>-->
+
     <p-table #dt [columns]="columns" [responsive]="responsive" [sortField]="sortField" [sortOrder]="1"
         [value]="datasource" [reorderableColumns]="reorderableColumns" [autoLayout]="autoLayout"
         [rows]="rows" [rowHover]="rowHover" [paginator]="paginator" [selectionMode]="'single'"
@@ -47,7 +50,7 @@
                 </th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-datasource let-rowData let-columns="columns">
+        <ng-template pTemplate="body" let-datasource let-rowData let-columns="columns" >
             <tr [pSelectableRow]="rowData">
                 <td *ngFor="let column of columns" style="text-align:center"
                     (dblclick)="goToEntry(datasource?.url)">
@@ -56,14 +59,10 @@
                 </td>
             </tr>
         </ng-template>
-        <ng-template pTemplate="emptymessage" let-columns>
+        <ng-template pTemplate="emptymessage" let-columns >
             <tr>
                 <td [attr.colspan]="columns.length + 2" style="text-align:center">
                     Записи не найдены
-                    <button pButton type="button" [label]="'Обновить'"
-                            icon="fa fa-refresh" class="ui-button-rounded ui-button-primary"
-                            click)="refresh()">
-                    </button>
                 </td>
             </tr>
         </ng-template>

@@ -12,91 +12,67 @@ import { AppConst } from '../app-const';
 @Injectable()
 export class ClientService {
 
-  clientsUrl: string;
-  clients: Client[] = [];
-  headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    clientsUrl: string;
+    clients: Client[] = [];
+    headers = new HttpHeaders({'Content-Type': 'application/json'});
 
-  private _property$: BehaviorSubject<Client> = new BehaviorSubject({});
-  
-  set property(value: Client) {
-    this._property$.next(value);
-  }
+    private _property$: BehaviorSubject<Client> = new BehaviorSubject({});
 
-  get property$(): Observable<Client> {
-      return this._property$.asObservable();
-  }
+    set property(value: Client) {
+        this._property$.next(value);
+    }
 
-  constructor(private http: HttpClient,
-              private appConst: AppConst) {
-    this.clientsUrl = appConst.baseUrl + appConst.clientsUrl;
-    this.getClientsList();
-  }
+    get property$(): Observable<Client> {
+        return this._property$.asObservable();
+    }
 
-  private getClientsList() {
-    this.http.get<Client[]>(this.clientsUrl, { headers: this.headers })
-      .subscribe(
-        clients => this.clients = clients
-      )
-  }
+    constructor(private http: HttpClient,
+                private appConst: AppConst) {
+        this.clientsUrl = appConst.baseUrl + appConst.clientsUrl + '/';
+    }
 
-  getClients() {
-    return this.clients;
-  }
-  
-  getClientById(id: number) {
-    const url = this.clientsUrl + '/id}';
-    return this.http
-      .get<Client>(url, { headers: this.headers });
-  }
-  
-  addClient(client: Client) {
-    const url = `${this.clientsUrl}`;
-    return this.http
-      .post<Client>(url, client, { headers: this.headers })
-      .pipe(
-        tap(() => console.log(`added client (alias=${client.alias})`)),
-        catchError(this.handleError<Client>('addClient'))
-      ); 
-  }
+    getClientsList() {
+        return this.http.get<Client[]>(this.clientsUrl, {headers: this.headers})
+            // .subscribe(
+            //     clients => {
+            //         this.clients = clients;
+            //     });
+    }
 
-  updateClient(client: Client): Observable<Client> {
-    const url = `${this.clientsUrl}/${client.id}`;
-    return this.http
-      .put<Client>(url, client, { headers: this.headers })
-      .pipe(
-        tap(_ => console.log(`updated client (ID=${client.id}, alias=${client.alias})`)),
-        catchError(this.handleError<Client>('updateClient'))
-      );
-  }
+    getClients() {
+        return this.clients;
+    }
 
-  deleteClient(client: Client): Observable<void> {
-    const url = `${this.clientsUrl}/${client.id}`;
-    return this.http
-      .delete(url, { headers: this.headers })
-      .pipe(
-        tap(_ => console.log(`deleted client ${client.alias} (ID=${client.id})`)),
-        catchError(this.handleError<any>('deleteClient'))
-      );
-  }
+
+    getClientById(id: number) {
+        return this.http.get<Client>(this.clientsUrl + id, {headers: this.headers});
+    }
+
+    addClient(client: Client) {
+        return this.http.post<Client>(this.clientsUrl, client, {headers: this.headers})
+    }
+
+    updateClient(client: Client): Observable<Client> {
+        const url = this.clientsUrl + client.id;
+        return this.http.put<Client>(url, client, {headers: this.headers})
+    }
+
+    deleteClient(client: Client) {
+        const url = this.clientsUrl + client.id;
+        return this.http.delete(url, {headers: this.headers})
+    }
 
   // Addresses
   getAddressesByClientId(clientId: number): Observable<ClientAddress[]> {
     const url = `${this.clientsUrl}/${clientId}/addresses`;
     return this.http
       .get<ClientAddress[]>(url, { headers: this.headers })
-      .pipe(
-        catchError(this.handleError<ClientAddress[]>('getAddressesByClientId'))
-      );
   }
 
   getAddressById(id: number, client: Client): Observable<ClientAddress> {
     const url = `${this.clientsUrl}/${client.id}/addresses/${id}`;
     return this.http
       .get<ClientAddress>(url, { headers: this.headers })
-      .pipe(
-        tap(_ => console.log(`obtained address ID=${id} for client ${client.alias}`)),
-        catchError(this.handleError<ClientAddress>('getAddressById'))
-      );
   }
 
   addAddress(address: ClientAddress, client: Client): Observable<ClientAddress> {

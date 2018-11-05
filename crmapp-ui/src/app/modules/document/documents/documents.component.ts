@@ -16,21 +16,23 @@ import { Client } from '../../../models/Client';
   styleUrls: ['./documents.component.css']
 })
 export class DocumentsComponent implements OnInit {
-  documents: Document[] = [];
-  docTypes: DocumentType[] = [];
-  docStatuses: DocumentStatus[] = [];
-  columns: any[] = [];
-  items: MenuItem[] = [];
-  showFilter: boolean = false;
-  selectedDocTypes: DocumentType[] = [];
-  selectedDocStatuses: DocumentStatus[] = [];
-  selectedClients: Client[] = [];
-  loadingCheck: boolean = false;
-  defaultSortField: string = "id";
-  defaultSortType: string = "asc";
-  sortTypes: SelectItem[] = [];
-  selectedSortType: string;
-  selectedSortField: any;
+
+    clients: Client[] = [];
+    documents: Document[] = [];
+    docTypes: DocumentType[] = [];
+    docStatuses: DocumentStatus[] = [];
+    sortTypes: SelectItem[] = [];
+    selectedDocTypes: DocumentType[] = [];
+    selectedDocStatuses: DocumentStatus[] = [];
+    selectedClients: Client[] = [];
+    columns: any[] = [];
+    items: MenuItem[] = [];
+    showFilter: boolean = false;
+    loadingCheck: boolean = false;
+    defaultSortField: string = "id";
+    defaultSortType: string = "asc";
+    selectedSortType: string;
+    selectedSortField: any;
 
   constructor(private docService: DocumentService,
               private docTypeService: DocumentTypeService,
@@ -68,7 +70,7 @@ export class DocumentsComponent implements OnInit {
   }
 
   useSorting() {
-    var docTypeIDs: number[] = this.getIDs(this.selectedDocTypes);
+      var docTypeIDs: number[] = this.getIDs(this.selectedDocTypes);
       var docStatusIDs: number[] = this.getIDs(this.selectedDocStatuses);
       var clientIDs: number[] = this.getIDs(this.selectedClients);
       console.log("this.selectedSortField = " + this.selectedSortField.field);
@@ -130,7 +132,9 @@ export class DocumentsComponent implements OnInit {
   }
 
   private getClients() {
-    return this.clientService.getClients();
+    return this.clientService.getClientsList().subscribe(
+        clients => this.clients = clients
+    );
   }
 
   private initColumns() {
