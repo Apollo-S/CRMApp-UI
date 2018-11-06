@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AgreementService } from '../../../services/agreement.service';
+import { AgreementService } from '../../services/agreement.service';
 import { MenuItem } from 'primeng/api';
 
 @Component({
