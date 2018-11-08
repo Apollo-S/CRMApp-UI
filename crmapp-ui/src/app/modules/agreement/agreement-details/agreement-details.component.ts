@@ -15,7 +15,7 @@ export class AgreementDetailsComponent implements OnInit, OnChanges {
     constructor(private agreementService: AgreementService,
                 private route: ActivatedRoute) {
         this.agreementId = +route.snapshot.params.id;
-        agreementService.getAgreementById(this.agreementId);
+        agreementService.fetchAgreementById(this.agreementId);
 
     }
 

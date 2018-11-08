@@ -16,15 +16,15 @@
       <p-card>
         <div class="ui-g">
             <div class="ui-g-4 ui-sm-6"><b>Полное название:</b></div>
-            <div class="ui-g-8 ui-sm-6">{{client?.title}}</div>
+            <div class="ui-g-8 ui-sm-6">{{getCurrentClient()?.title}}</div>
             <div class="ui-g-4 ui-sm-6"><b>Псевдоним:</b></div>
-            <div class="ui-g-8 ui-sm-6">{{client?.alias}}</div>
+            <div class="ui-g-8 ui-sm-6">{{getCurrentClient()?.alias}}</div>
             <div class="ui-g-4 ui-sm-6"><b>ЕДРПОУ:</b></div>
-            <div class="ui-g-8 ui-sm-6">{{client?.edrpou}}</div>
+            <div class="ui-g-8 ui-sm-6">{{getCurrentClient()?.edrpou}}</div>
             <div class="ui-g-4 ui-sm-6"><b>ИНН:</b></div>
-            <div class="ui-g-8 ui-sm-6">{{client?.inn}}</div>
+            <div class="ui-g-8 ui-sm-6">{{getCurrentClient()?.inn}}</div>
             <div class="ui-g-4 ui-sm-6"><b>№ свидетельства плат. НДС:</b></div>
-            <div class="ui-g-8 ui-sm-6">{{client?.vatCertificate}}</div>
+            <div class="ui-g-8 ui-sm-6">{{getCurrentClient()?.vatCertificate}}</div>
           </div>
       </p-card>
     </div>

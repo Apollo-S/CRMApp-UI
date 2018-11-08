@@ -9,40 +9,23 @@ import { Client } from '../../../models/Client';
   templateUrl: './client-details.component.html',
   styleUrls: ['./client-details.component.css']
 })
-export class ClientDetailsComponent implements OnInit, OnDestroy {
-  private _propertySubscribtion: Subscription;
-  client: Client = {};
+export class ClientDetailsComponent implements OnInit {
+    clientId: number;
+    client: Client = {};
 
-  constructor(private service: ClientService,
-              private route: ActivatedRoute) { }
+    constructor(private clientService: ClientService,
+                private route: ActivatedRoute) {
+        this.clientId = +route.snapshot.params.id;
+        clientService.fetchClientById(this.clientId);
+        clientService.emitterClient.subscribe(
+            client => {
+                this.client = client;
+                clientService.getAccountsByClientId(client.id);
+            }
+        );
 
-  ngOnInit() {
-    let clientId: number;
-    this.route.params
-      .subscribe(
-        (params: Params) => {
-          clientId = +params['id'];
-          this.getClientById(clientId);
-        }
-      );
-  }
-  
-  ngOnDestroy() {
-    this._propertySubscribtion.unsubscribe();
-  }
+    }
 
-  private getClientById(id: number) {
-    this.service.getClientById(id)
-      .subscribe(
-        client => {
-          this.client = client;
-          this.service.property = this.client;
-          this._propertySubscribtion = this.service.property$
-            .subscribe(
-              p => this.client = p
-            );
-        }
-      );
-  }
+    ngOnInit() {}
 
 }

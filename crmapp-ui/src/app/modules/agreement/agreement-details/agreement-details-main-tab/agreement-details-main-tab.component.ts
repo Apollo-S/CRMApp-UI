@@ -41,10 +41,10 @@ export class AgreementDetailsMainTabComponent implements OnInit {
     }
 
     private getClientById(clientId: number) {
-        this.clientService.getClientById(clientId)
-            .subscribe(
-                client => this.getAgreement().client = client
-            );
+        this.clientService.fetchClientById(clientId)
+            // .subscribe(
+            //     client => this.getAgreement().client = client
+            // );
     }
 
     private delete(): void {

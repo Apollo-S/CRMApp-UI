@@ -12,9 +12,11 @@ import { AppConst } from '../app-const';
 @Injectable()
 export class ClientService {
 
-    clientsUrl: string;
-    clients: Client[] = [];
-    headers = new HttpHeaders({'Content-Type': 'application/json'});
+    private clientsUrl: string;
+    private clients: Client[] = [];
+    private client: Client;
+    emitterClient = new EventEmitter<Client>();
+    private headers: any;
 
     private _property$: BehaviorSubject<Client> = new BehaviorSubject({});
 
@@ -29,23 +31,28 @@ export class ClientService {
     constructor(private http: HttpClient,
                 private appConst: AppConst) {
         this.clientsUrl = appConst.baseUrl + appConst.clientsUrl + '/';
+        this.headers = appConst.headersJSON;
     }
 
-    getClientsList() {
+    fetchClients() {
         return this.http.get<Client[]>(this.clientsUrl, {headers: this.headers})
-            // .subscribe(
-            //     clients => {
-            //         this.clients = clients;
-            //     });
     }
 
     getClients() {
         return this.clients;
     }
 
+    fetchClientById(id: number) {
+        const url = this.clientsUrl + id;
+        this.http.get(url).subscribe(
+            client => {
+                this.client = client;
+                this.emitterClient.emit(client);
+            });
+    }
 
-    getClientById(id: number) {
-        return this.http.get<Client>(this.clientsUrl + id, {headers: this.headers});
+    getCurrentClient() {
+        return this.client;
     }
 
     addClient(client: Client) {
@@ -62,12 +69,11 @@ export class ClientService {
         return this.http.delete(url, {headers: this.headers})
     }
 
-  // Addresses
-  getAddressesByClientId(clientId: number): Observable<ClientAddress[]> {
-    const url = `${this.clientsUrl}/${clientId}/addresses`;
-    return this.http
-      .get<ClientAddress[]>(url, { headers: this.headers })
-  }
+    // Addresses
+    getAddressesByClientId(clientId: number) {
+        const url = this.clientsUrl + clientId + '/addresses';
+        return this.http.get<ClientAddress[]>(url);
+    }
 
   getAddressById(id: number, client: Client): Observable<ClientAddress> {
     const url = `${this.clientsUrl}/${client.id}/addresses/${id}`;

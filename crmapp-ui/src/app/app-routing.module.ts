@@ -26,7 +26,7 @@ import { AddDirectorComponent } from './modules/clients/client-details/client-de
 import { EditDirectorComponent } from './modules/clients/client-details/client-details-directors-tab/edit-director/edit-director.component';
 import { ClientDetailsAgreementsTabComponent } from './modules/clients/client-details/client-details-agreements-tab/client-details-agreements-tab.component';
 
-import { AgreementsComponent } from './modules/agreement/agreements/agreements.component';
+import { AgreementsComponent } from './modules/agreement/agreements.component';
 import { AddAgreementComponent } from './modules/agreement/add-agreement/add-agreement.component';
 import { EditAgreementComponent } from './modules/agreement/edit-agreement/edit-agreement.component';
 import { AgreementDetailsComponent } from './modules/agreement/agreement-details/agreement-details.component';

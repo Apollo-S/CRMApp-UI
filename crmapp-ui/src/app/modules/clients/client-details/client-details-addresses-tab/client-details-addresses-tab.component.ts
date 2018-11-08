@@ -9,42 +9,32 @@ import { Client } from '../../../../models/Client';
   templateUrl: './client-details-addresses-tab.component.html',
   styleUrls: ['./client-details-addresses-tab.component.css']
 })
-export class ClientDetailsAddressesTabComponent implements OnInit, OnDestroy {
-  private _propertySubscribtion: Subscription;
-  columns: any[] = [];
-  addresses: ClientAddress[] = [];
-  client: Client = {};
-  
-  constructor(private service: ClientService) { }
+export class ClientDetailsAddressesTabComponent implements OnInit {
+    columns: any[] = [];
+    addresses: ClientAddress[] = [];
+    client: Client = {};
 
-  ngOnInit() { 
-    this._propertySubscribtion = this.service.property$
-      .subscribe(
-        p => {
-          this.client = p;
-          this.getAddressesByClientId(p.id);
-        }
-      );    
-    this.initColumns();
-  }
+    constructor(private clientService: ClientService) {}
 
-  ngOnDestroy() {
-    this._propertySubscribtion.unsubscribe();
-  }
+    ngOnInit() {
+        this.getAddressesByClientId(this.clientService.getCurrentClient().id);
+        this.initColumns();
+    }
 
-  private getAddressesByClientId(id: number) {
-    this.service.getAddressesByClientId(id)
-      .subscribe(
-        addresses => this.addresses = addresses
-      );
-  }
+    private getAddressesByClientId(id: number) {
+        // this.clientService.getAddressesByClientId(id)
+        //         //     .subscribe(
+        //         //         addresses => this.addresses = addresses
+        //         //     );
+        this.clientService.getAddressesByClientId(id);
+    }
 
-  private initColumns(): void {
-    this.columns = [
-      { field: 'id', header: 'ID' },
-      { field: 'presentation', header: 'Адрес' },
-      { field: 'dateStart', header: 'Действует с' }      
-    ];
-  }
+    private initColumns(): void {
+        this.columns = [
+            {field: 'id', header: 'ID'},
+            {field: 'presentation', header: 'Адрес'},
+            {field: 'dateStart', header: 'Действует с'}
+        ];
+    }
 
 }

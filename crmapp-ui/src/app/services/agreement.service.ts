@@ -34,7 +34,7 @@ export class AgreementService {
         return this.agreements;
     }
 
-    getAgreementById(id: number) {
+    fetchAgreementById(id: number) {
         this.http.get(this.agreementsUrl + '/' + id, {headers: this.headers})
             .subscribe(
                 (agreement: ClientAgreement) => {

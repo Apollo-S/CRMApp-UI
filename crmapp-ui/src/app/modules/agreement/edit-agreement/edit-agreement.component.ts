@@ -33,7 +33,7 @@ export class EditAgreementComponent implements OnInit , OnDestroy {
     //     p => {
     //       this.agreement = p;
     //       this.agreement.dateStart = new Date(this.agreement.dateStart);
-    //       this.clientService.getClientById(this.agreement.clientId)
+    //       this.clientService.fetchClientById(this.agreement.clientId)
     //         .subscribe(
     //           client => this.agreement.client = client
     //         );

@@ -15,7 +15,7 @@ export class ClientsComponent implements OnInit {
   loading: boolean = true;
   
   constructor(public clientService: ClientService) {
-      clientService.getClientsList().subscribe(
+      clientService.fetchClients().subscribe(
           clients => {
               this.clients = clients;
               this.loading = false;
