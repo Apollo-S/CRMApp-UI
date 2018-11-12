@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {DocumentService} from '../../../services/document.service';
-import {DocumentTypeService} from '../../../services/document-type.service';
+import {DocumentService} from '../../services/document.service';
+import {DocumentTypeService} from '../../services/document-type.service';
 import {Router, ActivatedRoute} from '@angular/router';
-import {Document} from '../../../models/Document';
-import {DocumentStatus} from '../../../models/DocumentStatus';
-import {DocumentType} from '../../../models/DocumentType';
-import {DocumentStatusService} from '../../../services/document-status.service';
-import {ClientService} from '../../../services/client.service';
+import {Document} from '../../models/Document';
+import {DocumentStatus} from '../../models/DocumentStatus';
+import {DocumentType} from '../../models/DocumentType';
+import {DocumentStatusService} from '../../services/document-status.service';
+import {ClientService} from '../../services/client.service';
 import {MenuItem, SortEvent, SelectItem} from 'primeng/api';
-import {Client} from '../../../models/Client';
+import {Client} from '../../models/Client';
 
 @Component({
     selector: 'app-documents',

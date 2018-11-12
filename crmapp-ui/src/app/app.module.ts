@@ -95,7 +95,8 @@ import { EditAgreementComponent } from './modules/agreement/edit-agreement/edit-
 import { AgreementDetailsComponent } from './modules/agreement/agreement-details/agreement-details.component';
 import { AgreementDetailsDocumentsTabComponent } from './modules/agreement/agreement-details/agreement-details-documents-tab/agreement-details-documents-tab.component';
 
-import { DocumentsComponent } from './modules/document/documents/documents.component';
+import { DocumentsComponent } from './modules/documents/documents.component';
+import { DocumentDetailsComponent } from './modules/documents/document-details/document-details.component';
 
 import { EmployeesComponent } from './modules/employee/employees/employees.component';
 import { AddEmployeeComponent } from './modules/employee/add-employee/add-employee.component';
@@ -184,6 +185,7 @@ import { EmployeeDetailsSicksTabComponent } from './modules/employee/employee-de
     ControlMessagesComponent,
     EmployeeDetailsVacationsTabComponent,
     EmployeeDetailsSicksTabComponent,
+    DocumentDetailsComponent,
   ],
   imports: [
     AppRoutingModule, 
