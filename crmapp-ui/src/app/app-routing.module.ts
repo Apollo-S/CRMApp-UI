@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AboutComponent } from './modules/about/about.component';
 import { NavbarComponent } from './modules/navbar/navbar.component';
-import { NavbarBottomComponent } from './modules/navbar-bottom/navbar-bottom.component';
+import { NavbarBottomComponent } from './modules/navbar/navbar-bottom/navbar-bottom.component';
 import { SidebarComponent } from './modules/sidebar/sidebar.component';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
 import { DashboardMenuComponent } from './modules/dashboard/dashboard-menu/dashboard-menu.component';
