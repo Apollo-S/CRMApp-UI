@@ -26,22 +26,22 @@ import { AddDirectorComponent } from './modules/clients/client-details/client-de
 import { EditDirectorComponent } from './modules/clients/client-details/client-details-directors-tab/edit-director/edit-director.component';
 import { ClientDetailsAgreementsTabComponent } from './modules/clients/client-details/client-details-agreements-tab/client-details-agreements-tab.component';
 
-import { AgreementsComponent } from './modules/agreement/agreements.component';
-import { AddAgreementComponent } from './modules/agreement/add-agreement/add-agreement.component';
-import { EditAgreementComponent } from './modules/agreement/edit-agreement/edit-agreement.component';
-import { AgreementDetailsComponent } from './modules/agreement/agreement-details/agreement-details.component';
-import { AgreementDetailsDocumentsTabComponent } from './modules/agreement/agreement-details/agreement-details-documents-tab/agreement-details-documents-tab.component';
+import { AgreementsComponent } from './modules/agreements/agreements.component';
+import { AddAgreementComponent } from './modules/agreements/add-agreement/add-agreement.component';
+import { EditAgreementComponent } from './modules/agreements/edit-agreement/edit-agreement.component';
+import { AgreementDetailsComponent } from './modules/agreements/agreement-details/agreement-details.component';
+import { AgreementDetailsDocumentsTabComponent } from './modules/agreements/agreement-details/agreement-details-documents-tab/agreement-details-documents-tab.component';
 
 import { DocumentsComponent } from './modules/documents/documents.component';
 
-import { EmployeesComponent } from './modules/employee/employees/employees.component';
-import { AddEmployeeComponent } from './modules/employee/add-employee/add-employee.component';
-import { EditEmployeeComponent } from './modules/employee/edit-employee/edit-employee.component';
-import { EmployeeDetailsComponent } from './modules/employee/employee-details/employee-details.component';
-import { EmployeeDetailsTabsComponent } from './modules/employee/employee-details/employee-details-tabs/employee-details-tabs.component';
-import { EmployeeDetailsMainTabComponent } from './modules/employee/employee-details/employee-details-main-tab/employee-details-main-tab.component';
-import { EmployeeDetailsAddressesTabComponent } from './modules/employee/employee-details/employee-details-addresses-tab/employee-details-addresses-tab.component';
-import { EmployeeDetailsAccountsTabComponent } from './modules/employee/employee-details/employee-details-accounts-tab/employee-details-accounts-tab.component';
+import { EmployeesComponent } from './modules/employees/employees.component';
+import { AddEmployeeComponent } from './modules/employees/add-employee/add-employee.component';
+import { EditEmployeeComponent } from './modules/employees/edit-employee/edit-employee.component';
+import { EmployeeDetailsComponent } from './modules/employees/employee-details/employee-details.component';
+import { EmployeeDetailsTabsComponent } from './modules/employees/employee-details/employee-details-tabs/employee-details-tabs.component';
+import { EmployeeDetailsMainTabComponent } from './modules/employees/employee-details/employee-details-main-tab/employee-details-main-tab.component';
+import { EmployeeDetailsAddressesTabComponent } from './modules/employees/employee-details/employee-details-addresses-tab/employee-details-addresses-tab.component';
+import { EmployeeDetailsAccountsTabComponent } from './modules/employees/employee-details/employee-details-accounts-tab/employee-details-accounts-tab.component';
 
 import { VacationsComponent } from './modules/vacation/vacations/vacations.component';
 import { VacationDetailsComponent } from './modules/vacation/vacation-details/vacation-details.component';
@@ -49,12 +49,12 @@ import { PersonsComponent } from "./modules/person/persons/persons.component";
 import { AddPersonComponent } from "./modules/person/add-person/add-person.component";
 import { PersonDetailsComponent } from "./modules/person/person-details/person-details.component";
 import { MainPageComponent } from "./modules/main-page/main-page.component";
-import { MailOutputsComponent } from "./modules/mail-output/mail-outputs/mail-outputs.component";
-import { AgreementDetailsMainTabComponent } from "./modules/agreement/agreement-details/agreement-details-main-tab/agreement-details-main-tab.component";
-import { MailInputsComponent } from "./modules/mail-input/mail-inputs/mail-inputs.component";
-import { DocumentTypesComponent } from "./modules/document-type/document-types/document-types.component";
-import { EmployeeDetailsVacationsTabComponent } from "./modules/employee/employee-details/employee-details-vacations-tab/employee-details-vacations-tab.component";
-import { EmployeeDetailsSicksTabComponent } from "./modules/employee/employee-details/employee-details-sicks-tab/employee-details-sicks-tab.component";
+import { MailOutputsComponent } from "./modules/mail-outputs/mail-outputs.component";
+import { AgreementDetailsMainTabComponent } from "./modules/agreements/agreement-details/agreement-details-main-tab/agreement-details-main-tab.component";
+import { MailInputsComponent } from "./modules/mail-inputs/mail-inputs.component";
+import { DocumentTypesComponent } from "./modules/document-types/document-types.component";
+import { EmployeeDetailsVacationsTabComponent } from "./modules/employees/employee-details/employee-details-vacations-tab/employee-details-vacations-tab.component";
+import { EmployeeDetailsSicksTabComponent } from "./modules/employees/employee-details/employee-details-sicks-tab/employee-details-sicks-tab.component";
 
 const appRoutes: Routes = [
   

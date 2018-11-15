@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem, Message, ConfirmationService } from 'primeng/api';
-import { MailInput } from '../../../models/MailInput';
-import { MailDocumentType } from '../../../models/MailDocumentType';
-import { MailInputService } from '../../../services/mail-input.service';
-import { MailDocumentTypeService } from '../../../services/mail-document-type.service';
-import { UtilService } from '../../../services/util.service';
+import { MailInput } from '../../models/MailInput';
+import { MailDocumentType } from '../../models/MailDocumentType';
+import { MailInputService } from '../../services/mail-input.service';
+import { MailDocumentTypeService } from '../../services/mail-document-type.service';
+import { UtilService } from '../../services/util.service';
 import { DatePipe } from '@angular/common';
 
 @Component({
