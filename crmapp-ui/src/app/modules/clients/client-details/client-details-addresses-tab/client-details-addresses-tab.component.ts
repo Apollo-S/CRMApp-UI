@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../../../../services/client.service';
 import { ClientAddress } from '../../../../models/ClientAddress';
 import { Client } from '../../../../models/Client';
@@ -14,18 +13,15 @@ export class ClientDetailsAddressesTabComponent implements OnInit {
     addresses: ClientAddress[] = [];
     client: Client = {};
 
-    constructor(private clientService: ClientService) {}
+    constructor(private clientService: ClientService) {
+        this.getAddressesByClientId(this.clientService.getCurrentClient().id);
+    }
 
     ngOnInit() {
-        this.getAddressesByClientId(this.clientService.getCurrentClient().id);
         this.initColumns();
     }
 
     private getAddressesByClientId(id: number) {
-        // this.clientService.getAddressesByClientId(id)
-        //         //     .subscribe(
-        //         //         addresses => this.addresses = addresses
-        //         //     );
         this.clientService.getAddressesByClientId(id);
     }
 

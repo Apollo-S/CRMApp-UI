@@ -12,11 +12,13 @@ import { AppConst } from '../app-const';
 @Injectable()
 export class ClientService {
 
+    private headers: any;
     private clientsUrl: string;
     private clients: Client[] = [];
     private client: Client;
+    private addresses: ClientAddress[] = [];
     emitterClient = new EventEmitter<Client>();
-    private headers: any;
+    emitterAddresses = new EventEmitter<ClientAddress[]>();
 
     private _property$: BehaviorSubject<Client> = new BehaviorSubject({});
 
@@ -72,8 +74,12 @@ export class ClientService {
     // Addresses
     getAddressesByClientId(clientId: number) {
         const url = this.clientsUrl + clientId + '/addresses';
-        return this.http.get<ClientAddress[]>(url);
-    }
+        this.http.get<ClientAddress[]>(url).subscribe(
+            addresses => {
+                this.addresses = addresses;
+                this.emitterAddresses.emit(addresses);
+            });
+}
 
   getAddressById(id: number, client: Client): Observable<ClientAddress> {
     const url = `${this.clientsUrl}/${client.id}/addresses/${id}`;

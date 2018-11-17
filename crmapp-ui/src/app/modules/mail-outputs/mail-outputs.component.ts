@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { MailOutputService } from '../../../services/mail-output.service';
-import { MailOutput } from '../../../models/MailOutput';
+import { MailOutputService } from '../../services/mail-output.service';
+import { MailOutput } from '../../models/MailOutput';
 import { MenuItem, ConfirmationService, Message } from 'primeng/api';
-import { MailDocumentTypeService } from '../../../services/mail-document-type.service';
-import { MailDocumentType } from '../../../models/MailDocumentType';
-import { UtilService } from '../../../services/util.service';
+import { MailDocumentTypeService } from '../../services/mail-document-type.service';
+import { MailDocumentType } from '../../models/MailDocumentType';
+import { UtilService } from '../../services/util.service';
 
 @Component({
   selector: 'app-mail-outputs',
