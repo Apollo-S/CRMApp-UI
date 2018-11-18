@@ -10,19 +10,20 @@ import { Client } from '../../../../models/Client';
 })
 export class ClientDetailsAddressesTabComponent implements OnInit {
     columns: any[] = [];
-    addresses: ClientAddress[] = [];
+    addresses: ClientAddress[];
     client: Client = {};
 
     constructor(private clientService: ClientService) {
-        this.getAddressesByClientId(this.clientService.getCurrentClient().id);
+        clientService.fetchAddressesByClientId(clientService.getCurrentClient().id);
+
     }
 
     ngOnInit() {
         this.initColumns();
     }
 
-    private getAddressesByClientId(id: number) {
-        this.clientService.getAddressesByClientId(id);
+    getAddresses() {
+        return this.clientService.getAddressesByClientId();
     }
 
     private initColumns(): void {
