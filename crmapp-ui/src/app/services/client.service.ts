@@ -1,7 +1,7 @@
 import {Injectable, EventEmitter} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable, BehaviorSubject, of} from 'rxjs';
-import {catchError, map, tap} from 'rxjs/operators';
+import {HttpClient} from '@angular/common/http';
+import {Observable, BehaviorSubject, of, forkJoin} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
 import {Client} from '../models/Client';
 import {ClientAddress} from '../models/ClientAddress';
 import {ClientAccount} from '../models/ClientAccount';
@@ -14,11 +14,13 @@ export class ClientService {
 
     private headers: any;
     private clientsUrl: string;
-    private clients: Client[] = [];
+    private clients: Client[];
     private client: Client;
     private addresses: ClientAddress[];
+    private accounts: ClientAccount[];
     emitterClient = new EventEmitter<Client>();
     emitterAddresses = new EventEmitter<ClientAddress[]>();
+    emitterAgreements = new EventEmitter<ClientAgreement[]>();
 
     private _property$: BehaviorSubject<Client> = new BehaviorSubject({});
 
@@ -41,6 +43,9 @@ export class ClientService {
     }
 
     getClients() {
+        if (this.clients === undefined) {
+            return this.clients = [];
+        }
         return this.clients;
     }
 
@@ -71,15 +76,38 @@ export class ClientService {
         return this.http.delete(url, {headers: this.headers})
     }
 
-    // Addresses
-    async fetchAddressesByClientId(clientId: number) {
-        const url = this.clientsUrl + clientId + '/addresses';
-        const addressesPromise = this.http.get<ClientAddress[]>(url).toPromise();
-        this.addresses = await addressesPromise;
-        console.log('addresses = ', this.addresses);
+    fetchAllClientData(clientId: number) {
+        const clientUrl = this.clientsUrl + clientId;
+        const addressesUrl = clientUrl + '/addresses';
+        const accountsUrl = clientUrl + '/accounts';
+        forkJoin(
+            this.http.get(clientUrl),
+            this.http.get<Array<ClientAddress>>(addressesUrl),
+            this.http.get<Array<ClientAccount>>(accountsUrl)
+        ).subscribe(
+            data => {
+                this.client = data[0];
+                this.client.addresses = data[1];
+                this.client.accounts = data[2];
+            });
     }
 
-    getAddressesByClientId() {
+    // Addresses
+    fetchAddressesByClientId(clientId: number) {
+        const url = this.clientsUrl + clientId + '/addresses';
+        return this.http.get<ClientAddress[]>(url).toPromise();
+    }
+
+    async getAddressesByClientId(clientId: number) {
+        debugger
+        if (this.addresses !== undefined) {
+            return this.addresses
+        }
+        ;
+        this.addresses = await this.fetchAddressesByClientId(clientId);
+        debugger
+        // this.addresses = await addressesPromise;
+        console.log('addresses = ', this.addresses);
         return this.addresses;
     }
 
