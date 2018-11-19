@@ -1,3 +1,6 @@
+import {ClientAddress} from "./ClientAddress";
+import {ClientAccount} from "./ClientAccount";
+
 export class Client {
         public id?: number;
         public title?: string;
@@ -6,4 +9,6 @@ export class Client {
         public inn?: string;
         public vatCertificate?: string;
         public url?: string;
+        public addresses?: ClientAddress[];
+        public accounts?: ClientAccount[];
 }
