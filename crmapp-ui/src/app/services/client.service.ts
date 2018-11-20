@@ -19,8 +19,6 @@ export class ClientService {
     private addresses: ClientAddress[];
     private accounts: ClientAccount[];
     emitterClient = new EventEmitter<Client>();
-    emitterAddresses = new EventEmitter<ClientAddress[]>();
-    emitterAgreements = new EventEmitter<ClientAgreement[]>();
 
     private _property$: BehaviorSubject<Client> = new BehaviorSubject({});
 
@@ -39,7 +37,16 @@ export class ClientService {
     }
 
     fetchClients() {
-        return this.http.get<Client[]>(this.clientsUrl, {headers: this.headers})
+        return this.http.get<Client[]>(this.clientsUrl, {headers: this.headers});
+    }
+
+    async fetchAllClientDataPromise(clientId: number) {
+        let clientPromise = this.fetchClientById(clientId);
+        let addressesPromise = this.fetchAddressesByClientId(clientId);
+        let accountsPromise = this.fetchAccountsByClientId(clientId);
+        this.client = await clientPromise;
+        this.client.addresses = await addressesPromise;
+        this.client.accounts = await accountsPromise;
     }
 
     getClients() {
@@ -49,13 +56,9 @@ export class ClientService {
         return this.clients;
     }
 
-    fetchClientById(id: number) {
-        const url = this.clientsUrl + id;
-        this.http.get(url).subscribe(
-            client => {
-                this.client = client;
-                this.emitterClient.emit(client);
-            });
+    fetchClientById(clientId: number) {
+        const clientUrl = this.clientsUrl + clientId;
+        return this.http.get(clientUrl).toPromise();
     }
 
     getCurrentClient() {
@@ -76,7 +79,7 @@ export class ClientService {
         return this.http.delete(url, {headers: this.headers})
     }
 
-    fetchAllClientData(clientId: number) {
+    fetchAllClientDataForkJoin(clientId: number) {
         const clientUrl = this.clientsUrl + clientId;
         const addressesUrl = clientUrl + '/addresses';
         const accountsUrl = clientUrl + '/accounts';
@@ -89,6 +92,7 @@ export class ClientService {
                 this.client = data[0];
                 this.client.addresses = data[1];
                 this.client.accounts = data[2];
+                this.emitterClient.emit(this.client);
             });
     }
 
@@ -98,17 +102,11 @@ export class ClientService {
         return this.http.get<ClientAddress[]>(url).toPromise();
     }
 
-    async getAddressesByClientId(clientId: number) {
-        debugger
-        if (this.addresses !== undefined) {
-            return this.addresses
+    getAddresses() {
+        if (this.client.addresses) {
+            return this.client.addresses;
         }
-        ;
-        this.addresses = await this.fetchAddressesByClientId(clientId);
-        debugger
-        // this.addresses = await addressesPromise;
-        console.log('addresses = ', this.addresses);
-        return this.addresses;
+        return [];
     }
 
     getAddressById(id: number, client: Client): Observable<ClientAddress> {
@@ -148,6 +146,11 @@ export class ClientService {
     }
 
     // Accounts
+    fetchAccountsByClientId(clientId: number) {
+        const accountsUrl = this.clientsUrl + clientId + '/accounts';
+        return this.http.get<Array<ClientAccount>>(accountsUrl).toPromise();
+    }
+
     getAccountsByClientId(clientId: number): Observable<ClientAccount[]> {
         const url = `${this.clientsUrl}/${clientId}/accounts`;
         return this.http
