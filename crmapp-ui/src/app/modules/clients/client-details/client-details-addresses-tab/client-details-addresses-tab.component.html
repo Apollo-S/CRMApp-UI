@@ -1,7 +1,15 @@
-<app-client-employee-details-template-table [addButtonTitle]="['Новый адрес']"
-  [columns]="columns" [datasource]="getAddresses()" [editButtonTitle]="['Изменить']"
-  [responsive]="true" [reorderableColumns]="true" 
-  [rows]="0" [paginator]="false" [rowHover]="true" 
-  [loading]="true" [sortField]="'id'" [routerLinkUrl]="['add']"
-  [autoLayout]="true">
-</app-client-employee-details-template-table>
+<app-client-employee-details-template-table
+    [columns]="columns"
+    [datasource]="getAddresses()"
+    [responsive]="true"
+    [reorderableColumns]="true"
+    [rows]="0"
+    [paginator]="false"
+    [rowHover]="true"
+    [loading]="true"
+    [sortField]="'id'"
+    [routerLinkUrl]="['add']"
+    [autoLayout]="true"
+    [editButtonTitle]="['Изменить']"
+    [addButtonTitle]="['Новый адрес']"
+></app-client-employee-details-template-table>

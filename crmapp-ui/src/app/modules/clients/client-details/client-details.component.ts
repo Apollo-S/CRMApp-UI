@@ -16,13 +16,13 @@ export class ClientDetailsComponent implements OnInit {
     constructor(private clientService: ClientService,
                 private route: ActivatedRoute) {
         this.clientId = +route.snapshot.params.id;
-        clientService.fetchClientById(this.clientId);
-        clientService.emitterClient.subscribe(
-            client => {
-                this.client = client;
-                clientService.getAccountsByClientId(client.id);
+        // this.clientService.fetchAllClientDataForkJoin(this.clientId);
+        this.clientService.fetchAllClientDataPromise(this.clientId).then(
+            () => {
+                console.log('client = ', this.clientService.getCurrentClient());
             }
         );
+
 
     }
 

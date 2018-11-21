@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../../../../services/client.service';
-import { ClientAddress } from '../../../../models/ClientAddress';
-import { Client } from '../../../../models/Client';
 
 @Component({
   selector: 'app-client-details-addresses-tab',
@@ -10,12 +8,8 @@ import { Client } from '../../../../models/Client';
 })
 export class ClientDetailsAddressesTabComponent implements OnInit {
     columns: any[] = [];
-    addresses: ClientAddress[];
-    client: Client = {};
 
-    constructor(private clientService: ClientService) {
-        clientService.fetchAddressesByClientId(clientService.getCurrentClient().id);
-
+    constructor(public clientService: ClientService) {
     }
 
     ngOnInit() {
@@ -23,7 +17,7 @@ export class ClientDetailsAddressesTabComponent implements OnInit {
     }
 
     getAddresses() {
-        return this.clientService.getAddressesByClientId();
+        return this.clientService.getAddresses();
     }
 
     private initColumns(): void {

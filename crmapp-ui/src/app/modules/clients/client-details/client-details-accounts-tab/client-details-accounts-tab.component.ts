@@ -1,50 +1,43 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { ClientAccount } from '../../../../models/ClientAccount';
-import { ClientService } from '../../../../services/client.service';
-import { Client } from '../../../../models/Client';
+import {Component, OnInit} from '@angular/core';
+import {ClientAccount} from '../../../../models/ClientAccount';
+import {ClientService} from '../../../../services/client.service';
+import {Client} from '../../../../models/Client';
 
 @Component({
-  selector: 'app-client-details-accounts-tab',
-  templateUrl: './client-details-accounts-tab.component.html',
-  styleUrls: ['./client-details-accounts-tab.component.css']
+    selector: 'app-client-details-accounts-tab',
+    templateUrl: './client-details-accounts-tab.component.html',
+    styleUrls: ['./client-details-accounts-tab.component.css']
 })
-export class ClientDetailsAccountsTabComponent implements OnInit, OnDestroy {
-  private _propertySubscribtion: Subscription;
-  columns: any[];
-  accounts: ClientAccount[] = [];
-  client: Client = {};
+export class ClientDetailsAccountsTabComponent implements OnInit {
+    columns: any[];
+    accounts: ClientAccount[] = [];
+    client: Client = {};
 
-  constructor(private service: ClientService) { }
+    constructor(private clientService: ClientService) {
+    }
 
-  ngOnInit() { 
-    this._propertySubscribtion = this.service.property$
-      .subscribe(
-        p => {
-          this.client = p;
-          this.getAccountsByClientId(p.id);
-        }
-      );
-    this.initColumns();
-  }
+    ngOnInit() {
+        // this.getAccountsByClientId(this.client.id);
+        this.initColumns();
+    }
 
-  ngOnDestroy() {
-    this._propertySubscribtion.unsubscribe();
-  }
+    getAccounts() {
+        return this.clientService.getCurrentClient().accounts;
+    }
 
-  private getAccountsByClientId(id: number) {
-    this.service.getAccountsByClientId(id)
-      .subscribe(
-        accounts => this.accounts = accounts
-      );
-  }
+    private getAccountsByClientId(id: number) {
+        this.clientService.getAccountsByClientId(id)
+            .subscribe(
+                accounts => this.accounts = accounts
+            );
+    }
 
-  private initColumns(): void {
-    this.columns = [
-      { field: 'id', header: 'ID' },
-      { field: 'presentation', header: 'Представление' },
-      { field: 'dateStart', header: 'Действует с' }      
-    ];
-  }
+    private initColumns(): void {
+        this.columns = [
+            {field: 'id', header: 'ID'},
+            {field: 'presentation', header: 'Представление'},
+            {field: 'dateStart', header: 'Действует с'}
+        ];
+    }
 
 }
