@@ -8,26 +8,25 @@ import { Router } from '@angular/router';
 })
 export class ClientEmployeeDetailsTemplateTableComponent implements OnInit {
   
-  @Input ('addButtonTitle') addButtonTitle: string;
-  @Input ('editButtonTitle') editButtonTitle: string;
-  @Input ('columns') columns: any[];
-  @Input ('datasource') datasource: any[];
-  @Input ('responsive') responsive: boolean;
-  @Input ('reorderableColumns') reorderableColumns: boolean; 
-  @Input ('rowHover') rowHover: boolean; 
-  @Input ('paginator') paginator: boolean; 
-  @Input ('rows') rows: number; 
-  @Input ('loading') loading: boolean; 
-  @Input ('sortField') sortField: string;
-  @Input ('autoLayout') autoLayout: boolean;
-  @Input ('routerLinkUrl') routerLinkUrl: string[];
+  @Input () addButtonTitle: string;
+  @Input () editButtonTitle: string;
+  @Input () columns: any[];
+  @Input () datasource: any[];
+  @Input () responsive: boolean;
+  @Input () reorderableColumns: boolean;
+  @Input () rowHover: boolean;
+  @Input () paginator: boolean;
+  @Input () rows: number;
+  @Input () loading: boolean;
+  @Input () sortField: string;
+  @Input () autoLayout: boolean;
+  @Input () routerLinkUrl: string[];
   selectedItem: any;
+
   constructor(private router: Router) { }
 
   ngOnInit() {
-    setTimeout(() => {
       this.loading = false;
-    }, 700);
   }
 
   goToEntry(url: string) {

@@ -12,12 +12,12 @@ import {AppConst} from '../app-const';
 @Injectable()
 export class ClientService {
 
-    private headers: any;
-    private clientsUrl: string;
+    private readonly headers: any;
+    private readonly clientsUrl: string;
     private clients: Client[];
-    private client: Client;
-    private addresses: ClientAddress[];
-    private accounts: ClientAccount[];
+    private client: Client = {};
+    // private addresses: ClientAddress[];
+    // private accounts: ClientAccount[];
     emitterClient = new EventEmitter<Client>();
 
     private _property$: BehaviorSubject<Client> = new BehaviorSubject({});
@@ -34,6 +34,10 @@ export class ClientService {
                 private appConst: AppConst) {
         this.clientsUrl = appConst.baseUrl + appConst.clientsUrl + '/';
         this.headers = appConst.headersJSON;
+        this.client.accounts = [];
+        this.client.addresses = [];
+        this.client.agreements = [];
+        this.client.directors = [];
     }
 
     fetchClients() {
@@ -41,12 +45,19 @@ export class ClientService {
     }
 
     async fetchAllClientDataPromise(clientId: number) {
-        let clientPromise = this.fetchClientById(clientId);
-        let addressesPromise = this.fetchAddressesByClientId(clientId);
-        let accountsPromise = this.fetchAccountsByClientId(clientId);
-        this.client = await clientPromise;
-        this.client.addresses = await addressesPromise;
-        this.client.accounts = await accountsPromise;
+        let [ client, addresses, accounts, agreements, directors ] =
+            await Promise.all([
+                this.fetchClientById(clientId),
+                this.fetchAddressesByClientId(clientId),
+                this.fetchAccountsByClientId(clientId),
+                this.fetchAgreementsByClientId(clientId),
+                this.fetchDirectorsByClientId(clientId)
+            ]);
+        this.client = client;
+        this.client.addresses = addresses;
+        this.client.accounts = accounts;
+        this.client.agreements = agreements;
+        this.client.directors = directors;
     }
 
     getClients() {
@@ -103,10 +114,7 @@ export class ClientService {
     }
 
     getAddresses() {
-        if (this.client.addresses) {
-            return this.client.addresses;
-        }
-        return [];
+        return this.client.addresses;
     }
 
     getAddressById(id: number, client: Client): Observable<ClientAddress> {
@@ -146,7 +154,7 @@ export class ClientService {
     }
 
     // Accounts
-    fetchAccountsByClientId(clientId: number) {
+    private fetchAccountsByClientId(clientId: number) {
         const accountsUrl = this.clientsUrl + clientId + '/accounts';
         return this.http.get<Array<ClientAccount>>(accountsUrl).toPromise();
     }
@@ -201,6 +209,15 @@ export class ClientService {
     }
 
     // Directors
+    private fetchDirectorsByClientId(clientId) {
+        const directorsUrl = this.clientsUrl + clientId + '/directors';
+        return this.http.get<Array<ClientDirector>>(directorsUrl).toPromise();
+    }
+
+    getDirectors() {
+        return this.client.directors;
+    }
+
     getDirectorsByClientId(clientId: number): Observable<ClientDirector[]> {
         const url = `${this.clientsUrl}/${clientId}/directors`;
         return this.http
@@ -251,13 +268,19 @@ export class ClientService {
     }
 
     // Agreements
-    getAgreementsByClientId(clientId: number): Observable<ClientAgreement[]> {
+    fetchAgreementsByClientId(clientId: number) {
+        const agreementsUrl = this.clientsUrl + clientId + '/agreements';
+        return this.http.get<Array<ClientAgreement>>(agreementsUrl).toPromise();
+    }
+
+    getAgreements() {
+        return this.client.agreements;
+    }
+
+    getAgreementsByClientId(clientId: number) {
         const url = `${this.clientsUrl}/${clientId}/agreements`;
         return this.http
             .get<ClientAgreement[]>(url, {headers: this.headers})
-            .pipe(
-                catchError(this.handleError<ClientAgreement[]>('getAgreementsByClientId'))
-            );
     }
 
     private handleError<T>(operation = 'operation', result?: T) {
