@@ -10,14 +10,16 @@
               <b>Полное название: *</b>
             </div>
             <div class="ui-grid-col-6">
-              <input pInputText type="text" formControlName="title" placeholder="Обязательное поле"
-                [(ngModel)]="client&&client.title">
+              <input pInputText type="text"
+                     formControlName="title"
+                     placeholder="Обязательное поле"
+              >
             </div>
             <div class="ui-grid-col-3">
               <div class="ui-message ui-messages-error ui-corner-all" 
                 *ngIf="!userform.controls['title'].valid&&userform.controls['title'].dirty">
-                  <i class="fa fa-close"></i>
-                  Введите полное название (не менее 2 символов)!
+                <i class="fa fa-close"></i>
+                Введите полное название (не менее 2 символов)!
               </div>            
             </div>
           </div>
@@ -26,14 +28,16 @@
               <b>Псевдоним: *</b>
             </div>
             <div class="ui-grid-col-6">
-              <input pInputText type="text" formControlName="alias" placeholder="Обязательное поле"
-                [(ngModel)]="client&&client.alias">
+              <input pInputText type="text"
+                     placeholder="Обязательное поле"
+                     formControlName="alias"
+              >
             </div>
             <div class="ui-grid-col-3">
               <div class="ui-message ui-messages-error ui-corner-all" 
                 *ngIf="!userform.controls['alias'].valid&&userform.controls['alias'].dirty">
-                  <i class="fa fa-close"></i>
-                  Введите псевдоним (не менее 2 символов)!
+                <i class="fa fa-close"></i>
+                Введите псевдоним (не менее 2 символов)!
               </div>            
             </div>
           </div>
@@ -42,15 +46,17 @@
               <b>ЕДРПОУ: *</b>
             </div>
             <div class="ui-grid-col-6">
-              <input pInputText type="text" formControlName="edrpou" 
-                placeholder="Обязательное поле" pKeyFilter="num"
-                [(ngModel)]="client&&client.edrpou">
+              <input pInputText type="text"
+                     pKeyFilter="num"
+                     placeholder="Обязательное поле"
+                     formControlName="edrpou"
+              >
             </div>
             <div class="ui-grid-col-3">
               <div class="ui-message ui-messages-error ui-corner-all" 
                 *ngIf="!userform.controls['edrpou'].valid&&userform.controls['edrpou'].dirty">
-                  <i class="fa fa-close"></i>
-                  Введите ЕДРПОУ (не менее 6 и не более 14 цифр)!
+                <i class="fa fa-close"></i>
+                Введите ЕДРПОУ (не менее 6 и не более 14 цифр)!
               </div>            
             </div>
           </div>
@@ -59,9 +65,11 @@
               <b>ИНН:</b>
             </div>
             <div class="ui-grid-col-6">
-              <input pInputText type="text" formControlName="inn" 
-                pKeyFilter="num" placeholder="Введите ИНН (необязательное поле)"
-                [(ngModel)]="client&&client.inn">
+              <input pInputText type="text"
+                     pKeyFilter="num"
+                     formControlName="inn"
+                     placeholder="Введите ИНН (необязательное поле)"
+              >
             </div>
           </div>
           <div class="ui-grid-row">
@@ -69,9 +77,11 @@
               <b>№ свидетельства плат. НДС:</b>
             </div>
             <div class="ui-grid-col-6">
-              <input pInputText type="text" formControlName="vatCertificate" 
-                pKeyFilter="num" placeholder="Введите № свид. НДС (необязательное поле)"
-                [(ngModel)]="client&&client.vatCertificate" >
+              <input pInputText type="text"
+                     pKeyFilter="num"
+                     placeholder="Введите № свид. НДС (необязательное поле)"
+                     formControlName="vatCertificate"
+              >
             </div>
           </div>
         </div>

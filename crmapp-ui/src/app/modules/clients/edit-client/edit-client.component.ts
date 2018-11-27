@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, Params } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
 import { ClientService } from '../../../services/client.service';
 import { Client } from '../../../models/Client';
 import { Message } from 'primeng/api';
@@ -11,69 +10,81 @@ import { Message } from 'primeng/api';
   templateUrl: './edit-client.component.html',
   styleUrls: ['./edit-client.component.css']
 })
-export class EditClientComponent implements OnInit, OnDestroy {
-  private _propertySubscribtion: Subscription;
+export class EditClientComponent implements OnInit {
   msgs: Message[] = [];
   userform: FormGroup;
   client: Client = {};
 
-  constructor(private fb: FormBuilder,
+  constructor(private formBuilder: FormBuilder,
               private clientService: ClientService,
-              private router: Router) { }
+              private router: Router) {
+      // this.getClient();
+  }
 
   ngOnInit() {
-    this._propertySubscribtion = this.clientService.property$
-      .subscribe(
-        p => this.client = p
-      );
-    this.userform = this.fb.group(
-      {
-        'title': new FormControl('', Validators.compose(
-          [
-            Validators.required, 
-            Validators.minLength(2)
-          ])),
-        'alias': new FormControl('', Validators.compose(
-          [
-            Validators.required, 
-            Validators.minLength(2)
-          ])),
-        'edrpou': new FormControl('', Validators.compose(
-          [
-            Validators.required, 
-            Validators.minLength(6),
-            Validators.maxLength(14)
-          ])),
-        'inn': new FormControl(''),
-        'vatCertificate': new FormControl('')
+      this.userform = this.formBuilder.group({
+          title: [this.getClient().title, Validators.compose([
+              Validators.required,
+              Validators.minLength(2)
+          ]), ],
+          alias: ['', Validators.compose([
+              Validators.required,
+              Validators.minLength(2)
+          ])],
+          edrpou: ['', Validators.compose([
+              Validators.required,
+              Validators.minLength(6),
+              Validators.maxLength(14)
+          ])],
+          inn: ['', Validators.compose([
+              Validators.maxLength(14)
+          ])],
+          vatCertificate: ['', Validators.compose([
+              Validators.maxLength(14)
+          ])]
       });
-  }
-  
-  ngOnDestroy() {
-    this._propertySubscribtion.unsubscribe();
+      this.userform.controls['title'].setValue(this.getClient().title);
+      this.userform.controls['alias'].setValue(this.getClient().alias);
+      this.userform.controls['edrpou'].setValue(this.getClient().edrpou);
+      this.userform.controls['vatCertificate'].setValue(this.getClient().vatCertificate);
+      this.userform.controls['inn'].setValue(this.getClient().inn);
   }
   
   onSubmit() {
     this.update();
-    this.goBackToClient(1500);
   }
 
-  private update(): void {
-    this.clientService.updateClient(this.client)
-      .subscribe(
-        response => {
-          this.client = response;
-          let msg = 'Клиент ' + this.client.alias +  ' успешно обновлен (ID=' + response.id + ')';
-          this.msgs = [{severity:'success', summary:'Успешно', detail: msg}];
-        }
-      );
+  getClient() {
+      return this.clientService.getCurrentClient();
   }
+
+
+    private update() {
+        let client: Client = {
+            id: this.getClient().id,
+            title: this.userform.controls['title'].value,
+            alias: this.userform.controls['alias'].value,
+            edrpou: this.userform.controls['edrpou'].value,
+            vatCertificate: this.userform.controls['vatCertificate'].value,
+            inn: this.userform.controls['inn'].value
+        };
+        this.clientService.updateClient(client)
+            .subscribe(
+                response => {
+                    let msg = 'Клиент ' + response.alias + ' успешно обновлен (ID=' + response.id + ')';
+                    this.msgs = [{severity: 'success', summary: 'Успешно', detail: msg}];
+                    this.clientService.fetchAllClientDataPromise(response.id).then(
+                        () => this.goBackToClient(0)
+                    );
+                }
+            );
+    }
 
   private goBackToClient(timeMillis: number) {
     setTimeout(
-      (router) => {
-        this.router.navigate([this.client.url]);
+      () => {
+        this.router.navigate([this.getClient().url]);
       }, timeMillis);
-  } 
+  }
 
 }

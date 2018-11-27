@@ -16,8 +16,6 @@ export class ClientService {
     private readonly clientsUrl: string;
     private clients: Client[];
     private client: Client = {};
-    // private addresses: ClientAddress[];
-    // private accounts: ClientAccount[];
     emitterClient = new EventEmitter<Client>();
 
     private _property$: BehaviorSubject<Client> = new BehaviorSubject({});
@@ -45,7 +43,7 @@ export class ClientService {
     }
 
     async fetchAllClientDataPromise(clientId: number) {
-        let [ client, addresses, accounts, agreements, directors ] =
+        let [client, addresses, accounts, agreements, directors] =
             await Promise.all([
                 this.fetchClientById(clientId),
                 this.fetchAddressesByClientId(clientId),
@@ -77,34 +75,15 @@ export class ClientService {
     }
 
     addClient(client: Client) {
-        return this.http.post<Client>(this.clientsUrl, client, {headers: this.headers})
+        return this.http.post<Client>(this.clientsUrl, client, {headers: this.headers});
     }
 
-    updateClient(client: Client): Observable<Client> {
-        const url = this.clientsUrl + client.id;
-        return this.http.put<Client>(url, client, {headers: this.headers})
+    updateClient(client: Client) {
+        return this.http.put<Client>( this.clientsUrl + client.id, client, {headers: this.headers});
     }
 
     deleteClient(client: Client) {
-        const url = this.clientsUrl + client.id;
-        return this.http.delete(url, {headers: this.headers})
-    }
-
-    fetchAllClientDataForkJoin(clientId: number) {
-        const clientUrl = this.clientsUrl + clientId;
-        const addressesUrl = clientUrl + '/addresses';
-        const accountsUrl = clientUrl + '/accounts';
-        forkJoin(
-            this.http.get(clientUrl),
-            this.http.get<Array<ClientAddress>>(addressesUrl),
-            this.http.get<Array<ClientAccount>>(accountsUrl)
-        ).subscribe(
-            data => {
-                this.client = data[0];
-                this.client.addresses = data[1];
-                this.client.accounts = data[2];
-                this.emitterClient.emit(this.client);
-            });
+        return this.http.delete(this.clientsUrl + client.id, {headers: this.headers});
     }
 
     // Addresses

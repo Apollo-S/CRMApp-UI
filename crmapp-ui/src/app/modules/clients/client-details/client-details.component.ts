@@ -1,13 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { ClientService } from '../../../services/client.service';
-import { Client } from '../../../models/Client';
+import {Component, OnInit, OnDestroy} from '@angular/core';
+import {ActivatedRoute, Params} from '@angular/router';
+import {Subscription} from 'rxjs';
+import {ClientService} from '../../../services/client.service';
+import {Client} from '../../../models/Client';
 
 @Component({
-  selector: 'app-client-details',
-  templateUrl: './client-details.component.html',
-  styleUrls: ['./client-details.component.css']
+    selector: 'app-client-details',
+    templateUrl: './client-details.component.html',
+    styleUrls: ['./client-details.component.css']
 })
 export class ClientDetailsComponent implements OnInit {
     clientId: number;
@@ -16,16 +16,13 @@ export class ClientDetailsComponent implements OnInit {
     constructor(private clientService: ClientService,
                 private route: ActivatedRoute) {
         this.clientId = +route.snapshot.params.id;
-        // this.clientService.fetchAllClientDataForkJoin(this.clientId);
         this.clientService.fetchAllClientDataPromise(this.clientId).then(
             () => {
-                console.log('client = ', this.clientService.getCurrentClient());
-            }
-        );
-
-
+                this.client = this.clientService.getCurrentClient();
+            });
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+    }
 
 }

@@ -1,83 +1,84 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ClientService } from '../../../services/client.service';
-import { Client } from '../../../models/Client';
-import { Message, MenuItem } from 'primeng/api';
+import {Component, OnInit, Output} from '@angular/core';
+import {FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {ClientService} from '../../../services/client.service';
+import {Client} from '../../../models/Client';
+import {Message, MenuItem} from 'primeng/api';
 
 @Component({
-  selector: 'app-add-client',
-  templateUrl: './add-client.component.html',
-  styleUrls: ['./add-client.component.css']
+    selector: 'app-add-client',
+    templateUrl: './add-client.component.html',
+    styleUrls: ['./add-client.component.css']
 })
 export class AddClientComponent implements OnInit {
-  tabs: MenuItem[];
-  msgs: Message[] = [];
-  userform: FormGroup;
-  client: Client = {};
 
-  constructor(private service: ClientService, 
-              private fb: FormBuilder,
-              private router: Router) { }
+    @Output() msgs: Message[] = [];
+    tabs: MenuItem[];
+    userform: FormGroup;
 
-  ngOnInit() {
-    this.initUserForm();
-    this.initTabs();
-  }
+    constructor(private clientService: ClientService,
+                private formBuilder: FormBuilder,
+                private router: Router) {
+    }
 
-  onSubmit() {
-    this.save();
-    this.goBackToClient(1500);
-  }
+    ngOnInit() {
+        this.initUserForm();
+        this.initTabs();
+    }
 
-  private initUserForm() {
-    this.userform = this.fb.group({
-      'title': new FormControl('', Validators.compose([
-        Validators.required,
-        Validators.minLength(2)
-      ])),
-      'alias': new FormControl('', Validators.compose([
-        Validators.required,
-        Validators.minLength(2)
-      ])),
-      'edrpou': new FormControl('', Validators.compose([
-        Validators.required,
-        Validators.minLength(6),
-        Validators.maxLength(14)
-      ])),
-      'inn': new FormControl('', Validators.compose([
-        Validators.maxLength(14)
-      ])),
-      'vatCertificate': new FormControl('')
-    });
-  }
+    onSubmit() {
+        this.save();
+    }
 
-  private initTabs() {
-    this.tabs = [
-      {label: 'Основные данные', icon: 'fa fa-address-card-o', disabled: true},
-      {label: 'Адресы', icon: 'fa fa-building-o', disabled: true},
-      {label: 'Банковские реквизиты', icon: 'fa fa-bank', disabled: true},
-      {label: 'Руководители', icon: 'fa fa-user-o', disabled: true},
-      {label: 'Договоры', icon: 'fa fa-file-text-o', disabled: true}
-    ];
-  }
+    private initUserForm() {
+        this.userform = this.formBuilder.group({
+            title: ['', Validators.compose([
+                Validators.required,
+                Validators.minLength(2)
+            ])],
+            alias: ['', Validators.compose([
+                Validators.required,
+                Validators.minLength(2)
+            ])],
+            edrpou: ['', Validators.compose([
+                Validators.required,
+                Validators.minLength(6),
+                Validators.maxLength(14)
+            ])],
+            inn: ['', Validators.compose([
+                Validators.maxLength(14)
+            ])],
+            vatCertificate: ['', Validators.compose([
+                Validators.maxLength(14)
+            ])]
+        });
+    }
 
-  private save(): void {
-    this.service.addClient(this.client)
-      .subscribe(
-        response => {
-          this.client = response;
-          let msg = 'Клиент ' + this.client.alias +  ' успешно добавлен (ID=' + response.id + ')';
-          this.msgs = [{severity:'success', summary:'Успешно!', detail: msg}];
-        }
-      );
-  }
+    private initTabs() {
+        this.tabs = [
+            {label: 'Основные данные', icon: 'fa fa-address-card-o', disabled: true},
+            {label: 'Адресы', icon: 'fa fa-building-o', disabled: true},
+            {label: 'Банковские реквизиты', icon: 'fa fa-bank', disabled: true},
+            {label: 'Руководители', icon: 'fa fa-user-o', disabled: true},
+            {label: 'Договоры', icon: 'fa fa-file-text-o', disabled: true}
+        ];
+    }
 
-  private goBackToClient(timeMillis: number) {
-    setTimeout(
-      (router) => {
-        this.router.navigate([this.client.url]);
-      }, timeMillis);
-  } 
+    private save() {
+        let client: Client = {
+            title: this.userform.controls['title'].value,
+            alias: this.userform.controls['alias'].value,
+            edrpou: this.userform.controls['edrpou'].value,
+            vatCertificate: this.userform.controls['vatCertificate'].value,
+            inn: this.userform.controls['inn'].value
+        };
+        this.clientService.addClient(client)
+            .subscribe(
+                response => {
+                    let msg = 'Клиент ' + response.alias + ' успешно добавлен (ID=' + response.id + ')';
+                    this.msgs = [{severity: 'success', summary: 'Успешно!', detail: msg}];
+                    this.router.navigate([response.url]);
+                });
+    }
 
 }
