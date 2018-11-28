@@ -7,8 +7,8 @@ import { MenuItem } from 'primeng/api';
   styleUrls: ['./navbar-menu-bar.component.css']
 })
 export class NavbarMenuBarComponent implements OnInit {
-  @Input('model') model: MenuItem[];
-  @Input('autoDisplay') autoDisplay: boolean = true;
+  @Input() model: MenuItem[] = [];
+  @Input() autoDisplay: boolean = true;
 
   constructor() { }
 
