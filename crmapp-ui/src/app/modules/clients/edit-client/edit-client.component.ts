@@ -12,8 +12,8 @@ import { Message } from 'primeng/api';
 })
 export class EditClientComponent implements OnInit {
   msgs: Message[] = [];
-  userform: FormGroup;
-  client: Client = {};
+  clientForm: FormGroup;
+  // client: Client = {};
 
   constructor(private formBuilder: FormBuilder,
               private clientService: ClientService,
@@ -22,7 +22,7 @@ export class EditClientComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.userform = this.formBuilder.group({
+      this.clientForm = this.formBuilder.group({
           title: [this.getClient().title, Validators.compose([
               Validators.required,
               Validators.minLength(2)
@@ -43,11 +43,11 @@ export class EditClientComponent implements OnInit {
               Validators.maxLength(14)
           ])]
       });
-      this.userform.controls['title'].setValue(this.getClient().title);
-      this.userform.controls['alias'].setValue(this.getClient().alias);
-      this.userform.controls['edrpou'].setValue(this.getClient().edrpou);
-      this.userform.controls['vatCertificate'].setValue(this.getClient().vatCertificate);
-      this.userform.controls['inn'].setValue(this.getClient().inn);
+      this.clientForm.controls['title'].setValue(this.getClient().title);
+      this.clientForm.controls['alias'].setValue(this.getClient().alias);
+      this.clientForm.controls['edrpou'].setValue(this.getClient().edrpou);
+      this.clientForm.controls['vatCertificate'].setValue(this.getClient().vatCertificate);
+      this.clientForm.controls['inn'].setValue(this.getClient().inn);
   }
   
   onSubmit() {
@@ -62,11 +62,11 @@ export class EditClientComponent implements OnInit {
     private update() {
         let client: Client = {
             id: this.getClient().id,
-            title: this.userform.controls['title'].value,
-            alias: this.userform.controls['alias'].value,
-            edrpou: this.userform.controls['edrpou'].value,
-            vatCertificate: this.userform.controls['vatCertificate'].value,
-            inn: this.userform.controls['inn'].value
+            title: this.clientForm.controls['title'].value,
+            alias: this.clientForm.controls['alias'].value,
+            edrpou: this.clientForm.controls['edrpou'].value,
+            vatCertificate: this.clientForm.controls['vatCertificate'].value,
+            inn: this.clientForm.controls['inn'].value
         };
         this.clientService.updateClient(client)
             .subscribe(

@@ -96,10 +96,9 @@ export class ClientService {
         return this.client.addresses;
     }
 
-    getAddressById(id: number, client: Client): Observable<ClientAddress> {
-        const url = `${this.clientsUrl}/${client.id}/addresses/${id}`;
-        return this.http
-            .get<ClientAddress>(url, {headers: this.headers})
+    getAddressById(addressId: number, clientId: number) {
+        const url = this.clientsUrl + clientId + '/addresses/' + addressId;
+        return this.http.get<ClientAddress>(url, {headers: this.headers});
     }
 
     addAddress(address: ClientAddress, client: Client): Observable<ClientAddress> {

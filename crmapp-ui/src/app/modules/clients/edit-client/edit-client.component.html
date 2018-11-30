@@ -1,7 +1,7 @@
 <p-growl [value]="msgs"></p-growl>
 
 <div class="ui-g-12">
-  <form [formGroup]="userform" (ngSubmit)="onSubmit()">
+  <form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
     <div class="ui-g-10">
       <p-card>
         <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
@@ -17,7 +17,7 @@
             </div>
             <div class="ui-grid-col-3">
               <div class="ui-message ui-messages-error ui-corner-all" 
-                *ngIf="!userform.controls['title'].valid&&userform.controls['title'].dirty">
+                *ngIf="!clientForm.controls['title'].valid&&clientForm.controls['title'].dirty">
                 <i class="fa fa-close"></i>
                 Введите полное название (не менее 2 символов)!
               </div>            
@@ -35,7 +35,7 @@
             </div>
             <div class="ui-grid-col-3">
               <div class="ui-message ui-messages-error ui-corner-all" 
-                *ngIf="!userform.controls['alias'].valid&&userform.controls['alias'].dirty">
+                *ngIf="!clientForm.controls['alias'].valid&&clientForm.controls['alias'].dirty">
                 <i class="fa fa-close"></i>
                 Введите псевдоним (не менее 2 символов)!
               </div>            
@@ -54,7 +54,7 @@
             </div>
             <div class="ui-grid-col-3">
               <div class="ui-message ui-messages-error ui-corner-all" 
-                *ngIf="!userform.controls['edrpou'].valid&&userform.controls['edrpou'].dirty">
+                *ngIf="!clientForm.controls['edrpou'].valid&&clientForm.controls['edrpou'].dirty">
                 <i class="fa fa-close"></i>
                 Введите ЕДРПОУ (не менее 6 и не более 14 цифр)!
               </div>            
@@ -92,7 +92,7 @@
         class="ui-button-info btn-block" icon="fa fa-arrow-circle-o-left"
         (click)="goBackToClient(0)">
       </button>
-      <button pButton type="submit" label="Записать" [disabled]="!userform.valid"
+      <button pButton type="submit" label="Записать" [disabled]="!clientForm.valid"
         class="ui-button-success btn-block" icon="fa fa-check-square-o">
       </button>
     </div>
