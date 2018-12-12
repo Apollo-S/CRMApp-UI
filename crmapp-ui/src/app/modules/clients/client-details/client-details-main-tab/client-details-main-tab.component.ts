@@ -1,55 +1,56 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Client } from '../../../../models/Client';
-import { ClientService } from '../../../../services/client.service';
-import { MessageService } from 'primeng/components/common/messageservice';
-import { ConfirmationService, Message } from 'primeng/api';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {Client} from '../../../../models/Client';
+import {ClientService} from '../../../../services/client.service';
+import {ConfirmationService, MessageService} from 'primeng/api';
 
 @Component({
-  selector: 'app-client-details-main-tab',
-  templateUrl: './client-details-main-tab.component.html',
-  styleUrls: ['./client-details-main-tab.component.css']
+    selector: 'app-client-details-main-tab',
+    templateUrl: './client-details-main-tab.component.html',
+    styleUrls: ['./client-details-main-tab.component.css']
 })
 export class ClientDetailsMainTabComponent implements OnInit {
-  msgs: Message[] = [];
-  client: Client = {};
 
-  constructor(private clientService: ClientService,
-              private router: Router,
-              private confirmationService: ConfirmationService) {}
+    constructor(private clientService: ClientService,
+                private router: Router,
+                private confirmationService: ConfirmationService,
+                private messageService: MessageService) {
+    }
 
-  ngOnInit() {}
+    ngOnInit() {}
 
-  getCurrentClient() {
-      return this.clientService.getCurrentClient();
-  }
+    getCurrentClient() {
+        return this.clientService.getCurrentClient();
+    }
 
-  confirmDeleting() {
-    let msg  = 'Клиент \"' + this.client.title + '(ID=' + this.client.id + ')\" успешно удален';
-    this.confirmationService.confirm({
-      message: 'Действительно удалить клиента?',
-      header: 'Удаление объекта',
-      icon: 'fa fa-trash',
-      accept: () => {
-        this.delete();
-        this.msgs = [{severity:'success', summary:'Успешно', detail: msg}];
-      },
-      reject: () => {}
-    });
-  }
-
-  private delete(): void {
-    this.clientService.deleteClient(this.client)
-      .subscribe(
-        () => this.goBackToClients()
-      );
-  }
-
-  private goBackToClients(): void {
-    setTimeout(
-      () => {
-        this.router.navigate(['/clients']);
-      }, 1500);
-  }
+    confirmDeleting() {
+        let msg = 'Клиент \"' + this.getCurrentClient().title + '\" (ID=' + this.getCurrentClient().id + ') ';
+        this.confirmationService.confirm({
+            message: 'Действительно удалить ' + this.getCurrentClient().title + ' ?',
+            header: 'Удаление',
+            icon: 'fa fa-trash',
+            accept: () => {
+                this.clientService.deleteClient(this.getCurrentClient().id).toPromise()
+                    .then(
+                    () => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Успешно!',
+                            detail: (msg + ' успешно удален')
+                        });
+                        this.router.navigate(['/clients']);
+                    })
+                    .catch(
+                    () => {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Ошибка!',
+                            detail: (msg + ' не удален')
+                        });
+                    });
+            },
+            reject: () => {}
+        });
+    }
 
 }
