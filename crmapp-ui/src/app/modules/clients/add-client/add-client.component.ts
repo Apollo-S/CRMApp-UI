@@ -1,9 +1,9 @@
-import {Component, OnInit, Output} from '@angular/core';
-import {FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ClientService} from '../../../services/client.service';
 import {Client} from '../../../models/Client';
-import {Message, MenuItem} from 'primeng/api';
+import {MenuItem, MessageService} from 'primeng/api';
 
 @Component({
     selector: 'app-add-client',
@@ -11,14 +11,13 @@ import {Message, MenuItem} from 'primeng/api';
     styleUrls: ['./add-client.component.css']
 })
 export class AddClientComponent implements OnInit {
-
-    @Output() msgs: Message[] = [];
     tabs: MenuItem[];
     userform: FormGroup;
 
     constructor(private clientService: ClientService,
                 private formBuilder: FormBuilder,
-                private router: Router) {
+                private router: Router,
+                private messageService: MessageService) {
     }
 
     ngOnInit() {
@@ -66,19 +65,32 @@ export class AddClientComponent implements OnInit {
 
     private save() {
         let client: Client = {
-            title: this.userform.controls['title'].value,
-            alias: this.userform.controls['alias'].value,
-            edrpou: this.userform.controls['edrpou'].value,
-            vatCertificate: this.userform.controls['vatCertificate'].value,
-            inn: this.userform.controls['inn'].value
+            title: this.userform.controls.title.value,
+            alias: this.userform.controls.alias.value,
+            edrpou: this.userform.controls.edrpou.value,
+            vatCertificate: this.userform.controls.vatCertificate.value,
+            inn: this.userform.controls.inn.value
         };
-        this.clientService.addClient(client)
-            .subscribe(
+        this.clientService.addClient(client).toPromise()
+            .then(
                 response => {
                     let msg = 'Клиент ' + response.alias + ' успешно добавлен (ID=' + response.id + ')';
-                    this.msgs = [{severity: 'success', summary: 'Успешно!', detail: msg}];
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Успешно!',
+                        detail: msg
+                    });
                     this.router.navigate([response.url]);
-                });
+                })
+            .catch(
+                () => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Ошибка!',
+                        detail: 'Клиент не добавлен'
+                    });
+                }
+            );
     }
 
 }
