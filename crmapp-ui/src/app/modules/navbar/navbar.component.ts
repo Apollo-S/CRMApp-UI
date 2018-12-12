@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import {MenuItem, MessageService} from 'primeng/api';
 import { CategoryService } from '../../services/category.service';
 
 @Component({
@@ -13,7 +13,8 @@ export class NavbarComponent implements OnInit {
     panelMenuItems: Array<MenuItem> = [];
     menuItems: Array<MenuItem> = [];
 
-    constructor(private categoryService: CategoryService) { }
+    constructor(private categoryService: CategoryService,
+                private messageService: MessageService) { }
 
     ngOnInit() {
         this.initCategories();
