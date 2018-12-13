@@ -1,18 +1,19 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import {Component, OnInit, Input} from '@angular/core';
+import {MenuItem} from 'primeng/api';
 
 @Component({
-  selector: 'app-navbar-menu-bar',
-  templateUrl: './navbar-menu-bar.component.html',
-  styleUrls: ['./navbar-menu-bar.component.css']
+    selector: 'app-navbar-menu-bar',
+    templateUrl: './navbar-menu-bar.component.html',
+    styleUrls: ['./navbar-menu-bar.component.css']
 })
 export class NavbarMenuBarComponent implements OnInit {
-  @Input() model: MenuItem[] = [];
-  @Input() autoDisplay: boolean = true;
+    @Input() model: MenuItem[] = [];
+    @Input() autoDisplay: boolean = true;
 
-  constructor() { }
+    constructor() {
+    }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
 
 }

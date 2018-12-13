@@ -20,6 +20,9 @@ export class ClientDetailsComponent implements OnInit {
             () => {
                 this.client = this.clientService.getCurrentClient();
             });
+        // this.clientService.fetchClientById(this.clientId).toPromise().then(
+        //     data => this.client = data
+        // )
     }
 
     ngOnInit() {

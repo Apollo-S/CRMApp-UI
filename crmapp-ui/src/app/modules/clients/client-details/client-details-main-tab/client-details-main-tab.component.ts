@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {Client} from '../../../../models/Client';
 import {ClientService} from '../../../../services/client.service';
 import {ConfirmationService, MessageService} from 'primeng/api';
 
