@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, ActivatedRoute} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {ClientService} from '../../../../../services/client.service';
 import {UtilService} from '../../../../../services/util.service';
-import {ConfirmationService, Message} from 'primeng/api';
+import {ConfirmationService, MessageService} from 'primeng/api';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
@@ -11,7 +11,6 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
     styleUrls: ['./edit-address.component.css']
 })
 export class EditAddressComponent implements OnInit {
-    msgs: Message[] = [];
     address: any;
     years: string;
     ru: any;
@@ -20,33 +19,29 @@ export class EditAddressComponent implements OnInit {
 
     constructor(private clientService: ClientService,
                 private formBuilder: FormBuilder,
-                private router: Router,
                 private route: ActivatedRoute,
-                private confirmationService: ConfirmationService) {
+                private confirmationService: ConfirmationService,
+                private messageService: MessageService) {
         this.addressId = +route.snapshot.params.id;
-        this.addressForm = this.formBuilder.group({
-            presentation: ['', Validators.required],
-            dateStart: ['', Validators.required]
-        });
-        this.getClientAddressById(this.addressId, this.getClient().id).toPromise().then(
-            address => {
-                address.dateStart = new Date(address.dateStart);
-                this.addressForm.controls.presentation.setValue(address.presentation);
-                this.addressForm.controls.dateStart.setValue(address.dateStart);
-            }
-        );
-    }
-
-    ngOnInit() {
         this.ru = UtilService.getCalendarLocalSet();
         this.years = UtilService.getCalendarYears(5);
     }
 
-    onSubmit() {
-        this.update().then(
-            () => {
-                this.goBackToAddresses()
+    ngOnInit() {
+        this.addressForm = this.formBuilder.group({
+            presentation: ['', Validators.required],
+            dateStart: ['', Validators.required]
+        });
+        this.clientService.getAddressById(this.addressId, this.getClient().id).toPromise()
+            .then(address => {
+                this.address = address;
+                this.addressForm.controls.presentation.setValue(address.presentation);
+                this.addressForm.controls.dateStart.setValue(new Date(address.dateStart));
             });
+    }
+
+    onSubmit() {
+        this.update();
     }
 
     getClient() {
@@ -56,54 +51,68 @@ export class EditAddressComponent implements OnInit {
     confirmDeleting() {
         this.confirmationService.confirm({
             message: 'Действительно удалить адрес?',
-            header: 'Удаление адреса',
+            header: 'Удаление',
             icon: 'fa fa-trash',
             accept: () => {
-                let msg = 'Адрес успешно удален (ID=' + this.address.id + ')';
-                this.delete().toPromise().then(
-                    () => {
-                        this.msgs = [{severity: 'success', summary: 'Успешно', detail: msg}];
-                    }
-                ).then(
-                    () => { this.goBackToAddresses(); }
-                );
+                let msg = 'Адрес (ID=' + this.address.id + ')';
+                this.clientService.deleteAddress(this.address.id, this.getClient()).toPromise()
+                    .then(() => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Успешно!',
+                            detail: msg + ' успешно удален'
+                        });
+                    })
+                    .then(() => {
+                        this.clientService.fetchAllClientDataPromise(this.getClient().id)
+                            .then(() => {
+                                    this.goBackToAddresses();
+                            })
+                    })
+                    .catch(() => {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Ошибка!',
+                            detail: msg + ' не удален'
+                        });
+                    });
             },
-            reject: () => {
-            }
+            reject: () => {}
         });
     }
 
-    private delete() {
-        return this.clientService.deleteAddress(this.address.id, this.getClient());
-    }
-
     private update() {
-        debugger
-        let address = {
+        const address = {
             id: this.addressId,
             presentation: this.addressForm.controls.presentation.value,
             dateStart: this.addressForm.controls.dateStart.value
         };
-        return this.clientService.updateAddress(address, this.getClient().id).toPromise().then(
-            response => {
-                this.clientService.fetchAddressesByClientId(this.getClient().id).toPromise().then(
-                    () => {
-                        let msg = 'Адрес для ' + this.getClient().alias + ' успешно обновлен (ID=' + response.id + ')';
-                        this.msgs = [{severity: 'success', summary: 'Успешно', detail: msg}];
+        this.clientService.updateAddress(address, this.getClient().id).toPromise()
+            .then(response => {
+                let msg = 'Адрес (ID=' + response.id + ') для клиента ' + this.getClient().alias;
+                this.clientService.fetchAllClientDataPromise(this.getClient().id)
+                    .then(() => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Успешно!',
+                            detail: msg + ' успешно обновлен'
+                        });
+                    })
+                    .then(() => {
                         this.goBackToAddresses();
-
-                    }
-                )
-            }
-        );
-    }
-
-    getClientAddressById(addressId: number, clientId: number) {
-        return this.clientService.getAddressById(addressId, clientId);
+                    })
+                    .catch(() => {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Ошибка!',
+                            detail: msg + ' не обновлен'
+                        });
+                    })
+            });
     }
 
     goBackToAddresses() {
-        this.router.navigate([this.getClient().url, 'addresses']).then(() => {});
+        this.clientService.goToUrl([this.getClient().url, 'addresses']).then(() => {});
     }
 
 }
