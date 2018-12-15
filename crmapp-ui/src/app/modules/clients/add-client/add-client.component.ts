@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
 import {ClientService} from '../../../services/client.service';
 import {Client} from '../../../models/Client';
 import {MenuItem, MessageService} from 'primeng/api';
@@ -16,7 +15,6 @@ export class AddClientComponent implements OnInit {
 
     constructor(private clientService: ClientService,
                 private formBuilder: FormBuilder,
-                private router: Router,
                 private messageService: MessageService) {
     }
 
@@ -72,25 +70,22 @@ export class AddClientComponent implements OnInit {
             inn: this.userform.controls.inn.value
         };
         this.clientService.addClient(client).toPromise()
-            .then(
-                response => {
-                    let msg = 'Клиент ' + response.alias + ' успешно добавлен (ID=' + response.id + ')';
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: 'Успешно!',
-                        detail: msg
-                    });
-                    this.router.navigate([response.url]);
-                })
-            .catch(
-                () => {
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: 'Ошибка!',
-                        detail: 'Клиент не добавлен'
-                    });
-                }
-            );
+            .then(response => {
+                let msg = 'Клиент ' + response.alias + ' успешно добавлен (ID=' + response.id + ')';
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Успешно!',
+                    detail: msg
+                });
+                this.clientService.goToUrl([response.url]);
+            })
+            .catch(() => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Ошибка!',
+                    detail: 'Клиент не добавлен'
+                });
+            });
     }
 
 }
