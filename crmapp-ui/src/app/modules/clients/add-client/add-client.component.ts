@@ -11,7 +11,7 @@ import {MenuItem, MessageService} from 'primeng/api';
 })
 export class AddClientComponent implements OnInit {
     tabs: MenuItem[];
-    userform: FormGroup;
+    clientForm: FormGroup;
 
     constructor(private clientService: ClientService,
                 private formBuilder: FormBuilder,
@@ -28,7 +28,7 @@ export class AddClientComponent implements OnInit {
     }
 
     private initUserForm() {
-        this.userform = this.formBuilder.group({
+        this.clientForm = this.formBuilder.group({
             title: ['', Validators.compose([
                 Validators.required,
                 Validators.minLength(2)
@@ -46,7 +46,7 @@ export class AddClientComponent implements OnInit {
                 Validators.maxLength(14)
             ])],
             vatCertificate: ['', Validators.compose([
-                Validators.maxLength(14)
+                Validators.maxLength(20)
             ])]
         });
     }
@@ -63,11 +63,11 @@ export class AddClientComponent implements OnInit {
 
     private save() {
         let client: Client = {
-            title: this.userform.controls.title.value,
-            alias: this.userform.controls.alias.value,
-            edrpou: this.userform.controls.edrpou.value,
-            vatCertificate: this.userform.controls.vatCertificate.value,
-            inn: this.userform.controls.inn.value
+            title: this.clientForm.controls.title.value,
+            alias: this.clientForm.controls.alias.value,
+            edrpou: this.clientForm.controls.edrpou.value,
+            vatCertificate: this.clientForm.controls.vatCertificate.value,
+            inn: this.clientForm.controls.inn.value
         };
         this.clientService.addClient(client).toPromise()
             .then(response => {
