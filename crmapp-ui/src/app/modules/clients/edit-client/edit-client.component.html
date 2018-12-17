@@ -78,6 +78,12 @@
                                    formControlName="vatCertificate"
                             >
                         </div>
+                        <div class="ui-grid-col-3">
+                            <p-message severity="error"
+                                       text="Введите не более 20 цифр)!"
+                                       *ngIf="!clientForm.controls['vatCertificate'].valid">
+                            </p-message>
+                        </div>
                     </div>
                 </div>
             </p-card>

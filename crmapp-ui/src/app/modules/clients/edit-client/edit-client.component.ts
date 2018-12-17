@@ -36,7 +36,7 @@ export class EditClientComponent implements OnInit {
                 Validators.maxLength(14)
             ])],
             vatCertificate: ['', Validators.compose([
-                Validators.maxLength(14)
+                Validators.maxLength(20)
             ])]
         });
         this.clientForm.controls.title.setValue(this.getClient().title);
