@@ -25,6 +25,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { ListboxModule } from 'primeng/listbox';
 import { MenubarModule } from 'primeng/menubar';
+import { MessageModule } from 'primeng/message';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { PanelModule } from 'primeng/panel';
@@ -37,12 +38,12 @@ import { TableModule } from 'primeng/table';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { TabViewModule } from 'primeng/tabview';
 import { TieredMenuModule } from 'primeng/tieredmenu';
+import { ToastModule } from 'primeng/toast';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TreeModule }  from 'primeng/tree';
-
 import { ConfirmationService } from 'primeng/api';
-import { MessageService } from 'primeng/components/common/messageservice';
+import { MessageService } from 'primeng/api';
 
 // Custom Service Imports
 import { AppConst } from './app-const';
@@ -79,8 +80,6 @@ import { ClientDetailsComponent } from './modules/clients/client-details/client-
 import { ClientDetailsTabsComponent } from './modules/clients/client-details/client-details-tabs/client-details-tabs.component';
 import { ClientDetailsMainTabComponent } from './modules/clients/client-details/client-details-main-tab/client-details-main-tab.component';
 import { ClientDetailsAddressesTabComponent } from './modules/clients/client-details/client-details-addresses-tab/client-details-addresses-tab.component';
-import { AddAddressComponent } from './modules/clients/client-details/client-details-addresses-tab/add-address/add-address.component';
-import { EditAddressComponent } from './modules/clients/client-details/client-details-addresses-tab/edit-address/edit-address.component';
 import { ClientDetailsAccountsTabComponent } from './modules/clients/client-details/client-details-accounts-tab/client-details-accounts-tab.component';
 import { AddAccountComponent } from './modules/clients/client-details/client-details-accounts-tab/add-account/add-account.component';
 import { EditAccountComponent } from './modules/clients/client-details/client-details-accounts-tab/edit-account/edit-account.component';
@@ -125,6 +124,7 @@ import { ClientEmployeeDetailsTemplateTableComponent } from './templates/client-
 import { ControlMessagesComponent } from './templates/control-messages/control-messages.component';
 import { EmployeeDetailsVacationsTabComponent } from './modules/employees/employee-details/employee-details-vacations-tab/employee-details-vacations-tab.component';
 import { EmployeeDetailsSicksTabComponent } from './modules/employees/employee-details/employee-details-sicks-tab/employee-details-sicks-tab.component';
+import { AddEditAddressComponent } from './modules/clients/client-details/client-details-addresses-tab/add-edit-address/add-edit-address.component';
 
 @NgModule({
   declarations: [
@@ -162,8 +162,7 @@ import { EmployeeDetailsSicksTabComponent } from './modules/employees/employee-d
     EmployeeDetailsTabsComponent,
     ClientDetailsMainTabComponent,
     ClientDetailsTabsComponent,
-    AddAddressComponent,
-    EditAddressComponent,
+    AddEditAddressComponent,
     AddAccountComponent,
     EditAccountComponent,
     AddDirectorComponent,
@@ -214,6 +213,7 @@ import { EmployeeDetailsSicksTabComponent } from './modules/employees/employee-d
     KeyFilterModule,
     ListboxModule,
     MenubarModule,
+    MessageModule,
     MultiSelectModule,
     PaginatorModule,
     PanelMenuModule,
@@ -226,6 +226,7 @@ import { EmployeeDetailsSicksTabComponent } from './modules/employees/employee-d
     TabMenuModule,
     TabViewModule,
     TieredMenuModule,
+    ToastModule,
     ToggleButtonModule,
     ToolbarModule,
     TreeModule,

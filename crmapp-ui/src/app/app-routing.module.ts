@@ -16,8 +16,6 @@ import { ClientDetailsComponent } from './modules/clients/client-details/client-
 import { ClientDetailsTabsComponent } from './modules/clients/client-details/client-details-tabs/client-details-tabs.component';
 import { ClientDetailsMainTabComponent } from './modules/clients/client-details/client-details-main-tab/client-details-main-tab.component';
 import { ClientDetailsAddressesTabComponent } from './modules/clients/client-details/client-details-addresses-tab/client-details-addresses-tab.component';
-import { AddAddressComponent } from './modules/clients/client-details/client-details-addresses-tab/add-address/add-address.component';
-import { EditAddressComponent } from './modules/clients/client-details/client-details-addresses-tab/edit-address/edit-address.component';
 import { ClientDetailsAccountsTabComponent } from './modules/clients/client-details/client-details-accounts-tab/client-details-accounts-tab.component';
 import { AddAccountComponent } from './modules/clients/client-details/client-details-accounts-tab/add-account/add-account.component';
 import { EditAccountComponent } from './modules/clients/client-details/client-details-accounts-tab/edit-account/edit-account.component';
@@ -55,6 +53,7 @@ import { MailInputsComponent } from "./modules/mail-inputs/mail-inputs.component
 import { DocumentTypesComponent } from "./modules/document-types/document-types.component";
 import { EmployeeDetailsVacationsTabComponent } from "./modules/employees/employee-details/employee-details-vacations-tab/employee-details-vacations-tab.component";
 import { EmployeeDetailsSicksTabComponent } from "./modules/employees/employee-details/employee-details-sicks-tab/employee-details-sicks-tab.component";
+import {AddEditAddressComponent} from "./modules/clients/client-details/client-details-addresses-tab/add-edit-address/add-edit-address.component";
 
 const appRoutes: Routes = [
   
@@ -69,11 +68,11 @@ const appRoutes: Routes = [
           {path: 'main', component: ClientDetailsMainTabComponent},
           {path: 'main/edit', component:EditClientComponent},
           {path: 'addresses', component: ClientDetailsAddressesTabComponent},
-          {path: 'addresses/add', component:AddAddressComponent},
-          {path: 'addresses/:id', component:EditAddressComponent,
+          {path: 'addresses/add', component:AddEditAddressComponent},
+          {path: 'addresses/:id', component:AddEditAddressComponent,
             children: [
               {path:  '', redirectTo: 'edit', pathMatch: 'full'},
-              {path: 'edit', component:EditAddressComponent},
+              {path: 'edit', component:AddEditAddressComponent},
             ]
           },
           {path: 'accounts', component: ClientDetailsAccountsTabComponent},
@@ -131,7 +130,7 @@ const appRoutes: Routes = [
       {path: 'document-types', component:DocumentTypesComponent},
     ]
   }
-]
+];
 
 @NgModule({
   declarations: [],
