@@ -4,7 +4,7 @@ import {ClientService} from "../../../../../services/client.service";
 import {ConfirmationService, MessageService} from "primeng/api";
 import {UtilService} from "../../../../../services/util.service";
 import {ClientAddress} from "../../../../../models/ClientAddress";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
     selector: 'app-add-edit-address',
@@ -12,7 +12,6 @@ import {ActivatedRoute, Router} from "@angular/router";
     styleUrls: ['./add-edit-address.component.css']
 })
 export class AddEditAddressComponent implements OnInit {
-    // addressId: number;
     address: ClientAddress;
     isNew: boolean = false;
     years: string;
@@ -44,17 +43,21 @@ export class AddEditAddressComponent implements OnInit {
     }
 
     onSubmit() {
-        this.save();
+        if (this.isNew) {
+            this.save();
+        } else {
+            this.update();
+        }
     }
 
     private initAddressForm() {
         this.addressForm = this.formBuilder.group({
             presentation: ['', Validators.compose([
-                Validators.required
+                Validators.required,
+                Validators.minLength(1)
             ])],
             dateStart: ['', Validators.compose([
                 Validators.required,
-                Validators.nullValidator
             ])]
         });
     }
@@ -126,7 +129,8 @@ export class AddEditAddressComponent implements OnInit {
                         });
                     });
             },
-            reject: () => {}
+            reject: () => {
+            }
         });
     }
 
