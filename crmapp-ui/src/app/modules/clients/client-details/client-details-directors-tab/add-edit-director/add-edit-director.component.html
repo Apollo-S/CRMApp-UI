@@ -1,0 +1,97 @@
+<div class="ui-g-12">
+    <form [formGroup]="directorForm" (ngSubmit)="onSubmit()">
+        <div class="ui-g-10">
+            <p-card>
+                <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-3">
+                            <b>Фамилия, имя, отчество:</b>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <input pInputText type="text"
+                                   placeholder="напр., Иванов Иван Иванович"
+                                   formControlName="fullName"
+                            >
+                        </div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-3">
+                            <b>Фамилия и инициалы:</b>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <input pInputText type="text"
+                                   placeholder="напр., Иванов И.И."
+                                   formControlName="shortName"
+                            >
+                        </div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-3">
+                            <b>Должность:</b>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <p-dropdown [options]="posts"
+                                        optionLabel="title"
+                                        [autoWidth]="false"
+                                        placeholder="Выберите должность..."
+                                        formControlName="post"
+                            ></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-3">
+                            <b>Актуален с:</b>
+                        </div>
+                        <div class="ui-grid-col-3">
+                            <p-calendar formControlName="dateStart" placeholder="Дата"
+                                        [monthNavigator]="true"
+                                        [yearNavigator]="true"
+                                        yearRange="{{years}}"
+                                        [locale]="ru"
+                                        showButtonBar="true"
+                                        [showIcon]="true"
+                                        dateFormat="dd.mm.yy"
+                            ></p-calendar>
+                        </div>
+                    </div>
+                </div>
+            </p-card>
+        </div>
+        <div class="ui-g-2" *ngIf="isNew">
+            <button pButton type="submit"
+                    class="ui-button-success btn-block"
+                    icon="fa fa-check-square-o"
+                    label="Сохранить"
+                    [disabled]="!directorForm.valid"
+            ></button>
+            <button pButton type="button"
+                    class="ui-button-danger btn-block"
+                    icon="fa fa-arrow-circle-o-left"
+                    label="Отменить"
+                    (click)="goBackToDirectors()"
+            ></button>
+        </div>
+        <div class="ui-g-2" *ngIf="!isNew">
+            <button pButton type="button" label="Назад к клиенту"
+                    class="ui-button-info btn-block" icon="fa fa-arrow-circle-o-left"
+                    (click)="goBackToDirectors()">
+            </button>
+            <button pButton type="submit" label="Сохранить"
+                    class="ui-button-success btn-block" icon="fa fa-check-square-o">
+            </button>
+            <button pButton type="button" label="Удалить"
+                    class="ui-button-danger btn-block" icon="fa fa-trash-o"
+                    (click)="confirmDeleting()">
+            </button>
+        </div>
+    </form>
+</div>
+
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" #cd>
+    <p-footer>
+        <button type="button" pButton icon="fa fa-check"
+                class="ui-button-primary" label="Ок" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="fa fa-close"
+                class="ui-button-secondary" label="Отмена" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
