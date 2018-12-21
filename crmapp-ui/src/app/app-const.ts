@@ -7,5 +7,6 @@ export class AppConst {
     clientsUrl = '/clients';
     agreementsUrl = '/agreements';
     documentsUrl = '/documents';
+    postsUrl = '/posts';
 
 }

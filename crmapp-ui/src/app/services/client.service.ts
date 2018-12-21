@@ -1,40 +1,29 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, BehaviorSubject, of} from 'rxjs';
 import {Client} from '../models/Client';
 import {ClientAddress} from '../models/ClientAddress';
 import {ClientAccount} from '../models/ClientAccount';
 import {ClientAgreement} from '../models/ClientAgreement';
 import {ClientDirector} from '../models/ClientDirector';
 import {AppConst} from '../app-const';
-import {BaseServiceService} from "./base-service.service";
+import {BaseService} from "./base.service";
 import {Router} from "@angular/router";
-import {catchError, tap} from "rxjs/operators";
+import {catchError} from "rxjs/operators";
 import {MessageService} from "primeng/api";
 
 @Injectable()
-export class ClientService extends BaseServiceService {
+export class ClientService extends BaseService {
 
     private readonly headers: any;
     private readonly clientsUrl: string;
     private clients: Client[];
     private client: Client = {};
 
-    private _property$: BehaviorSubject<Client> = new BehaviorSubject({});
-
-    set property(value: Client) {
-        this._property$.next(value);
-    }
-
-    get property$(): Observable<Client> {
-        return this._property$.asObservable();
-    }
-
     constructor(private http: HttpClient,
                 private appConst: AppConst,
                 router: Router,
-                private messageService: MessageService) {
-        super(router);
+                messageService: MessageService) {
+        super(router, messageService);
         this.clientsUrl = appConst.baseUrl + appConst.clientsUrl + '/';
         this.headers = appConst.headersJSON;
         this.client.accounts = [];
@@ -153,11 +142,6 @@ export class ClientService extends BaseServiceService {
         return this.http.get<Array<ClientAccount>>(url, {headers: this.headers})
     }
 
-    getAccountById(id: number, client: Client) {
-        const url = `${this.clientsUrl}/${client.id}/accounts/${id}`;
-        return this.http.get<ClientAccount>(url, {headers: this.headers})
-    }
-
     addAccount(account: ClientAccount, clientId: number) {
         const url = this.clientsUrl + clientId + '/accounts';
         return this.http.post<ClientAccount>(url, account, {headers: this.headers});
@@ -176,36 +160,46 @@ export class ClientService extends BaseServiceService {
     // Directors
     private fetchDirectorsByClientId(clientId) {
         const directorsUrl = this.clientsUrl + clientId + '/directors';
-        return this.http.get<Array<ClientDirector>>(directorsUrl);
+        return this.http.get<Array<ClientDirector>>(directorsUrl)
+            .pipe(catchError(this.handleError<Array<ClientDirector>>(
+                'Ошибка при получении списка директоров!'
+            )));
     }
 
     getDirectors() {
         return this.client.directors;
     }
 
-    getDirectorsByClientId(clientId: number) {
-        const url = this.clientsUrl + clientId + '/directors/';
-        return this.http.get<ClientDirector[]>(url, {headers: this.headers});
-    }
-
     getDirectorById(directorId: number, clientId: number) {
         const url = this.clientsUrl + clientId + '/directors/' + directorId;
         return this.http.get<ClientDirector>(url, {headers: this.headers})
+            .pipe(catchError(this.handleError<ClientDirector>(
+                'Ошибка при добавлении директора!'
+            )));
     }
 
     addDirector(director: ClientDirector, clientId: number) {
         const url = this.clientsUrl + clientId + '/directors';
-        return this.http.post<ClientDirector>(url, director, {headers: this.headers});
+        return this.http.post<ClientDirector>(url, director, {headers: this.headers})
+            .pipe(catchError(this.handleError<ClientDirector>(
+                    'Ошибка при добавлении директора!'
+            )));
     }
 
     updateDirector(director: ClientDirector, clientId: number) {
         const url = this.clientsUrl + clientId + '/directors/' + director.id;
-        return this.http.put<ClientDirector>(url, director, {headers: this.headers});
+        return this.http.put<ClientDirector>(url, director, {headers: this.headers})
+            .pipe(catchError(this.handleError<ClientDirector>(
+                'Ошибка при изменении директора!'
+            )));
     }
 
     deleteDirector(directorId: number, clientId: number) {
         const url = this.clientsUrl + clientId + '/directors/' + directorId;
-        return this.http.delete(url, {headers: this.headers});
+        return this.http.delete(url, {headers: this.headers})
+            .pipe(catchError(this.handleError<ClientDirector>(
+                'Ошибка при удалении директора!'
+            )));
     }
 
     // Agreements
@@ -224,21 +218,6 @@ export class ClientService extends BaseServiceService {
     getAgreementsByClientId(clientId: number) {
         const url = this.clientsUrl + clientId + '/agreements';
         return this.http.get<ClientAgreement[]>(url, {headers: this.headers})
-    }
-
-    private handleError<T>(operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
-            // TODO: send the error to remote logging infrastructure
-            console.error(error); // log to console instead
-            this.messageService.add({
-                sticky: true,
-                severity: 'error',
-                summary: operation,
-                detail: 'failed: ' + error.message
-            })
-            console.log(`${operation} failed: ${error.message}`);
-            return of(result as T);
-        }
     }
 
 }

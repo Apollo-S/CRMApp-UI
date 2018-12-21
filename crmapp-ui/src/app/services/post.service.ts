@@ -1,27 +1,41 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Post } from '../models/Post';
-
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Post} from '../models/Post';
+import {AppConst} from "../app-const";
+import {catchError} from "rxjs/operators";
+import {BaseService} from "./base.service";
+import {Router} from "@angular/router";
+import {MessageService} from "primeng/api";
 
 @Injectable()
-export class PostService {
+export class PostService extends BaseService{
 
-  private postsUrl = '/api/posts';
-  private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    private readonly postsUrl;
+    private readonly headers;
 
-  constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient,
+                private appConst: AppConst,
+                router: Router,
+                messageService: MessageService) {
+        super(router, messageService);
+        this.postsUrl = appConst.baseUrl + appConst.postsUrl + '/';
+        this.headers = appConst.headersJSON;
+    }
 
-  getPosts(): Observable<Post[]> {
-    const url = `${this.postsUrl}`;
-    return this.http
-      .get<Post[]>(url, { headers: this.headers })
-  }
+    getPosts() {
+        const url = this.postsUrl;
+        return this.http.get<Post[]>(url, {headers: this.headers})
+            .pipe(catchError(this.handleError<Post[]>(
+                'Ошибка при загрузке должностей!'
+            )));
+    }
 
-  getPostById(id: number): Observable<Post> {
-    const url = `${this.postsUrl}/${id}`;
-    return this.http
-      .get<Post>(url, { headers: this.headers })
-  }
+    getPostById(postId: number) {
+        const url = this.postsUrl + postId;
+        return this.http.get(url, {headers: this.headers})
+            .pipe(catchError(this.handleError<Post>(
+                'Ошибка при загрузке должности с ID=' + postId + '!'
+            )));
+    }
 
 }
