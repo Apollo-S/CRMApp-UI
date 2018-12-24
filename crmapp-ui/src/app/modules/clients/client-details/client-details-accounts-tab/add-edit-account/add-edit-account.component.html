@@ -9,13 +9,13 @@
             </div>
             <div class="ui-grid-col-6">
               <input pInputText type="text"
-                     placeholder="Введите адрес"
+                     placeholder="Введите счет"
                      formControlName="presentation"
               >
             </div>
             <div class="ui-grid-col-3">
               <p-message severity="error"
-                         text="Необходимо ввести адрес!"
+                         text="Необходимо ввести счет!"
                          *ngIf="!accountForm.controls['presentation'].valid&&accountForm.controls['presentation'].dirty">
               </p-message>
             </div>

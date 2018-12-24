@@ -1,6 +1,5 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {ActivatedRoute, Params} from '@angular/router';
-import {Subscription} from 'rxjs';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {ClientService} from '../../../services/client.service';
 import {Client} from '../../../models/Client';
 
@@ -12,6 +11,7 @@ import {Client} from '../../../models/Client';
 export class ClientDetailsComponent implements OnInit {
     clientId: number;
     client: Client = {};
+    loadingState: boolean = true;
 
     constructor(private clientService: ClientService,
                 private route: ActivatedRoute) {
@@ -19,10 +19,8 @@ export class ClientDetailsComponent implements OnInit {
         this.clientService.fetchAllClientDataPromise(this.clientId).then(
             () => {
                 this.client = this.clientService.getCurrentClient();
+                this.loadingState = false;
             });
-        // this.clientService.fetchClientById(this.clientId).toPromise().then(
-        //     data => this.client = data
-        // )
     }
 
     ngOnInit() {
