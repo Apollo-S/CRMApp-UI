@@ -1,23 +1,101 @@
 <div class="ui-g-12">
     <form [formGroup]="addressForm" (ngSubmit)="onSubmit()">
         <div class="ui-g-10">
-            <p-card>
+            <p-card *ngIf="loadingState">
+                <div style="text-align: center;">
+                    <img
+                            src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+                    />
+                </div>
+            </p-card>
+
+            <p-card *ngIf="!loadingState">
                 <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-3">
-                            <b>Адрес:</b>
+                            <b>Страна:*</b>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <p-dropdown [options]="countries"
+                                        [showClear]="false"
+                                        [autoWidth]="false"
+                                        placeholder="Выберите страну"
+                                        optionLabel="title"
+                                        formControlName="country"
+                            ></p-dropdown>
+                        </div>
+                        <div class="ui-grid-col-3">
+                            <p-message severity="error"
+                                       text="Обязательное поле"
+                                       *ngIf="addressForm.controls['country'].invalid"
+                            ></p-message>
+                        </div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-3">
+                            <b>Область:</b>
                         </div>
                         <div class="ui-grid-col-6">
                             <input pInputText type="text"
-                                   placeholder="Введите адрес"
-                                   formControlName="presentation"
+                                   formControlName="region"
+                            >
+                        </div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-3">
+                            <b>Город:</b>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <input pInputText type="text"
+                                   formControlName="city"
+                            >
+                        </div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-3">
+                            <b>Улица:</b>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <input pInputText type="text"
+                                   formControlName="street"
+                            >
+                        </div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-3">
+                            <b>Дом:</b>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <input pInputText type="text"
+                                   formControlName="building"
+                            >
+                        </div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-3">
+                            <b>Квартира (офис):</b>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <input pInputText type="text"
+                                   formControlName="apartment"
+                            >
+                        </div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-3">
+                            <b>Индекс:</b>
+                        </div>
+                        <div class="ui-grid-col-3">
+                            <input pInputText type="text"
+
+                                   formControlName="zip"
                             >
                         </div>
                         <div class="ui-grid-col-3">
                             <p-message severity="error"
-                                       text="Необходимо ввести адрес!"
-                                       *ngIf="!addressForm.controls['presentation'].valid&&addressForm.controls['presentation'].dirty">
-                            </p-message>
+                                       text="Не более 5 знаков"
+                                       *ngIf="addressForm.controls['zip'].invalid&&addressForm.controls['zip'].dirty"
+                            ></p-message>
                         </div>
                     </div>
                     <div class="ui-grid-row">
@@ -25,17 +103,22 @@
                             <b>Действует с:</b>
                         </div>
                         <div class="ui-grid-col-3">
-                            <p-calendar [monthNavigator]="true" [yearNavigator]="true" [yearRange]="years"
-                                        [locale]="ru" showButtonBar="true" [showIcon]="true" dateFormat="dd.mm.yy"
-                                        placeholder="Дата"
+                            <p-calendar [monthNavigator]="true"
+                                        [yearNavigator]="true"
+                                        [yearRange]="years"
+                                        [locale]="ru"
+                                        [showButtonBar]="true"
+                                        [showIcon]="true"
+                                        [dateFormat]="'dd.mm.yy'"
+                                        placeholder="..."
                                         formControlName="dateStart"
                             ></p-calendar>
                         </div>
                         <div class="ui-grid-col-3"></div>
                         <div class="ui-grid-col-3">
                             <p-message severity="error"
-                                       text="Необходимо ввести дату!"
-                                       *ngIf="addressForm.controls['dateStart'].invalid&&!addressForm.controls['dateStart'].dirty"
+                                       text="Обязательное поле"
+                                       *ngIf="addressForm.controls['dateStart'].invalid"
                             ></p-message>
                         </div>
                     </div>
@@ -57,26 +140,40 @@
             ></button>
         </div>
         <div class="ui-g-2" *ngIf="!isNew">
-            <button pButton type="button" label="Назад к клиенту"
-                    class="ui-button-info btn-block" icon="fa fa-arrow-circle-o-left"
+            <button pButton type="button"
+                    class="ui-button-info btn-block"
+                    icon="fa fa-arrow-circle-o-left"
+                    label="Назад к клиенту"
                     (click)="goBackToAddresses()">
             </button>
-            <button pButton type="submit" label="Сохранить"
-                    class="ui-button-success btn-block" icon="fa fa-check-square-o">
-            </button>
-            <button pButton type="button" label="Удалить"
-                    class="ui-button-danger btn-block" icon="fa fa-trash-o"
-                    (click)="confirmDeleting()">
-            </button>
+            <button pButton type="submit"
+                    class="ui-button-success btn-block"
+                    icon="fa fa-check-square-o"
+                    label="Сохранить"
+            ></button>
+            <button pButton type="button"
+                    class="ui-button-danger btn-block"
+                    icon="fa fa-trash-o"
+                    label="Удалить"
+                    (click)="confirmDeleting()"
+            ></button>
         </div>
     </form>
 </div>
 
 <p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" #cd>
     <p-footer>
-        <button type="button" pButton icon="fa fa-check"
-                class="ui-button-primary" label="Ок" (click)="cd.accept()"></button>
-        <button type="button" pButton icon="fa fa-close"
-                class="ui-button-secondary" label="Отмена" (click)="cd.reject()"></button>
+        <button pButton type="button"
+                class="ui-button-primary"
+                icon="fa fa-check"
+                label="Ок"
+                (click)="cd.accept()"
+        ></button>
+        <button pButton type="button"
+                class="ui-button-secondary"
+                icon="fa fa-close"
+                label="Отмена"
+                (click)="cd.reject()"
+        ></button>
     </p-footer>
 </p-confirmDialog>

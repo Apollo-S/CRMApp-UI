@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ClientService} from "../../../../../services/client.service";
 import {ConfirmationService, MessageService} from "primeng/api";
-import {UtilService} from "../../../../../services/util.service";
-import {ClientAddress} from "../../../../../models/ClientAddress";
+import {UtilService} from "app/services/util.service";
 import {ActivatedRoute} from "@angular/router";
+import {ClientService} from "app/services/client.service";
+import {AddressService} from "app/services/address.service";
+import {Address} from "app/models/Address";
 
 @Component({
     selector: 'app-add-edit-address',
@@ -12,13 +13,16 @@ import {ActivatedRoute} from "@angular/router";
     styleUrls: ['./add-edit-address.component.css']
 })
 export class AddEditAddressComponent implements OnInit {
-    address: ClientAddress;
+    address: Address = <Address>{};
     isNew: boolean = false;
     years: string;
     ru: any;
     addressForm: FormGroup;
+    countries: any[];
+    loadingState: boolean;
 
     constructor(private clientService: ClientService,
+                private addressService: AddressService,
                 private formBuilder: FormBuilder,
                 private route: ActivatedRoute,
                 private confirmationService: ConfirmationService,
@@ -26,16 +30,28 @@ export class AddEditAddressComponent implements OnInit {
         this.initAddressForm();
         this.ru = UtilService.getCalendarLocalSet();
         this.years = UtilService.getCalendarYears(5);
+        this.addressService.fetchCountries().toPromise()
+            .then(response => {
+                this.countries = response
+            });
     }
 
     ngOnInit() {
         let addressId = +this.route.snapshot.params.id;
         if (addressId) {
+            this.loadingState = true;
             this.clientService.getAddressById(addressId, this.getClient().id).toPromise()
                 .then(address => {
                     this.address = address;
-                    this.addressForm.controls.presentation.setValue(address.presentation);
+                    this.addressForm.controls.country.setValue(address.country);
+                    this.addressForm.controls.region.setValue(address.region);
+                    this.addressForm.controls.city.setValue(address.city);
+                    this.addressForm.controls.street.setValue(address.street);
+                    this.addressForm.controls.building.setValue(address.building);
+                    this.addressForm.controls.apartment.setValue(address.apartment);
+                    this.addressForm.controls.zip.setValue(address.zip);
                     this.addressForm.controls.dateStart.setValue(new Date(address.dateStart));
+                    this.loadingState = false;
                 });
         } else {
             this.isNew = true;
@@ -52,9 +68,26 @@ export class AddEditAddressComponent implements OnInit {
 
     private initAddressForm() {
         this.addressForm = this.formBuilder.group({
-            presentation: ['', Validators.compose([
-                Validators.required,
-                Validators.minLength(1)
+            country: ['', Validators.compose([
+                Validators.required
+            ])],
+            region: ['', Validators.compose([
+                Validators.maxLength(30)
+            ])],
+            city: ['', Validators.compose([
+                Validators.maxLength(25)
+            ])],
+            street: ['', Validators.compose([
+                Validators.maxLength(100)
+            ])],
+            building: ['', Validators.compose([
+                Validators.maxLength(25)
+            ])],
+            apartment: ['', Validators.compose([
+                Validators.maxLength(15)
+            ])],
+            zip: ['', Validators.compose([
+                Validators.maxLength(5)
             ])],
             dateStart: ['', Validators.compose([
                 Validators.required,
@@ -68,8 +101,14 @@ export class AddEditAddressComponent implements OnInit {
 
     private save() {
         let msg = 'Адрес для ' + this.getClient().alias;
-        let address: ClientAddress = new ClientAddress();
-        address.presentation = this.addressForm.controls.presentation.value;
+        let address = <Address>{};
+        address.country = this.addressForm.controls.country.value;
+        address.region = this.addressForm.controls.region.value;
+        address.city = this.addressForm.controls.city.value;
+        address.street = this.addressForm.controls.street.value;
+        address.building = this.addressForm.controls.building.value;
+        address.apartment = this.addressForm.controls.apartment.value;
+        address.zip = this.addressForm.controls.zip.value;
         address.dateStart = this.addressForm.controls.dateStart.value;
         this.clientService.addAddress(address, this.getClient().id).toPromise()
             .then(response => {
@@ -85,13 +124,6 @@ export class AddEditAddressComponent implements OnInit {
                         this.goBackToAddresses();
                     });
             })
-            .catch(() => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Ошибка!',
-                    detail: msg + ' не добавлен'
-                });
-            });
     }
 
     private goBackToAddresses() {
@@ -121,13 +153,6 @@ export class AddEditAddressComponent implements OnInit {
                                 this.goBackToAddresses();
                             })
                     })
-                    .catch(() => {
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: 'Ошибка!',
-                            detail: msg + ' не удален'
-                        });
-                    });
             },
             reject: () => {
             }
@@ -135,9 +160,15 @@ export class AddEditAddressComponent implements OnInit {
     }
 
     private update() {
-        const address = {
+        const address = <Address>{
             id: this.address.id,
-            presentation: this.addressForm.controls.presentation.value,
+            country: this.addressForm.controls.country.value,
+            region: this.addressForm.controls.region.value,
+            city: this.addressForm.controls.city.value,
+            street: this.addressForm.controls.street.value,
+            building: this.addressForm.controls.building.value,
+            apartment: this.addressForm.controls.apartment.value,
+            zip: this.addressForm.controls.zip.value,
             dateStart: this.addressForm.controls.dateStart.value
         };
         this.clientService.updateAddress(address, this.getClient().id).toPromise()
@@ -153,13 +184,6 @@ export class AddEditAddressComponent implements OnInit {
                     })
                     .then(() => {
                         this.goBackToAddresses();
-                    })
-                    .catch(() => {
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: 'Ошибка!',
-                            detail: msg + ' не обновлен'
-                        });
                     })
             });
     }
