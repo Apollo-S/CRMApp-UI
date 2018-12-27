@@ -26,7 +26,7 @@ export class ClientEmployeeDetailsTemplateTableComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit() {
-      this.loading = false;
+      // this.loading = false;
   }
 
   goToEntry(url: string) {
