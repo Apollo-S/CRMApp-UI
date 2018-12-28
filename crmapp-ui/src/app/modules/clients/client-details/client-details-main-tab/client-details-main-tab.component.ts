@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {ClientService} from '../../../../services/client.service';
 import {ConfirmationService, MessageService} from 'primeng/api';
+import {debug} from "util";
 
 @Component({
     selector: 'app-client-details-main-tab',
@@ -10,13 +11,22 @@ import {ConfirmationService, MessageService} from 'primeng/api';
 })
 export class ClientDetailsMainTabComponent implements OnInit {
 
+    loadingState: boolean;
+
     constructor(private clientService: ClientService,
                 private router: Router,
                 private confirmationService: ConfirmationService,
                 private messageService: MessageService) {
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+    debugger
+        this.loadingState = this.clientService.getLoadingState();
+    }
+
+    getLoadingState() {
+        return this.clientService.getLoadingState();
+    }
 
     getCurrentClient() {
         return this.clientService.getCurrentClient();
