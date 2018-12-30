@@ -17,6 +17,7 @@ export class AddEditAccountComponent implements OnInit {
     years: string;
     ru: any;
     accountForm: FormGroup;
+    loadingState: boolean;
 
     constructor(private clientService: ClientService,
                 private formBuilder: FormBuilder,
@@ -29,13 +30,15 @@ export class AddEditAccountComponent implements OnInit {
     }
 
     ngOnInit() {
-        let addressId = +this.route.snapshot.params.id;
-        if (addressId) {
-            this.clientService.getAddressById(addressId, this.getClient().id).toPromise()
-                .then(address => {
-                    this.account = address;
-                    this.accountForm.controls.presentation.setValue(address.presentation);
-                    this.accountForm.controls.dateStart.setValue(new Date(address.dateStart));
+        let accountId = +this.route.snapshot.params.id;
+        if (accountId) {
+            this.loadingState = true;
+            this.clientService.getAccountById(accountId, this.getClient().id).toPromise()
+                .then(account => {
+                    this.account = account;
+                    this.accountForm.controls.presentation.setValue(account.presentation);
+                    this.accountForm.controls.dateStart.setValue(new Date(account.dateStart));
+                    this.loadingState = false;
                 });
         } else {
             this.isNew = true;
@@ -73,7 +76,7 @@ export class AddEditAccountComponent implements OnInit {
         account.dateStart = this.accountForm.controls.dateStart.value;
         this.clientService.addAccount(account, this.getClient().id).toPromise()
             .then(response => {
-                this.clientService.fetchAllClientDataPromise(this.getClient().id)
+                this.clientService.fetchAccountsByClientId(this.getClient().id).toPromise()
                     .then(() => {
                         this.messageService.add({
                             severity: 'success',
@@ -85,13 +88,6 @@ export class AddEditAccountComponent implements OnInit {
                         this.goBackToAccounts();
                     });
             })
-            .catch(() => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Ошибка!',
-                    detail: msg + ' не добавлен'
-                });
-            });
     }
 
     private goBackToAccounts() {
@@ -116,18 +112,11 @@ export class AddEditAccountComponent implements OnInit {
                         });
                     })
                     .then(() => {
-                        this.clientService.fetchAllClientDataPromise(this.getClient().id)
+                        this.clientService.fetchAccountsByClientId(this.getClient().id).toPromise()
                             .then(() => {
                                 this.goBackToAccounts();
                             })
                     })
-                    .catch(() => {
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: 'Ошибка!',
-                            detail: msg + ' не удален'
-                        });
-                    });
             },
             reject: () => {
             }
@@ -143,7 +132,7 @@ export class AddEditAccountComponent implements OnInit {
         this.clientService.updateAccount(account, this.getClient().id).toPromise()
             .then(response => {
                 let msg = 'Счет (ID=' + response.id + ') для клиента ' + this.getClient().alias;
-                this.clientService.fetchAllClientDataPromise(this.getClient().id)
+                this.clientService.fetchAccountsByClientId(this.getClient().id).toPromise()
                     .then(() => {
                         this.messageService.add({
                             severity: 'success',
@@ -153,13 +142,6 @@ export class AddEditAccountComponent implements OnInit {
                     })
                     .then(() => {
                         this.goBackToAccounts();
-                    })
-                    .catch(() => {
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: 'Ошибка!',
-                            detail: msg + ' не обновлен'
-                        });
                     })
             });
     }

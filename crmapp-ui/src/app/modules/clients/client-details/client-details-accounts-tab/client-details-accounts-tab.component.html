@@ -1,14 +1,14 @@
 <app-client-employee-details-template-table
     [addButtonTitle]="['Новый счет']"
     [columns]="columns"
-    [datasource]="getAccounts()"
+    [datasource]="accounts"
     [editButtonTitle]="['Изменить']"
     [responsive]="true"
     [reorderableColumns]="true"
     [rows]="0"
     [paginator]="false"
     [rowHover]="true"
-    [loading]="false"
+    [loading]="loading"
     [sortField]="'id'"
     [routerLinkUrl]="['add']"
     [autoLayout]="true">

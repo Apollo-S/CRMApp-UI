@@ -12,24 +12,23 @@ export class ClientDetailsAccountsTabComponent implements OnInit {
     columns: any[];
     accounts: ClientAccount[] = [];
     client: Client = {};
+    loading: boolean;
 
     constructor(private clientService: ClientService) {
     }
 
     ngOnInit() {
-        // this.getAccountsByClientId(this.client.id);
+        this.loading = true;
         this.initColumns();
+        this.getAccounts().then(() => this.loading = false);
     }
 
-    getAccounts() {
-        return this.clientService.getCurrentClient().accounts;
+    async getAccounts() {
+        this.accounts = await this.clientService.fetchAccountsByClientId(this.getClient().id).toPromise();
     }
 
-    private getAccountsByClientId(id: number) {
-        this.clientService.getAccountsByClientId(id)
-            .subscribe(
-                accounts => this.accounts = accounts
-            );
+    getClient() {
+        return this.clientService.getCurrentClient();
     }
 
     private initColumns(): void {
