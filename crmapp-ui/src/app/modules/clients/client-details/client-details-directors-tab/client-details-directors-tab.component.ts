@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ClientService} from '../../../../services/client.service';
+import {ClientDirector} from "../../../../models/ClientDirector";
 
 @Component({
     selector: 'app-client-details-directors-tab',
@@ -8,16 +9,25 @@ import {ClientService} from '../../../../services/client.service';
 })
 export class ClientDetailsDirectorsTabComponent implements OnInit {
     columns: any[];
+    directors: ClientDirector[] = [];
+    loading: boolean;
 
     constructor(private clientService: ClientService) {
     }
 
     ngOnInit() {
+        this.loading = true;
         this.initColumns();
+        this.getDirectors().then(() => this.loading = false);
+
     }
 
-    getDirectors() {
-        return this.clientService.getDirectors();
+    async getDirectors() {
+        this.directors = await this.clientService.fetchDirectorsByClientId(this.getClient().id).toPromise();
+    }
+
+    getClient() {
+        return this.clientService.getCurrentClient();
     }
 
     private initColumns() {

@@ -20,6 +20,7 @@ export class AddEditDirectorComponent implements OnInit {
     years: string;
     ru: any;
     directorForm: FormGroup;
+    loadingState: boolean;
 
     constructor(private clientService: ClientService,
                 private postService: PostService,
@@ -36,13 +37,15 @@ export class AddEditDirectorComponent implements OnInit {
     ngOnInit() {
         let directorId = +this.route.snapshot.params.id;
         if (directorId) {
+            this.loadingState = true;
             this.clientService.getDirectorById(directorId, this.getClient().id).toPromise()
                 .then(response => {
-                this.director = response;
+                    this.director = response;
                     this.directorForm.controls.fullName.setValue(response.fullName);
                     this.directorForm.controls.shortName.setValue(response.shortName);
                     this.directorForm.controls.post.setValue(response.post);
                     this.directorForm.controls.dateStart.setValue(new Date(response.dateStart));
+                    this.loadingState = false;
                 });
         } else {
             this.isNew = true;
@@ -98,7 +101,7 @@ export class AddEditDirectorComponent implements OnInit {
         director.dateStart = this.directorForm.controls.dateStart.value;
         this.clientService.addDirector(director, this.getClient().id).toPromise()
             .then(response => {
-                this.clientService.fetchAllClientDataPromise(this.getClient().id)
+                this.clientService.fetchDirectorsByClientId(this.getClient().id).toPromise()
                     .then(() => {
                         this.messageService.add({
                             severity: 'success',
@@ -134,7 +137,7 @@ export class AddEditDirectorComponent implements OnInit {
                         });
                     })
                     .then(() => {
-                        this.clientService.fetchAllClientDataPromise(this.getClient().id)
+                        this.clientService.fetchDirectorsByClientId(this.getClient().id).toPromise()
                             .then(() => {
                                 this.goBackToDirectors();
                             })
@@ -156,7 +159,7 @@ export class AddEditDirectorComponent implements OnInit {
         this.clientService.updateDirector(director, this.getClient().id).toPromise()
             .then(response => {
                 let msg = 'Директор (ID=' + response.id + ') для клиента ' + this.getClient().alias;
-                this.clientService.fetchAllClientDataPromise(this.getClient().id)
+                this.clientService.fetchDirectorsByClientId(this.getClient().id).toPromise()
                     .then(() => {
                         this.messageService.add({
                             severity: 'success',
