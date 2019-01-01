@@ -8,16 +8,24 @@ import { ClientService } from '../../../../services/client.service';
 })
 export class ClientDetailsAddressesTabComponent implements OnInit {
     columns: any[] = [];
+    addresses: any[] = [];
+    loading: boolean;
 
     constructor(public clientService: ClientService) {
     }
 
     ngOnInit() {
+        this.loading = true;
         this.initColumns();
+        this.getAddresses().then(() => this.loading = false);
     }
 
-    getAddresses() {
-        return this.clientService.getAddresses();
+    async getAddresses() {
+        this.addresses = await this.clientService.fetchAddressesByClientId(this.getClient().id).toPromise();
+    }
+
+    getClient() {
+        return this.clientService.getCurrentClient();
     }
 
     private initColumns(): void {

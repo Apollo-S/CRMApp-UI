@@ -112,7 +112,7 @@ export class AddEditAddressComponent implements OnInit {
         address.dateStart = this.addressForm.controls.dateStart.value;
         this.clientService.addAddress(address, this.getClient().id).toPromise()
             .then(response => {
-                this.clientService.fetchAllClientDataPromise(this.getClient().id)
+                this.clientService.fetchAddressesByClientId(this.getClient().id).toPromise()
                     .then(() => {
                         this.messageService.add({
                             severity: 'success',
@@ -148,7 +148,7 @@ export class AddEditAddressComponent implements OnInit {
                         });
                     })
                     .then(() => {
-                        this.clientService.fetchAllClientDataPromise(this.getClient().id)
+                        this.clientService.fetchAddressesByClientId(this.getClient().id).toPromise()
                             .then(() => {
                                 this.goBackToAddresses();
                             })
@@ -174,7 +174,7 @@ export class AddEditAddressComponent implements OnInit {
         this.clientService.updateAddress(address, this.getClient().id).toPromise()
             .then(response => {
                 let msg = 'Адрес (ID=' + response.id + ') для клиента ' + this.getClient().alias;
-                this.clientService.fetchAllClientDataPromise(this.getClient().id)
+                this.clientService.fetchAddressesByClientId(this.getClient().id).toPromise()
                     .then(() => {
                         this.messageService.add({
                             severity: 'success',
