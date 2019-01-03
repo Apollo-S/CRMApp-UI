@@ -2,11 +2,11 @@
 
 <p-confirmDialog header="Внимание" icon="fa fa-question-circle" width="425" #cd>
     <p-footer>
-        <button type="button" pButton icon="fa fa-check" 
-          class="ui-button-primary" label="Ок" (click)="cd.accept()">
+        <button type="button" pButton icon="fa fa-check"
+                class="ui-button-primary" label="Ок" (click)="cd.accept()">
         </button>
-        <button type="button" pButton icon="fa fa-close" 
-          class="ui-button-secondary" label="Отмена" (click)="cd.reject()">
+        <button type="button" pButton icon="fa fa-close"
+                class="ui-button-secondary" label="Отмена" (click)="cd.reject()">
         </button>
     </p-footer>
 </p-confirmDialog>
@@ -16,32 +16,34 @@
         <div class="ui-helper-clearfix">
             <span class="ui-panel-title" style="display:inline-block;margin-top:6px">
                 <h4><b>Исходящие документы</b></h4>
-            </span> 
+            </span>
         </div>
     </p-header>
-    <p-table #dt [columns]="columns" [value]="outputs" selectionMode="single" [(selection)]="selectedMailOutput" 
-        (onRowSelect)="onRowSelect($event)" [paginator]="false" [rows]="15">
+    <p-table #dt [columns]="columns" [value]="outputs" selectionMode="single" [(selection)]="selectedMailOutput"
+             (onRowSelect)="onRowSelect($event)" [paginator]="false" [rows]="15">
         <ng-template pTemplate="caption">
             <div>
-                <button pButton type="button" label="Новый" style="margin-top:2px;float:left" 
-                    (click)="showDialogToAdd()" icon="fa fa-plus">
+                <button pButton type="button" label="Новый" style="margin-top:2px;float:left"
+                        (click)="showDialogToAdd()" icon="fa fa-plus">
                 </button>
-                <button pButton type="button" label="Редакт." style="margin-left:2px;margin-top:2px;float:left" 
-                    (click)="goToEntry(selectedMailOutput?.url)" icon="fa fa-edit" class="ui-button-success" [disabled]="!selectedItem">
+                <button pButton type="button" label="Редакт." style="margin-left:2px;margin-top:2px;float:left"
+                        (click)="goToEntry(selectedMailOutput?.url)" icon="fa fa-edit" class="ui-button-success"
+                        [disabled]="!selectedItem">
                 </button>
-                <p-tieredMenu #menu [model]="menuModel" [popup]="true" 
-                    appendTo="body">
+                <p-tieredMenu #menu [model]="menuModel" [popup]="true"
+                              appendTo="body">
                 </p-tieredMenu>
                 <button *ngIf="menuModel?.length > 0"
-                    #btn pButton type="button" icon="fa fa-list" class="ui-button-info" 
-                    style="margin-left:2px;margin-top:2px;float:left" label="Прочее"
-                    (click)="menu.toggle($event)" (mousedown)="initMenu(selectedItem?.id)" [disabled]="!selectedItem">
+                        #btn pButton type="button" icon="fa fa-list" class="ui-button-info"
+                        style="margin-left:2px;margin-top:2px;float:left" label="Прочее"
+                        (click)="menu.toggle($event)" (mousedown)="initMenu(selectedItem?.id)"
+                        [disabled]="!selectedItem">
                 </button>
             </div>
             <div style="text-align: right">
                 <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-                <input type="text" pInputText size="50" placeholder="Фильтр" style="width:auto" 
-                    (input)="dt.filterGlobal($event.target.value, 'contains')">
+                <input type="text" pInputText size="50" placeholder="Фильтр" style="width:auto"
+                       (input)="dt.filterGlobal($event.target.value, 'contains')">
             </div>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
@@ -66,7 +68,7 @@
                     {{rowData.receiver}}
                 </td>
                 <td style="text-align:center">
-                    {{rowData.dated == null ? '-' : rowData.dated | date: 'dd.MM.y'}}
+                    {{rowData.dated === null ? '-' : rowData.dated | date: 'dd.MM.y'}}
                 </td>
             </tr>
         </ng-template>
@@ -83,8 +85,12 @@
     </p-table>
 </p-panel>
 
-<p-dialog [(visible)]="displayDialog" [contentStyle]="{'overflow':'visible'}"
-  showEffect="fade" [modal]="true" [width]="600" [responsive]="true">
+<p-dialog [(visible)]="displayDialog"
+          [contentStyle]="{'overflow':'visible'}"
+          showEffect="fade"
+          [modal]="true"
+          [width]="600"
+          [responsive]="true">
     <p-header>
         {{headerText}}
     </p-header>
@@ -93,55 +99,67 @@
             <div class="ui-g-4">
                 <label for="number"><b>Номер</b></label>
                 <div class="ui-inputgroup">
-                    <input pInputText id="number" [(ngModel)]="mailOutput.number" 
-                        [disabled]="!disabledMailOutputNumber"/>
+                    <input pInputText id="number" [(ngModel)]="mailOutput.number"
+                           [disabled]="!disabledMailOutputNumber"/>
                     <span style="width: 100%" class="ui-inputgroup-addon">
                         {{numberSecondPart}}
-                    </span> 
+                    </span>
                 </div>
             </div>
             <div class="ui-g-4">
                 <label for="dated"><b>Дата</b></label>
-                <p-calendar [(ngModel)]="mailOutput.dated" placeholder="Дата" name="dated" 
-                    [monthNavigator]="true" [yearNavigator]="true" yearRange="years" [locale]="ru"
-                    showButtonBar="true" [showIcon]="true" dateFormat="dd.mm.yy" id="dated" 
-                    [disabled]="!disabledMailOutputNumber">
-                </p-calendar>
+                <p-calendar [(ngModel)]="mailOutput.dated" placeholder="Дата" name="dated"
+                            [monthNavigator]="true" [yearNavigator]="true" yearRange="years" [locale]="ru"
+                            showButtonBar="true" [showIcon]="true" dateFormat="dd.mm.yy" id="dated"
+                            [disabled]="!disabledMailOutputNumber"
+                ></p-calendar>
             </div>
             <div class="ui-g-4">
-                <label for="disabled-btn"></label>
-                <p-toggleButton [(ngModel)]="disabledMailOutputNumber" [style]="{'margin-top':'10px'}"
-                    offIcon="fa fa-edit" onIcon="fa fa-save" onLabel="Сохранить" offLabel="Редактир.">
-                </p-toggleButton>
+                <p-toggleButton [(ngModel)]="disabledMailOutputNumber"
+                                [style]="{'margin-top':'28px'}"
+                                offIcon="fa fa-edit"
+                                onIcon="fa fa-save"
+                                onLabel="Сохранить"
+                                offLabel="Редактир."
+                ></p-toggleButton>
             </div>
         </div>
         <div class="ui-g-12">
             <div class="ui-g-12">
                 <label for="docTypeTitle"><b>Тип документа</b></label>
-                <p-dropdown [options]="docTypes" [(ngModel)]="mailOutput.docType" 
-                    name="docType" filter="false" optionLabel="title" 
-                    [autoWidth]="false" placeholder="Выберите тип документа">
+                <p-dropdown [options]="docTypes" [(ngModel)]="mailOutput.docType"
+                            name="docType" filter="false" optionLabel="title"
+                            [autoWidth]="false" placeholder="Выберите тип документа">
                 </p-dropdown>
             </div>
         </div>
         <div class="ui-g-12">
             <div class="ui-g-12">
                 <label for="receiver"><b>Получатель</b></label>
-                <input pInputText id="receiver" [(ngModel)]="mailOutput.receiver" />
+                <input pInputText id="receiver" [(ngModel)]="mailOutput.receiver"/>
             </div>
         </div>
     </div>
     <p-footer>
         <div class="ui-dialog-buttonpane ui-helper-clearfix">
-            <button type="button" pButton icon="fa fa-trash" class="ui-button-danger" 
-                (click)="confirmDeleting()" label="Удалить">
-            </button>
-            <button type="button" pButton icon="fa fa-close" class="ui-button-secondary" 
-                (click)="displayDialog=false" label="Закрыть">
-            </button>
-            <button type="button" pButton icon="fa fa-check" class="ui-button-success" 
-                (click)="saveOrUpdate()" label="Сохранить">
-            </button>
+            <button pButton type="button"
+                    class="ui-button-danger"
+                    icon="fa fa-trash"
+                    label="Удалить"
+                    (click)="confirmDeleting()"
+            ></button>
+            <button pButton type="button"
+                    class="ui-button-secondary"
+                    icon="fa fa-close"
+                    label="Закрыть"
+                    (click)="closeDialog()"
+            ></button>
+            <button type="button" pButton
+                    class="ui-button-success"
+                    icon="fa fa-check"
+                    label="Сохранить"
+                    (click)="saveOrUpdate()"
+            ></button>
         </div>
     </p-footer>
 </p-dialog>
