@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {DocumentService} from '../../services/document.service';
-import {DocumentTypeService} from '../../services/document-type.service';
-import {Router, ActivatedRoute} from '@angular/router';
-import {Document} from '../../models/Document';
-import {DocumentStatus} from '../../models/DocumentStatus';
-import {DocumentType} from '../../models/DocumentType';
-import {DocumentStatusService} from '../../services/document-status.service';
-import {ClientService} from '../../services/client.service';
+import {DocumentService} from 'app/services/document.service';
+import {DocumentTypeService} from 'app/services/document-type.service';
+import {Router} from '@angular/router';
+import {Document} from 'app/models/Document';
+import {DocumentStatus} from 'app/models/DocumentStatus';
+import {DocumentType} from 'app/models/DocumentType';
+import {DocumentStatusService} from 'app/services/document-status.service';
+import {ClientService} from 'app/services/client.service';
 import {MenuItem, SortEvent, SelectItem} from 'primeng/api';
-import {Client} from '../../models/Client';
+import {Client} from 'app/models/Client';
 
 @Component({
     selector: 'app-documents',
@@ -28,11 +28,9 @@ export class DocumentsComponent implements OnInit {
     columns: any[] = [];
     items: MenuItem[] = [];
     showFilter: boolean = false;
-    loadingCheck: boolean = false;
-    defaultSortField: string = "id";
-    defaultSortType: string = "asc";
-    selectedSortType: string;
-    selectedSortField: any;
+    loadingState: boolean;
+    selectedSortType: string = '';
+    selectedSortField: any = '';
 
     constructor(private docService: DocumentService,
                 private docTypeService: DocumentTypeService,
@@ -42,14 +40,14 @@ export class DocumentsComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.loadingCheck = true;
+        this.loadingState = true;
         this.initColumns();
         this.getDocumentTypes();
         this.getDocumentStatuses();
         this.getClients();
         // this.getDocuments();
-        this.useFilter(this.defaultSortField, this.defaultSortType);
-        this.loadingCheck = true;
+        this.useFilter("id", "asc");
+        // this.loadingCheck = false;
         this.initSortTypes();
     }
 
@@ -66,7 +64,10 @@ export class DocumentsComponent implements OnInit {
         let clientIDs: number[] = this.getIDs(this.selectedClients);
         this.docService.getDocumentsAccordingFilter(docTypeIDs, docStatusIDs, clientIDs, sortField, sortType)
             .subscribe(
-                documents => this.documents = documents
+                documents => {
+                    this.documents = documents;
+                    this.loadingState = false;
+                }
             );
     }
 
@@ -148,6 +149,18 @@ export class DocumentsComponent implements OnInit {
         this.selectedClients = [];
         this.selectedDocTypes = [];
         this.selectedDocStatuses = [];
+    }
+
+    changeSelectedClients(event) {
+        this.selectedClients = event.value;
+    }
+
+    changeSelectedDocTypes(event) {
+        this.selectedDocTypes = event.value;
+    }
+
+    changeSelectedDocStatuses(event) {
+        this.selectedDocStatuses = event.value;
     }
 
 }
