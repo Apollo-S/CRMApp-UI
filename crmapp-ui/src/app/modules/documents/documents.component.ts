@@ -9,6 +9,7 @@ import {DocumentStatusService} from 'app/services/document-status.service';
 import {ClientService} from 'app/services/client.service';
 import {MenuItem, SortEvent, SelectItem} from 'primeng/api';
 import {Client} from 'app/models/Client';
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
     selector: 'app-documents',
@@ -16,7 +17,7 @@ import {Client} from 'app/models/Client';
     styleUrls: ['./documents.component.css']
 })
 export class DocumentsComponent implements OnInit {
-
+    // filterForm: FormGroup;
     clients: Client[] = [];
     documents: Document[] = [];
     docTypes: DocumentType[] = [];
@@ -27,7 +28,7 @@ export class DocumentsComponent implements OnInit {
     selectedClients: Client[] = [];
     columns: any[] = [];
     items: MenuItem[] = [];
-    showFilter: boolean = false;
+    filterState: boolean = false;
     loadingState: boolean;
     selectedSortType: string = '';
     selectedSortField: any = '';
@@ -47,7 +48,6 @@ export class DocumentsComponent implements OnInit {
         this.getClients();
         // this.getDocuments();
         this.useFilter("id", "asc");
-        // this.loadingCheck = false;
         this.initSortTypes();
     }
 
@@ -151,16 +151,11 @@ export class DocumentsComponent implements OnInit {
         this.selectedDocStatuses = [];
     }
 
-    changeSelectedClients(event) {
-        this.selectedClients = event.value;
+    changeFilterState(state: boolean) {
+        this.filterState = state;
     }
 
-    changeSelectedDocTypes(event) {
-        this.selectedDocTypes = event.value;
+    refresh() {
+        this.ngOnInit();
     }
-
-    changeSelectedDocStatuses(event) {
-        this.selectedDocStatuses = event.value;
-    }
-
 }

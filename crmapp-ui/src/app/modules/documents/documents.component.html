@@ -1,4 +1,4 @@
-<p *ngIf="showFilter">
+<p *ngIf="filterState">
     <p-card>
         <div class="ui-grid">
             <div class="ui-grid-row">
@@ -14,7 +14,7 @@
                                    [panelStyle]="{minWidth:'12em'}"
                                    [style]="{width:'300px'}"
                                    defaultLabel="Не выбрано"
-                                   (onChange)="changeSelectedClients($event)"
+                                   [(ngModel)]="selectedClients"
                     ></p-multiSelect>
                 </div>
                 <div class="ui-grid-col-2">
@@ -40,7 +40,7 @@
                                    [panelStyle]="{minWidth:'12em'}"
                                    [style]="{width:'300px'}"
                                    defaultLabel="Не выбрано"
-                                   (onChange)="changeSelectedDocTypes($event)"
+                                   [(ngModel)]="selectedDocTypes"
                     ></p-multiSelect>
                 </div>
                 <div class="ui-grid-col-2">
@@ -66,7 +66,7 @@
                                    [panelStyle]="{minWidth:'12em'}"
                                    [style]="{width:'300px'}"
                                    defaultLabel="Не выбрано"
-                                   (onChange)="changeSelectedDocStatuses($event)"
+                                   [(ngModel)]="selectedDocStatuses"
                     ></p-multiSelect>
                 </div>
                 <div class="ui-grid-col-2">
@@ -75,7 +75,7 @@
                             style="float:right"
                             icon="fa fa-times"
                             label="Закрыть"
-                            (click)="showFilter=false"
+                            (click)="changeFilterState(false)"
                     ></button>
                 </div>
             </div>           
@@ -83,21 +83,22 @@
     </p-card>
 </p>
 
-<p>
+<p></p>
 
 <p-panel>
   <p-header>
       <div class="ui-helper-clearfix">
         <span class="ui-panel-title" style="display:inline-block;margin-top:6px">
             <h4><b>Документы</b></h4>
-        </span> 
+        </span>
 
-        <button pButton type="button" label="Добавить" style="margin-top:6px;float:right" 
-            [routerLink]="['add']" icon="fa fa-plus">
-        </button>
-        <button pButton type="button" icon="fa fa-filter" label="Фильтр"
-            (click)="showFilter=true" class="ui-button-info" style="margin-top:6px;margin-right:4px;float:right">
-        </button>
+        <button pButton type="button"
+                icon="fa fa-filter"
+                label="Фильтр"
+                (click)="changeFilterState(true)"
+                class="ui-button-info"
+                style="margin-top:6px;margin-right:4px;float:right"
+        ></button>
 
         <!--<p-dropdown [options]="columns" [(ngModel)]="selectedSortField" optionLabel="header" [autoWidth]="false"-->
              <!--[showClear]="false" [style]="{'min-width':'10em'}">-->
@@ -134,10 +135,30 @@
      [loading]="loadingState"
     >
         <ng-template pTemplate="caption">
+            <div>
+                <button pButton type="button"
+                        label="Добавить"
+                        style="margin-top:2px;float:left"
+                        [routerLink]="['add']"
+                        icon="fa fa-plus"
+                        class="ui-button-rounded ui-button-primary"
+                ></button>
+                <button pButton type="button"
+                        [label]="'Обновить'"
+                        style="margin-left:2px;margin-top:2px;float:left"
+                        icon="fa fa-refresh"
+                        class="ui-button-rounded ui-button-primary"
+                        (click)="refresh()"
+                ></button>
+            </div>
             <div style="text-align: right">
                 <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-                <input type="text" pInputText size="50" placeholder="Фильтр" style="width:auto"
-                       (input)="dt.filterGlobal($event.target.value, 'contains')">
+                <input type="text" pInputText
+                       size="50"
+                       placeholder="Фильтр"
+                       style="width:auto"
+                       (input)="dt.filterGlobal($event.target.value, 'contains')"
+                >
             </div>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
