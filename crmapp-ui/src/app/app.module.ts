@@ -123,7 +123,8 @@ import { EmployeeDetailsSicksTabComponent } from './modules/employees/employee-d
 import { AddEditAddressComponent } from './modules/clients/client-details/client-details-addresses-tab/add-edit-address/add-edit-address.component';
 import { AddEditAccountComponent } from './modules/clients/client-details/client-details-accounts-tab/add-edit-account/add-edit-account.component';
 import { AddEditDirectorComponent } from './modules/clients/client-details/client-details-directors-tab/add-edit-director/add-edit-director.component';
-import {AddressService} from "./services/address.service";
+import { AddressService } from "./services/address.service";
+import { AddEditDocumentComponent } from './modules/documents/document-details/add-edit-document/add-edit-document.component';
 
 @NgModule({
   declarations: [
@@ -182,6 +183,7 @@ import {AddressService} from "./services/address.service";
     EmployeeDetailsVacationsTabComponent,
     EmployeeDetailsSicksTabComponent,
     DocumentDetailsComponent,
+    AddEditDocumentComponent,
   ],
   imports: [
     AppRoutingModule, 

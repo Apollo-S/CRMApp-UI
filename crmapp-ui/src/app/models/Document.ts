@@ -1,9 +1,14 @@
-import { DocumentType } from "./DocumentType";
-import { DocumentStatus } from "./DocumentStatus";
+import {DocumentType} from "./DocumentType";
+import {DocumentStatus} from "./DocumentStatus";
+import {Client} from "./Client";
+import {ClientAgreement} from "./ClientAgreement";
 
 export class Document {
     public id?: number;
     public docType?: DocumentType;
+    public client?: Client;
+    public clientId?: number;
+    public clientTitle?: string;
     public docTypeShortTitle?: string;
     public number?: number;
     public amount?: number;
@@ -13,6 +18,7 @@ export class Document {
     public status?: DocumentStatus;
     public docStatus?: string;
     public agreementId?: number;
+    public agreement?: ClientAgreement;
     public agreementNumber?: string;
     public url?: string;
 }

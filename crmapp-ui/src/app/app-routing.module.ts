@@ -44,6 +44,8 @@ import {EmployeeDetailsSicksTabComponent} from "./modules/employees/employee-det
 import {AddEditAddressComponent} from "./modules/clients/client-details/client-details-addresses-tab/add-edit-address/add-edit-address.component";
 import {AddEditAccountComponent} from "./modules/clients/client-details/client-details-accounts-tab/add-edit-account/add-edit-account.component";
 import {AddEditDirectorComponent} from "./modules/clients/client-details/client-details-directors-tab/add-edit-director/add-edit-director.component";
+import {DocumentDetailsComponent} from "./modules/documents/document-details/document-details.component";
+import {AddEditDocumentComponent} from "./modules/documents/document-details/add-edit-document/add-edit-document.component";
 
 const appRoutes: Routes = [
 
@@ -106,6 +108,9 @@ const appRoutes: Routes = [
                 ]
             },
             {path: 'documents', component: DocumentsComponent},
+            {path: 'documents/add', component: DocumentDetailsComponent},
+            {path: 'documents/:id', component: DocumentDetailsComponent},
+
             {path: 'vacations', component: VacationsComponent},
             {path: 'agreements', component: AgreementsComponent},
             {path: 'agreements/add', component: AddAgreementComponent},
