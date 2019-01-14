@@ -5,9 +5,13 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { Document } from '../models/Document';
 import { DocumentType } from '../models/DocumentType';
 import {AppConst} from "../app-const";
+import {ClientAccount} from "../models/ClientAccount";
+import {Router} from "@angular/router";
+import {MessageService} from "primeng/api";
+import {BaseService} from "./base.service";
 
 @Injectable()
-export class DocumentService {
+export class DocumentService extends BaseService{
 
     private readonly documentsUrl;
     private readonly headers;
@@ -23,8 +27,11 @@ export class DocumentService {
     }
 
     constructor(private http: HttpClient,
-                private appConst: AppConst) {
-        this.documentsUrl = appConst.baseUrl + appConst.documentsUrl;
+                private appConst: AppConst,
+                router: Router,
+                messageService: MessageService) {
+        super(router, messageService);
+        this.documentsUrl = appConst.baseUrl + appConst.documentsUrl + '/';
         this.headers = appConst.headersJSON;
     }
 
@@ -34,21 +41,20 @@ export class DocumentService {
 
     getDocumentsAccordingFilter(docTypes: number[], docStatuses: number[], clients: number[],
                                 sortField: string, sortType: string) {
-        // const url = this.documentsUrl + '/filter/docTypes=[' + docTypes + ']&docStatuses=[' + docStatuses +
-        //     ']&clients=[' + clients + ']&sortField=' + sortField + '&sortType=' + sortType;
-        const url = this.documentsUrl + '/filter/';
+        const url = this.documentsUrl + 'filter/';
         let body = {docTypes, docStatuses, clients, sortField, sortType};
-        return this.http.post<Document[]>(url, body ,{headers: this.headers});
+        return this.http.post<Document[]>(url, body ,{headers: this.headers})
+            .pipe(catchError(this.handleError<Document[]>(
+                'Ошибка при получении списка документов!'
+            )));
     }
 
-    getDocumentById(id: number): Observable<Document> {
-        const url = `${this.documentsUrl}/${id}`;
-        return this.http
-            .get<Document>(url, {headers: this.headers})
-            .pipe(
-                tap(_ => console.log(`obtained document ID=${id}`)),
-                catchError(this.handleError<Document>('getDocumentById'))
-            );
+    getDocumentById(id: number) {
+        const url = this.documentsUrl + id;
+        return this.http.get<Document>(url, {headers: this.headers})
+            .pipe(catchError(this.handleError<Document>(
+                'Ошибка при получении данных о документе!'
+            )));
     }
 
     addDocument(document: Document): Observable<Document> {
@@ -57,28 +63,19 @@ export class DocumentService {
     }
 
     updateDocument(document: Document) {
-        const url = this.documentsUrl + '/document.id';
+        const url = this.documentsUrl + document.id;
         return this.http.put<Document>(url, document, {headers: this.headers})
+            .pipe(catchError(this.handleError<Document>(
+                'Ошибка при обновлении документа!'
+            )));
     }
 
-    deleteDocument(document: Document): Observable<void> {
-        const url = `${this.documentsUrl}/${document.id}`;
-        return this.http
-            .delete(url, {headers: this.headers})
-            .pipe(
-                tap(_ => console.log(`deleted document ${document.number} (ID=${document.id})`)),
-                catchError(this.handleError<any>('deleteDocument'))
-            );
+    deleteDocument(documentId: number) {
+        const url = this.documentsUrl + documentId;
+        return this.http.delete(url, {headers: this.headers})
+            .pipe(catchError(this.handleError<any>(
+                'Ошибка при удалении документа!'
+            )));
     }
 
-    private handleError<T>(operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
-            // TODO: send the error to remote logging infrastructure
-            console.error(error); // log to console instead
-            // TODO: better job of transforming error for user consumption
-            console.log(`${operation} failed: ${error.message}`);
-            // Let the app keep running by returning an empty result.
-            return of(result as T);
-        };
-    }
 }

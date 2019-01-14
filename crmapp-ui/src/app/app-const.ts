@@ -9,5 +9,6 @@ export class AppConst {
     documentsUrl = '/documents';
     postsUrl = '/posts';
     countriesUrl = '/countries';
+    docStatusesUrl = '/document-statuses';
 
 }

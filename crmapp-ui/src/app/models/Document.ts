@@ -1,12 +1,10 @@
 import {DocumentType} from "./DocumentType";
 import {DocumentStatus} from "./DocumentStatus";
-import {Client} from "./Client";
 import {ClientAgreement} from "./ClientAgreement";
 
 export class Document {
     public id?: number;
     public docType?: DocumentType;
-    public client?: Client;
     public clientId?: number;
     public clientTitle?: string;
     public docTypeShortTitle?: string;
@@ -20,5 +18,7 @@ export class Document {
     public agreementId?: number;
     public agreement?: ClientAgreement;
     public agreementNumber?: string;
+    public agreementDateStart?: string;
+    public agreementUrl?: string;
     public url?: string;
 }

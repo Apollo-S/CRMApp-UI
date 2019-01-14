@@ -1,45 +1,41 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
-import { DocumentStatus } from '../models/DocumentStatus';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {catchError} from 'rxjs/operators';
+import {DocumentStatus} from 'app/models/DocumentStatus';
+import {AppConst} from "app/app-const";
+import {BaseService} from "./base.service";
+import {Router} from "@angular/router";
+import {MessageService} from "primeng/api";
 
 @Injectable()
-export class DocumentStatusService {
+export class DocumentStatusService extends BaseService {
 
-  private docStatusUrl = '/api/document-statuses';
-  private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  
-  constructor(private http: HttpClient) { }
+    private readonly docStatusesUrl;
+    private readonly headers;
 
-  getDocumentStatuses(): Observable<DocumentStatus[]> {
-    const url = `${this.docStatusUrl}`;
-    return this.http
-      .get<DocumentStatus[]>(url, { headers: this.headers })
-      .pipe(
-        catchError(this.handleError('getDocumentStatuses', []))
-      );
-  }
-
-  getDocumentStatusById(id: number): Observable<DocumentStatus> {
-    const url = `${this.docStatusUrl}/${id}`;
-    return this.http
-      .get<DocumentStatus>(url, { headers: this.headers })
-      .pipe(
-        tap(_ => console.log(`obtained DocumentStatus ID=${id}`)),
-        catchError(this.handleError<DocumentStatus>('getDocumentStatusById'))
-      ); 
-  }
-
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-      // TODO: better job of transforming error for user consumption
-      console.log(`${operation} failed: ${error.message}`);
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
+    constructor(private http: HttpClient,
+                private appConst: AppConst,
+                router: Router,
+                messageService: MessageService) {
+        super(router, messageService);
+        this.docStatusesUrl = appConst.baseUrl + appConst.docStatusesUrl + '/';
+        this.headers = appConst.headersJSON;
     }
-  }
+
+    getDocumentStatuses() {
+        const url = this.docStatusesUrl;
+        return this.http.get<DocumentStatus[]>(url, {headers: this.headers})
+            .pipe(catchError(this.handleError<DocumentStatus[]>(
+                'Ошибка при загрузке списка статусов!'
+            )));
+    }
+
+    getDocumentStatusById(statusId: number) {
+        const url = this.docStatusesUrl + statusId;
+        return this.http.get<DocumentStatus>(url, {headers: this.headers})
+            .pipe(catchError(this.handleError<DocumentStatus>(
+                'Ошибка при загрузке статуса с ID=' + statusId
+            )));
+    }
 
 }

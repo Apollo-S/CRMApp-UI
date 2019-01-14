@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ClientAddress} from "../models/ClientAddress";
+import {Address} from "app/models/Address";
 import {HttpClient} from "@angular/common/http";
 import {AppConst} from "../app-const";
 import {ClientService} from "./client.service";
@@ -8,9 +8,9 @@ import {ClientService} from "./client.service";
     providedIn: 'root'
 })
 export class AddressService {
-    private clientId: number;
-    private addressesUrl: string;
-    private countriesUrl: string;
+    private readonly clientId: number;
+    private readonly addressesUrl: string;
+    private readonly countriesUrl: string;
 
     constructor(private http: HttpClient,
                 private appConst: AppConst, private clientService: ClientService) {
@@ -20,7 +20,7 @@ export class AddressService {
     }
 
     fetchAddressesByClientId(clientId: number) {
-        return this.http.get<ClientAddress[]>(this.addressesUrl);
+        return this.http.get<Array<Address>>(this.addressesUrl);
     }
 
     // getAddresses() {
@@ -29,11 +29,11 @@ export class AddressService {
 
     getAddressById(addressId: number, clientId: number) {
         const url = this.addressesUrl + addressId;
-        return this.http.get<ClientAddress>(url);
+        return this.http.get<Address>(url);
     }
 
     fetchCountries() {
-        return this.http.get<any>(this.countriesUrl);
+        return this.http.get<Array<Address>>(this.countriesUrl);
     }
 
 }

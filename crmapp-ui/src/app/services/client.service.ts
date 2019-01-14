@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Client} from '../models/Client';
 import {ClientAddress} from '../models/ClientAddress';
@@ -10,14 +10,31 @@ import {BaseService} from "./base.service";
 import {Router} from "@angular/router";
 import {catchError} from "rxjs/operators";
 import {MessageService} from "primeng/api";
+import {BehaviorSubject, Observable, Subject} from "rxjs";
+import {Employee} from "../models/Employee";
 
 @Injectable()
 export class ClientService extends BaseService {
+
+    private _currentClient$: BehaviorSubject<Client> = new BehaviorSubject<Client>({});
+
+    set currentClient(value: Client) {
+        this._currentClient$.next(value);
+    }
+
+    get currentClient$(): Observable<Client> {
+        return this._currentClient$.asObservable();
+    }
 
     private readonly headers: any;
     private readonly clientsUrl: string;
     private clients: Client[];
     private client: Client = {};
+    emitterClient: EventEmitter<Client> = new EventEmitter();
+    emitterLoadState: EventEmitter<boolean> = new EventEmitter();
+    private loadingState: boolean;
+    // private _currentClient: Subject<Client> = new Subject<Client>();
+
 
     constructor(private http: HttpClient,
                 private appConst: AppConst,
@@ -30,6 +47,7 @@ export class ClientService extends BaseService {
         this.client.addresses = [];
         this.client.agreements = [];
         this.client.directors = [];
+        this.loadingState = true;
     }
 
     fetchClients() {
@@ -53,6 +71,8 @@ export class ClientService extends BaseService {
         this.client.accounts = accounts;
         this.client.agreements = agreements;
         this.client.directors = directors;
+        this.emitterLoadState.emit(false);
+        this.loadingState = false;
     }
 
     getClients() {
@@ -70,9 +90,20 @@ export class ClientService extends BaseService {
             )));
     }
 
+    fetchClientData(clientId: number) {
+        this.fetchClientById(clientId).subscribe(
+            data => {
+                this.emitterClient.emit(data);
+                this.client = data;
+            });
+    }
+
     getCurrentClient() {
         return this.client;
-        // this.fetchClient()
+    }
+
+    getLoadingState() {
+        return this.loadingState;
     }
 
     fetchClient(clientId: number) {
@@ -104,7 +135,10 @@ export class ClientService extends BaseService {
     // Addresses
     fetchAddressesByClientId(clientId: number) {
         const url = this.clientsUrl + clientId + '/addresses';
-        return this.http.get<ClientAddress[]>(url);
+        return this.http.get<ClientAddress[]>(url)
+            .pipe(catchError(this.handleError<ClientAddress[]>(
+                'Ошибка при получении списка адресов!'
+            )));
     }
 
     getAddresses() {
@@ -113,52 +147,79 @@ export class ClientService extends BaseService {
 
     getAddressById(addressId: number, clientId: number) {
         const url = this.clientsUrl + clientId + '/addresses/' + addressId;
-        return this.http.get<any>(url, {headers: this.headers});
+        return this.http.get<any>(url, {headers: this.headers})
+            .pipe(catchError(this.handleError<ClientAddress>(
+                'Ошибка при получении адреса!'
+            )));
     }
 
     addAddress(address: ClientAddress, clientId: number) {
         const url = this.clientsUrl + clientId + '/addresses';
-        return this.http.post<ClientAddress>(url, address, {headers: this.headers});
+        return this.http.post<ClientAddress>(url, address, {headers: this.headers})
+            .pipe(catchError(this.handleError<ClientAddress>(
+                'Ошибка при добавлении нового адреса!'
+            )));
     }
 
     updateAddress(address: ClientAddress, clientId: number) {
         const url = this.clientsUrl + clientId + '/addresses/' + address.id;
-        return this.http.put<ClientAddress>(url, address, {headers: this.headers});
+        return this.http.put<ClientAddress>(url, address, {headers: this.headers})
+            .pipe(catchError(this.handleError<ClientAddress>(
+                'Ошибка при обновлении адреса!'
+            )));
     }
 
     deleteAddress(addressId: number, clientId: number) {
         const url = this.clientsUrl + clientId + '/addresses/' + addressId;
-        return this.http.delete(url, {headers: this.headers});
+        return this.http.delete(url, {headers: this.headers})
+            .pipe(catchError(this.handleError<ClientAddress>(
+                'Ошибка при удалении адреса!'
+            )));
     }
 
     // Accounts
-    private fetchAccountsByClientId(clientId: number) {
+    fetchAccountsByClientId(clientId: number) {
         const accountsUrl = this.clientsUrl + clientId + '/accounts';
-        return this.http.get<Array<ClientAccount>>(accountsUrl);
+        return this.http.get<Array<ClientAccount>>(accountsUrl)
+            .pipe(catchError(this.handleError<Array<ClientAccount>>(
+                'Ошибка при получении списка банк. счетов!'
+            )));
     }
 
-    getAccountsByClientId(clientId: number) {
-        const url = `${this.clientsUrl}/${clientId}/accounts`;
-        return this.http.get<Array<ClientAccount>>(url, {headers: this.headers})
+    getAccountById(accountId: number, clientId: number) {
+        const url = this.clientsUrl + clientId + '/accounts/' + accountId;
+        return this.http.get<ClientAccount>(url, {headers: this.headers})
+            .pipe(catchError(this.handleError<ClientAccount>(
+                'Ошибка при получении банк. счета!'
+            )));
     }
 
     addAccount(account: ClientAccount, clientId: number) {
         const url = this.clientsUrl + clientId + '/accounts';
-        return this.http.post<ClientAccount>(url, account, {headers: this.headers});
+        return this.http.post<ClientAccount>(url, account, {headers: this.headers})
+            .pipe(catchError(this.handleError<ClientAccount>(
+                'Ошибка при добавлении нового банк. счета!'
+            )));
     }
 
     updateAccount(account: ClientAccount, clientId: number) {
         const url = this.clientsUrl + clientId + '/accounts/' + account.id;
         return this.http.put<ClientAccount>(url, account, {headers: this.headers})
+            .pipe(catchError(this.handleError<ClientAccount>(
+                'Ошибка при обновлении банк. счета!'
+            )));
     }
 
     deleteAccount(accountId: number, clientId: number) {
         const url = this.clientsUrl + clientId + '/accounts/' + accountId;
-        return this.http.delete(url, {headers: this.headers});
+        return this.http.delete(url, {headers: this.headers})
+            .pipe(catchError(this.handleError<ClientAccount>(
+                'Ошибка при удалении банк. счета!'
+            )));
     }
 
     // Directors
-    private fetchDirectorsByClientId(clientId) {
+    fetchDirectorsByClientId(clientId) {
         const directorsUrl = this.clientsUrl + clientId + '/directors';
         return this.http.get<Array<ClientDirector>>(directorsUrl)
             .pipe(catchError(this.handleError<Array<ClientDirector>>(
@@ -213,11 +274,6 @@ export class ClientService extends BaseService {
 
     getAgreements() {
         return this.client.agreements;
-    }
-
-    getAgreementsByClientId(clientId: number) {
-        const url = this.clientsUrl + clientId + '/agreements';
-        return this.http.get<ClientAgreement[]>(url, {headers: this.headers})
     }
 
 }

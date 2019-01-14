@@ -1,3 +1,256 @@
-<p>
-  document-details works!
-</p>
+<div class="ui-g">
+    <div class="ui-g-4">
+        <button
+            pButton type="button"
+            label="Вернуться"
+            class="ui-button-info"
+            icon="fa fa-arrow-circle-o-left"
+            routerLink="../"
+        ></button>
+    </div>
+    <div class="ui-g-8" *ngIf="loadingState">
+        <img
+                src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+        />
+    </div>
+    <div class="ui-g-8" *ngIf="!loadingState">
+        <h4 style="font-weight:normal">
+            <b>
+                <ins *ngIf="!isNew">
+                    {{document?.docType?.title + ' № '}} {{document?.number + ' от '}} {{document?.dated | date:
+                    'dd.MM.y' + 'г.'}}
+                </ins>
+                <ins *ngIf="isNew">
+                    Добавление нового документа
+                </ins>
+            </b>
+        </h4>
+    </div>
+
+    <div class="ui-g-12">
+        <form [formGroup]="documentForm" (ngSubmit)="onSubmit()">
+            <div class="ui-g-10">
+                <p-card *ngIf="loadingState">
+                    <div style="text-align: center;">
+                        <img
+                                src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+                        />
+                    </div>
+                </p-card>
+                <p-card *ngIf="!loadingState">
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-3" style="margin: 5px 0px">
+                                <b>Контрагент:*</b>
+                            </div>
+                            <div class="ui-grid-col-6">
+                                <p-dropdown [options]="clients"
+                                            [showClear]="false"
+                                            [autoWidth]="false"
+                                            placeholder="..."
+                                            optionLabel="title"
+                                            formControlName="client"
+                                            (onChange)="changeClient($event)"
+                                ></p-dropdown>
+                            </div>
+                            <div class="ui-grid-col-3">
+                                <p-message severity="error"
+                                           text="Выберите клиента"
+                                           *ngIf="documentForm.controls['client'].invalid"
+                                ></p-message>
+                            </div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-3" style="margin: 5px 0px">
+                                <b>Договор:*</b>
+                            </div>
+                            <div class="ui-grid-col-6">
+                                <p-dropdown [options]="agreements"
+                                            [showClear]="false"
+                                            [autoWidth]="false"
+                                            placeholder="..."
+                                            optionLabel="number"
+                                            formControlName="agreement"
+                                ></p-dropdown>
+                            </div>
+                            <div class="ui-grid-col-3">
+                                <p-message severity="error"
+                                           text="Выберите договор"
+                                           *ngIf="documentForm.controls['agreement'].invalid"
+                                ></p-message>
+                            </div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-3" style="margin: 5px 0px">
+                                <b>Тип документа:*</b>
+                            </div>
+                            <div class="ui-grid-col-6">
+                                <p-dropdown [options]="docTypes"
+                                            [showClear]="false"
+                                            [autoWidth]="false"
+                                            placeholder="..."
+                                            optionLabel="title"
+                                            formControlName="docType"
+                                ></p-dropdown>
+                            </div>
+                            <div class="ui-grid-col-3">
+                                <p-message severity="error"
+                                           text="Обязательное поле"
+                                           *ngIf="documentForm.controls['docType'].invalid"
+                                ></p-message>
+                            </div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-3" style="margin: 5px 0px">
+                                <b>Номер:</b>
+                            </div>
+                            <div class="ui-grid-col-3">
+                                <input pInputText type="text"
+                                       formControlName="number"
+                                >
+                            </div>
+                            <div class="ui-grid-col-6"></div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-3" style="margin: 5px 0px">
+                                <b>Дата документа:*</b>
+                            </div>
+                            <div class="ui-grid-col-3">
+                                <p-calendar [monthNavigator]="true"
+                                            [yearNavigator]="true"
+                                            [yearRange]="years"
+                                            [locale]="ru"
+                                            [showButtonBar]="true"
+                                            [showIcon]="true"
+                                            [dateFormat]="'dd.mm.yy'"
+                                            placeholder="..."
+                                            formControlName="dated"
+                                ></p-calendar>
+                            </div>
+                            <div class="ui-grid-col-3"></div>
+                            <div class="ui-grid-col-3">
+                                <p-message severity="error"
+                                           text="Обязательное поле"
+                                           *ngIf="documentForm.controls['dated'].invalid"
+                                ></p-message>
+                            </div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-3" style="margin: 5px 0px">
+                                <b>Сумма:</b>
+                            </div>
+                            <div class="ui-grid-col-6">
+                                <input pInputText type="text" [pKeyFilter]="'money'"
+                                       [value]="documentForm.get('amount').value | number:'1.2-2'"
+                                       formControlName="amount"
+                                >
+                            </div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-3" style="margin: 5px 0px">
+                                <b>Статус:</b>
+                            </div>
+                            <div class="ui-grid-col-6">
+                                <p-dropdown [options]="docStatuses"
+                                            [showClear]="false"
+                                            [autoWidth]="false"
+                                            placeholder="..."
+                                            optionLabel="status"
+                                            formControlName="status"
+                                ></p-dropdown>
+                            </div>
+                            <div class="ui-grid-col-3">
+                                <p-message severity="error"
+                                           text="Обязательное поле"
+                                           *ngIf="documentForm.controls['status'].invalid"
+                                ></p-message>
+                            </div>
+                        </div>
+                        <div class="ui-grid-row" *ngIf="checkAllowPaymentDate()">
+                            <div class="ui-grid-col-3" style="margin: 5px 0px">
+                                <b>Дата оплаты:</b>
+                            </div>
+                            <div class="ui-grid-col-3">
+                                <p-calendar
+                                    [monthNavigator]="true"
+                                    [yearNavigator]="true"
+                                    [yearRange]="years"
+                                    [locale]="ru"
+                                    [showButtonBar]="true"
+                                    [showIcon]="true"
+                                    [dateFormat]="'dd.mm.yy'"
+                                    placeholder="..."
+                                    formControlName="paymentDate"
+                                ></p-calendar>
+                            </div>
+                            <div class="ui-grid-col-3"></div>
+                            <div class="ui-grid-col-3"></div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-3" style="margin: 5px 0px">
+                                <b>Примечание:</b>
+                            </div>
+                            <div class="ui-grid-col-6">
+                                <textarea
+                                    pInputTextarea
+                                    rows="5"
+                                    cols="30"
+                                    formControlName="comment"
+                                ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </p-card>
+            </div>
+            <div class="ui-g-2">
+                <!--<button pButton type="button" label="Изменить"-->
+                        <!--class="ui-button-success btn-block" icon="fa fa-edit"-->
+                        <!--[routerLink]="['edit']">-->
+                <!--</button>-->
+                <p-toggleButton
+                    [style]="{'width':'100%'}"
+                    onIcon="fa fa-save"
+                    onLabel="Сохранить"
+                    offIcon="fa fa-edit"
+                    offLabel="Редактировать"
+                    (onChange)="handleChange($event)"
+                ></p-toggleButton>
+                <button pButton type="submit"
+                        class="ui-button-success btn-block"
+                        icon="fa fa-check-square-o"
+                        label="Сохранить"
+                        [disabled]="!documentForm.valid"
+                ></button>
+                <button
+                    style="margin-top:10px"
+                    pButton type="button"
+                    label="Удалить"
+                    class="ui-button-danger btn-block"
+                    icon="fa fa-trash-o"
+                    (click)="confirmDeleting()"
+                ></button>
+                {{editEnabled}}
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" #cd>
+    <p-footer>
+        <button
+            type="button" pButton
+            icon="fa fa-check"
+            class="ui-button-primary"
+            label="Ок"
+            (click)="cd.accept()"
+        ></button>
+        <button
+            type="button" pButton
+            icon="fa fa-close"
+            class="ui-button-secondary"
+            label="Отмена"
+            (click)="cd.reject()"
+        ></button>
+    </p-footer>
+</p-confirmDialog>
