@@ -14,6 +14,7 @@ export class Document {
     public paymentDate?: string;
     public comment?: string;
     public status?: DocumentStatus;
+    public passingDate?: string;
     public docStatus?: string;
     public agreementId?: number;
     public agreement?: ClientAgreement;

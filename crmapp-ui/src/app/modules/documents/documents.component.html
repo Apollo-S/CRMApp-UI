@@ -1,4 +1,4 @@
-<p *ngIf="filterState">
+<p *ngIf="docService.getFilterState()">
     <p-card>
         <div class="ui-grid">
             <div class="ui-grid-row">
@@ -14,7 +14,7 @@
                                    [panelStyle]="{minWidth:'12em'}"
                                    [style]="{width:'300px'}"
                                    defaultLabel="Не выбрано"
-                                   [(ngModel)]="selectedClients"
+                                   [(ngModel)]="docService._selectedClients"
                     ></p-multiSelect>
                 </div>
                 <div class="ui-grid-col-2">
@@ -40,7 +40,7 @@
                                    [panelStyle]="{minWidth:'12em'}"
                                    [style]="{width:'300px'}"
                                    defaultLabel="Не выбрано"
-                                   [(ngModel)]="selectedDocTypes"
+                                   [(ngModel)]="docService._selectedDocTypes"
                     ></p-multiSelect>
                 </div>
                 <div class="ui-grid-col-2">
@@ -66,7 +66,7 @@
                                    [panelStyle]="{minWidth:'12em'}"
                                    [style]="{width:'300px'}"
                                    defaultLabel="Не выбрано"
-                                   [(ngModel)]="selectedDocStatuses"
+                                   [(ngModel)]="docService._selectedDocStatuses"
                     ></p-multiSelect>
                 </div>
                 <div class="ui-grid-col-2">
@@ -169,14 +169,13 @@
                     {{column.header}}
                     <p-sortIcon [field]="column.field"></p-sortIcon>
                 </th>
-                <th></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-document let-rowData let-expanded="expanded" let-columns="columns">
             <tr [ngStyle]="{'background-color': document.status.backgroundColor, 'color': document.status.color}">
                 <td>
                     <a href="#" [pRowToggler]="rowData">
-                        <i [ngClass]="expanded ? 'fa fa-fw fa fa-chevron-circle-down' : 'fa fa-fw fa fa-chevron-circle-right'"></i>
+                        <i [ngClass]="expanded ? 'fa fa-toggle-down' : 'fa fa-toggle-right'"></i>
                     </a>
                 </td>
 
@@ -193,29 +192,16 @@
                     {{document.amount | number: '3.2-2'}}
                 </td>
                 <td style="text-align:center" (click)="goToEntry(document?.url)">
-                    {{document.dated == null ? '-' : document.dated | date: 'dd.MM.y'}}
+                    {{document.dated === null ? '-' : document.dated | date: 'dd.MM.y'}}
                 </td>
                 <td style="text-align:center" (click)="goToEntry(document?.url)">
-                    {{document.paymentDate == null ? '-' : document.paymentDate | date: 'dd.MM.y'}}
+                    {{document.paymentDate === null ? '-' : document.paymentDate | date: 'dd.MM.y'}}
                 </td>
                 <td style="text-align:center" (click)="goToEntry(document?.url)">
                     {{document.status.status}}
                 </td>
-
-                <td style="text-align:center">
-                    <button pButton type="button"
-                            class="ui-button-info"
-                            icon="fa fa-arrow-circle-o-right"
-                            (click)="goToEntry(document?.url)"
-                    ></button>
-                    <p-tieredMenu #menu
-                                  [model]="items"
-                                  [popup]="true"
-                                  appendTo="body"
-                    ></p-tieredMenu>
-                    <!-- <button #btn pButton type="button" icon="fa fa-list" class="ui-button-info"
-                        (click)="menu.toggle($event)" (mousedown)="initMenu(document?.id)">
-                    </button> -->
+                <td style="text-align:center" (click)="goToEntry(document?.url)">
+                    {{document.passingDate === null ? '-' : document.passingDate | date: 'dd.MM.y'}}
                 </td>
             </tr>
         </ng-template>
@@ -232,6 +218,9 @@
                                     <h5><b>Договор: </b> <a [routerLink]="['/agreements', rowData.agreementId]">
                                         {{rowData.agreementNumber + ' от '}} {{rowData.agreementDateStart | date: 'dd.MM.y'}}
                                     </a></h5>
+                                    <h5><b>Примечание: </b> <i>
+                                        {{rowData.comment === '' ? '-' : rowData.comment}}
+                                    </i></h5>
                                 </span>
                             </div>
                         </p-card>
@@ -241,7 +230,7 @@
         </ng-template>
         <ng-template pTemplate="emptymessage" let-columns *ngIf="loadingState">
             <tr>
-                <td [attr.colspan]="columns.length + 2" style="text-align:center">
+                <td [attr.colspan]="columns.length + 1" style="text-align:center">
                     <img
                             src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
                     />
@@ -250,7 +239,7 @@
         </ng-template>
       <ng-template pTemplate="emptymessage" let-columns *ngIf="!loadingState">
           <tr>
-              <td [attr.colspan]="columns.length + 2" style="text-align:center">
+              <td [attr.colspan]="columns.length + 1" style="text-align:center">
                   No records found
               </td>
           </tr>

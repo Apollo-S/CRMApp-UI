@@ -9,12 +9,18 @@ import {ClientAccount} from "../models/ClientAccount";
 import {Router} from "@angular/router";
 import {MessageService} from "primeng/api";
 import {BaseService} from "./base.service";
+import {DocumentStatus} from "../models/DocumentStatus";
+import {Client} from "../models/Client";
 
 @Injectable()
 export class DocumentService extends BaseService{
 
     private readonly documentsUrl;
     private readonly headers;
+    protected _selectedDocTypes: DocumentType[] = [];
+    protected _selectedDocStatuses: DocumentStatus[] = [];
+    protected _selectedClients: Client[] = [];
+    private _filterState: boolean = false;
 
     private _property$: BehaviorSubject<Document> = new BehaviorSubject({});
 
@@ -33,6 +39,46 @@ export class DocumentService extends BaseService{
         super(router, messageService);
         this.documentsUrl = appConst.baseUrl + appConst.documentsUrl + '/';
         this.headers = appConst.headersJSON;
+    }
+
+    getSelectedClients(): Client[] {
+        return this._selectedClients;
+    }
+
+    setSelectedClients(value: Client[]) {
+        this._selectedClients = value;
+    }
+    getSelectedDocStatuses(): DocumentStatus[] {
+        return this._selectedDocStatuses;
+    }
+
+    setSelectedDocStatuses(value: DocumentStatus[]) {
+        this._selectedDocStatuses = value;
+    }
+
+    getSelectedDocTypes(): DocumentType[] {
+        return this._selectedDocTypes;
+    }
+
+    setSelectedDocTypes(value: DocumentType[]) {
+        this._selectedDocTypes = value;
+    }
+
+    getFilterState(): boolean {
+        return this._filterState;
+    }
+
+    setFilterState(value: boolean) {
+        this._filterState = value;
+    }
+
+    getIDs(sourceArray: any[]): number[] {
+        let arrLength: number = sourceArray.length;
+        let result: number[] = [arrLength];
+        for (let index = 0; index < arrLength; index++) {
+            result[index] = sourceArray[index].id;
+        }
+        return result;
     }
 
     getDocuments() {

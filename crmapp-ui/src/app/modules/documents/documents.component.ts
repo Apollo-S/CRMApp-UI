@@ -9,7 +9,6 @@ import {DocumentStatusService} from 'app/services/document-status.service';
 import {ClientService} from 'app/services/client.service';
 import {MenuItem, SortEvent, SelectItem} from 'primeng/api';
 import {Client} from 'app/models/Client';
-import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
     selector: 'app-documents',
@@ -17,23 +16,20 @@ import {FormControl, FormGroup} from "@angular/forms";
     styleUrls: ['./documents.component.css']
 })
 export class DocumentsComponent implements OnInit {
-    // filterForm: FormGroup;
+
     clients: Client[] = [];
     documents: Document[] = [];
     docTypes: DocumentType[] = [];
     docStatuses: DocumentStatus[] = [];
     sortTypes: SelectItem[] = [];
-    selectedDocTypes: DocumentType[] = [];
-    selectedDocStatuses: DocumentStatus[] = [];
-    selectedClients: Client[] = [];
     columns: any[] = [];
     items: MenuItem[] = [];
-    filterState: boolean = false;
+    // filterState: boolean = false;
     loadingState: boolean;
     selectedSortType: string = '';
     selectedSortField: any = '';
 
-    constructor(private docService: DocumentService,
+    constructor(public docService: DocumentService,
                 private docTypeService: DocumentTypeService,
                 private docStatusService: DocumentStatusService,
                 private clientService: ClientService,
@@ -59,9 +55,9 @@ export class DocumentsComponent implements OnInit {
     }
 
     useFilter(sortField: string, sortType: string) {
-        let docTypeIDs: number[] = this.getIDs(this.selectedDocTypes);
-        let docStatusIDs: number[] = this.getIDs(this.selectedDocStatuses);
-        let clientIDs: number[] = this.getIDs(this.selectedClients);
+        let docTypeIDs: number[] = this.docService.getIDs(this.docService.getSelectedDocTypes());
+        let docStatusIDs: number[] = this.docService.getIDs(this.docService.getSelectedDocStatuses());
+        let clientIDs: number[] = this.docService.getIDs(this.docService.getSelectedClients());
         this.docService.getDocumentsAccordingFilter(docTypeIDs, docStatusIDs, clientIDs, sortField, sortType)
             .subscribe(
                 documents => {
@@ -72,28 +68,19 @@ export class DocumentsComponent implements OnInit {
     }
 
     useSorting() {
-        let docTypeIDs: number[] = this.getIDs(this.selectedDocTypes);
-        let docStatusIDs: number[] = this.getIDs(this.selectedDocStatuses);
-        let clientIDs: number[] = this.getIDs(this.selectedClients);
-        this.docService.getDocumentsAccordingFilter(docTypeIDs, docStatusIDs, clientIDs, this.selectedSortField.field, this.selectedSortType)
-            .subscribe(
-                documents => this.documents = documents
-            );
+        // let docTypeIDs: number[] = this.docService.getIDs(this.selectedDocTypes);
+        // let docStatusIDs: number[] = this.getIDs(this.selectedDocStatuses);
+        // let clientIDs: number[] = this.getIDs(this.selectedClients);
+        // this.docService.getDocumentsAccordingFilter(docTypeIDs, docStatusIDs, clientIDs, this.selectedSortField.field, this.selectedSortType)
+        //     .subscribe(
+        //         documents => this.documents = documents
+        //     );
     }
 
     customSort(event: SortEvent) {
         let sortField = event.field;
         let sortType = (event.order == 1 ? "asc" : "desc");
         this.useFilter(sortField, sortType)
-    }
-
-    private getIDs(sourceArray: any[]): number[] {
-        let arrLength: number = sourceArray.length;
-        let result: number[] = [arrLength];
-        for (let index = 0; index < arrLength; index++) {
-            result[index] = sourceArray[index].id;
-        }
-        return result;
     }
 
     private getDocumentTypes() {
@@ -123,8 +110,9 @@ export class DocumentsComponent implements OnInit {
             {field: 'number', header: '№', colStyle: 'text-align:center'},
             {field: 'amount', header: 'Сумма', colStyle: 'text-align:center'},
             {field: 'dated', header: 'Дата', colStyle: 'text-align:center'},
-            {field: 'paymentDate', header: 'Дата оплаты', colStyle: 'paid'},
-            {field: 'status.status', header: 'Статус', colStyle: 'text-align:center'}
+            {field: 'paymentDate', header: 'Дата оплаты', colStyle: 'text-align:center'},
+            {field: 'status.status', header: 'Статус', colStyle: 'text-align:center'},
+            {field: 'passingDate', header: 'Дата передачи', colStyle: 'text-align:center'}
         ];
         this.selectedSortField = this.columns[0];
     }
@@ -146,13 +134,15 @@ export class DocumentsComponent implements OnInit {
     }
 
     clearFilter() {
-        this.selectedClients = [];
-        this.selectedDocTypes = [];
-        this.selectedDocStatuses = [];
+        this.docService.setSelectedClients([]);
+        this.docService.setSelectedDocTypes([]);
+        this.docService.setSelectedDocStatuses([]);
+        this.useFilter("id", "asc");
+
     }
 
     changeFilterState(state: boolean) {
-        this.filterState = state;
+        this.docService.setFilterState(state);
     }
 
     refresh() {
