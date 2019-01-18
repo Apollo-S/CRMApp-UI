@@ -11,16 +11,14 @@ import {MessageService} from "primeng/api";
 import {BaseService} from "./base.service";
 import {DocumentStatus} from "../models/DocumentStatus";
 import {Client} from "../models/Client";
+import {DocumentFilter} from "../models/DocumentFilter";
 
 @Injectable()
 export class DocumentService extends BaseService{
 
     private readonly documentsUrl;
     private readonly headers;
-    protected _selectedDocTypes: DocumentType[] = [];
-    protected _selectedDocStatuses: DocumentStatus[] = [];
-    protected _selectedClients: Client[] = [];
-    private _filterState: boolean = false;
+    protected docFilter;
 
     private _property$: BehaviorSubject<Document> = new BehaviorSubject({});
 
@@ -39,37 +37,46 @@ export class DocumentService extends BaseService{
         super(router, messageService);
         this.documentsUrl = appConst.baseUrl + appConst.documentsUrl + '/';
         this.headers = appConst.headersJSON;
+        this.docFilter = <DocumentFilter>{
+            filterState: false,
+            selectedDocStatuses: [],
+            selectedClients: [],
+            selectedDocTypes: [],
+            selectedSortField: {},
+            selectedSortType: ''
+        }
     }
 
     getSelectedClients(): Client[] {
-        return this._selectedClients;
+        return this.docFilter.selectedClients;
     }
 
     setSelectedClients(value: Client[]) {
-        this._selectedClients = value;
+        this.docFilter.selectedClients = value;
     }
+
     getSelectedDocStatuses(): DocumentStatus[] {
-        return this._selectedDocStatuses;
+        return this.docFilter.selectedDocStatuses;
     }
 
     setSelectedDocStatuses(value: DocumentStatus[]) {
-        this._selectedDocStatuses = value;
+        this.docFilter.selectedDocStatuses = value;
     }
 
     getSelectedDocTypes(): DocumentType[] {
-        return this._selectedDocTypes;
+        return this.docFilter.selectedDocTypes;
     }
 
     setSelectedDocTypes(value: DocumentType[]) {
-        this._selectedDocTypes = value;
+        this.docFilter.selectedDocTypes = value;
     }
 
     getFilterState(): boolean {
-        return this._filterState;
+        return this.docFilter.filterState;
     }
 
     setFilterState(value: boolean) {
-        this._filterState = value;
+        this.docFilter.filterState = value;
     }
 
     getIDs(sourceArray: any[]): number[] {
