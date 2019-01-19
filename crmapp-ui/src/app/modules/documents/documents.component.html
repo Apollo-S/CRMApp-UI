@@ -2,83 +2,123 @@
     <p-card>
         <div class="ui-grid">
             <div class="ui-grid-row">
-                <div class="ui-grid-col-3">
+                <div class="ui-grid-col-2">
                     <b>Клиент:</b>
                 </div>
-                <div class="ui-grid-col-7">
-                    <p-multiSelect [options]="clients"
-                                   optionLabel="title"
-                                   selectedItemsLabel="{0} эл. выбрано"
-                                   maxSelectedLabels="1"
-                                   [resetFilterOnHide]="true"
-                                   [panelStyle]="{minWidth:'12em'}"
-                                   [style]="{width:'300px'}"
-                                   defaultLabel="Не выбрано"
-                                   [(ngModel)]="docService._selectedClients"
+                <div class="ui-grid-col-9">
+                    <p-multiSelect
+                        id="float-dropdown-clients"
+                        [options]="clients"
+                        optionLabel="title"
+                        selectedItemsLabel="{0} эл. выбрано"
+                        maxSelectedLabels="1"
+                        [resetFilterOnHide]="true"
+                        [panelStyle]="{minWidth:'12em'}"
+                        [style]="{width:'300px'}"
+                        defaultLabel="Не выбрано"
+                        [(ngModel)]="docService.docFilter.selectedClients"
                     ></p-multiSelect>
                 </div>
-                <div class="ui-grid-col-2">
-                    <button pButton type="button"
-                            class="ui-button-info btn-block"
-                            style="float:right"
-                            icon="fa fa-filter"
-                            label="Фильтровать"
-                            (click)="useFilter('id', 'asc')"
+                <div class="ui-grid-col-1">
+                    <button
+                        pButton type="button"
+                        class="ui-button-info btn-block"
+                        style="float:right"
+                        icon="fa fa-filter"
+                        label="Фильтровать"
+                        (click)="useFilter('id', 'asc')"
                     ></button>
                 </div>
             </div>    
             <div class="ui-grid-row">
-                <div class="ui-grid-col-3">
+                <div class="ui-grid-col-2">
                     <b>Тип документа:</b>
                 </div>
-                <div class="ui-grid-col-7">
-                    <p-multiSelect [options]="docTypes"
-                                   optionLabel="title"
-                                   selectedItemsLabel="{0} эл. выбрано"
-                                   maxSelectedLabels="1"
-                                   [resetFilterOnHide]="true"
-                                   [panelStyle]="{minWidth:'12em'}"
-                                   [style]="{width:'300px'}"
-                                   defaultLabel="Не выбрано"
-                                   [(ngModel)]="docService._selectedDocTypes"
+                <div class="ui-grid-col-9">
+                    <p-multiSelect
+                        [options]="docTypes"
+                        optionLabel="title"
+                        selectedItemsLabel="{0} эл. выбрано"
+                        maxSelectedLabels="1"
+                        [resetFilterOnHide]="true"
+                        [panelStyle]="{minWidth:'12em'}"
+                        [style]="{width:'300px'}"
+                        defaultLabel="Не выбрано"
+                        [(ngModel)]="docService.docFilter.selectedDocTypes"
                     ></p-multiSelect>
                 </div>
-                <div class="ui-grid-col-2">
-                    <button pButton type="button"
-                            class="ui-button-success btn-block"
-                            style="float:right"
-                            icon="fa fa-trash"
-                            label="Очистить"
-                            (click)="clearFilter()"
+                <div class="ui-grid-col-1">
+                    <button
+                        pButton type="button"
+                        class="ui-button-success btn-block"
+                        style="float:right"
+                        icon="fa fa-trash"
+                        label="Очистить"
+                        (click)="clearFilter()"
                     ></button>
                 </div>
             </div>     
             <div class="ui-grid-row">
-                <div class="ui-grid-col-3">
+                <div class="ui-grid-col-2">
                     <b>Статус:</b>
                 </div>
-                <div class="ui-grid-col-7">
-                    <p-multiSelect [options]="docStatuses"
-                                   optionLabel="status"
-                                   selectedItemsLabel="{0} эл. выбрано"
-                                   maxSelectedLabels="1"
-                                   [resetFilterOnHide]="true"
-                                   [panelStyle]="{minWidth:'12em'}"
-                                   [style]="{width:'300px'}"
-                                   defaultLabel="Не выбрано"
-                                   [(ngModel)]="docService._selectedDocStatuses"
+                <div class="ui-grid-col-9">
+                    <p-multiSelect
+                        [options]="docStatuses"
+                        optionLabel="status"
+                        selectedItemsLabel="{0} эл. выбрано"
+                        maxSelectedLabels="1"
+                        [resetFilterOnHide]="true"
+                        [panelStyle]="{minWidth:'12em'}"
+                        [style]="{width:'300px'}"
+                        defaultLabel="Не выбрано"
+                        [(ngModel)]="docService.docFilter.selectedDocStatuses"
                     ></p-multiSelect>
                 </div>
-                <div class="ui-grid-col-2">
-                    <button pButton type="button"
-                            class="ui-button-danger btn-block"
-                            style="float:right"
-                            icon="fa fa-times"
-                            label="Закрыть"
-                            (click)="changeFilterState(false)"
+                <div class="ui-grid-col-1">
+                    <button
+                        pButton type="button"
+                        class="ui-button-danger btn-block"
+                        style="float:right"
+                        icon="fa fa-times"
+                        label="Закрыть"
+                        (click)="changeFilterState()"
                     ></button>
                 </div>
-            </div>           
+            </div>
+            <br>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    <b>Сортировка:</b>
+                </div>
+                <div class="ui-grid-col-2">
+                    <span class="ui-float-label">
+                        <p-dropdown
+                            id="float-dropdown-field"
+                            [options]="columns"
+                            [style]="{'width':'90%'}"
+                            optionLabel="header"
+                            [autoWidth]="false"
+                            [showClear]="false"
+                            [(ngModel)]="docService.docFilter.selectedSortField"
+                        ></p-dropdown>
+                        <label for="float-dropdown-field"><b>Столбец</b></label>
+                    </span>
+                </div>
+                <div class="ui-grid-col-2">
+                    <span class="ui-float-label">
+                        <p-dropdown
+                            id="float-dropdown-type"
+                            [options]="sortTypes"
+                            [style]="{'width':'90%'}"
+                            [autoWidth]="false"
+                            [showClear]="false"
+                            [(ngModel)]="docService.docFilter.selectedSortType"
+                        ></p-dropdown>
+                        <label for="float-dropdown-type"><b>Тип сортировки</b></label>
+                    </span>
+                </div>
+            </div>
         </div>
     </p-card>
 </p>
@@ -91,28 +131,14 @@
         <span class="ui-panel-title" style="display:inline-block;margin-top:6px">
             <h4><b>Документы</b></h4>
         </span>
-
-        <button pButton type="button"
+            <button
+                pButton type="button"
                 icon="fa fa-filter"
                 label="Фильтр"
-                (click)="changeFilterState(true)"
+                (click)="changeFilterState()"
                 class="ui-button-info"
                 style="margin-top:6px;margin-right:4px;float:right"
-        ></button>
-
-        <!--<p-dropdown [options]="columns" [(ngModel)]="selectedSortField" optionLabel="header" [autoWidth]="false"-->
-             <!--[showClear]="false" [style]="{'min-width':'10em'}">-->
-        <!--</p-dropdown>-->
-        <!--<span>-->
-            <!--Сортировка по:-->
-        <!--</span>-->
-        <!--<p-dropdown [options]="sortTypes" [(ngModel)]="selectedSortType" [autoWidth]="false"-->
-             <!--[showClear]="false" [style]="{'min-width':'10em'}">-->
-        <!--</p-dropdown>-->
-        <!--<button pButton type="button" icon="fa fa-sort" label="Сортировать"-->
-            <!--(click)="useSorting()" class="ui-button-info" style="margin-top:6px;margin-right:4px;float:right">-->
-        <!--</button> -->
-
+            ></button>
       </div>
   </p-header>
 
@@ -136,28 +162,31 @@
     >
         <ng-template pTemplate="caption">
             <div>
-                <button pButton type="button"
-                        label="Добавить"
-                        style="margin-top:2px;float:left"
-                        [routerLink]="['add']"
-                        icon="fa fa-plus"
-                        class="ui-button-rounded ui-button-primary"
+                <button
+                    pButton type="button"
+                    label="Добавить"
+                    style="margin-top:2px;float:left"
+                    [routerLink]="['add']"
+                    icon="fa fa-plus"
+                    class="ui-button-rounded ui-button-primary"
                 ></button>
-                <button pButton type="button"
-                        [label]="'Обновить'"
-                        style="margin-left:2px;margin-top:2px;float:left"
-                        icon="fa fa-refresh"
-                        class="ui-button-rounded ui-button-primary"
-                        (click)="refresh()"
+                <button
+                    pButton type="button"
+                    [label]="'Обновить'"
+                    style="margin-left:2px;margin-top:2px;float:left"
+                    icon="fa fa-refresh"
+                    class="ui-button-rounded ui-button-primary"
+                    (click)="refresh()"
                 ></button>
             </div>
             <div style="text-align: right">
                 <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-                <input type="text" pInputText
-                       size="50"
-                       placeholder="Фильтр"
-                       style="width:auto"
-                       (input)="dt.filterGlobal($event.target.value, 'contains')"
+                <input
+                    type="text" pInputText
+                    size="50"
+                    placeholder="Фильтр"
+                    style="width:auto"
+                    (input)="dt.filterGlobal($event.target.value, 'contains')"
                 >
             </div>
         </ng-template>

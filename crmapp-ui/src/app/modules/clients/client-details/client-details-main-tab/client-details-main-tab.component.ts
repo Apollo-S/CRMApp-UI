@@ -1,8 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component,OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {ClientService} from '../../../../services/client.service';
 import {ConfirmationService, MessageService} from 'primeng/api';
-import {debug} from "util";
 
 @Component({
     selector: 'app-client-details-main-tab',
@@ -11,7 +10,7 @@ import {debug} from "util";
 })
 export class ClientDetailsMainTabComponent implements OnInit {
 
-    loadingState: boolean;
+    loadingState: boolean = true;
 
     constructor(private clientService: ClientService,
                 private router: Router,
@@ -20,8 +19,9 @@ export class ClientDetailsMainTabComponent implements OnInit {
     }
 
     ngOnInit() {
-    debugger
-        this.loadingState = this.clientService.getLoadingState();
+        this.clientService.emitterClient.subscribe((data) => {
+            console.log(data);
+        });
     }
 
     getLoadingState() {
@@ -49,14 +49,6 @@ export class ClientDetailsMainTabComponent implements OnInit {
                         });
                         this.router.navigate(['/clients']);
                     })
-                    .catch(
-                    () => {
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: 'Ошибка!',
-                            detail: (msg + ' не удален')
-                        });
-                    });
             },
             reject: () => {}
         });

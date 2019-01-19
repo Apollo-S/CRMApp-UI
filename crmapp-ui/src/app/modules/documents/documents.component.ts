@@ -24,10 +24,10 @@ export class DocumentsComponent implements OnInit {
     sortTypes: SelectItem[] = [];
     columns: any[] = [];
     items: MenuItem[] = [];
-    // filterState: boolean = false;
     loadingState: boolean;
     selectedSortType: string = '';
     selectedSortField: any = '';
+
 
     constructor(public docService: DocumentService,
                 private docTypeService: DocumentTypeService,
@@ -65,16 +65,6 @@ export class DocumentsComponent implements OnInit {
                     this.loadingState = false;
                 }
             );
-    }
-
-    useSorting() {
-        // let docTypeIDs: number[] = this.docService.getIDs(this.selectedDocTypes);
-        // let docStatusIDs: number[] = this.getIDs(this.selectedDocStatuses);
-        // let clientIDs: number[] = this.getIDs(this.selectedClients);
-        // this.docService.getDocumentsAccordingFilter(docTypeIDs, docStatusIDs, clientIDs, this.selectedSortField.field, this.selectedSortType)
-        //     .subscribe(
-        //         documents => this.documents = documents
-        //     );
     }
 
     customSort(event: SortEvent) {
@@ -119,8 +109,8 @@ export class DocumentsComponent implements OnInit {
 
     private initSortTypes() {
         this.sortTypes = [
-            {label: 'Возрастание', value: 'asc'},
-            {label: 'Убывание', value: 'desc'}
+            {label: 'По возрастанию', value: 'asc'},
+            {label: 'По убыванию', value: 'desc'}
         ];
         this.selectedSortType = 'asc';
     }
@@ -141,8 +131,8 @@ export class DocumentsComponent implements OnInit {
 
     }
 
-    changeFilterState(state: boolean) {
-        this.docService.setFilterState(state);
+    changeFilterState() {
+        this.docService.setFilterState(!this.docService.getFilterState());
     }
 
     refresh() {

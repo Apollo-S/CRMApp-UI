@@ -31,11 +31,7 @@ export class ClientsComponent implements OnInit {
                 this.loading = false;
             });
     }
-
-    getClients() {
-        return this.clientService.getClients();
-    }
-
+    
     private initColumns() {
         this.columns = [
             {field: 'id', header: 'ID'},
