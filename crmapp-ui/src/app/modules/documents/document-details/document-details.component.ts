@@ -66,6 +66,9 @@ export class DocumentDetailsComponent implements OnInit {
                     this.documentForm.controls.paymentDate.setValue(
                         this.document.paymentDate === null ? null : new Date(this.document.paymentDate)
                     );
+                    this.documentForm.controls.passingDate.setValue(
+                        this.document.passingDate === null ? null : new Date(this.document.passingDate)
+                    );
                     this.documentForm.controls.comment.setValue(this.document.comment);
                     this.loadingState = false;
                 })
@@ -111,6 +114,7 @@ export class DocumentDetailsComponent implements OnInit {
                 Validators.required,
             ])],
             paymentDate: [''],
+            passingDate: [''],
             number: ['', Validators.compose([
                 Validators.required,
             ])],
@@ -135,6 +139,7 @@ export class DocumentDetailsComponent implements OnInit {
         updatedDocument.dated = this.documentForm.controls.dated.value;
         updatedDocument.status = this.documentForm.controls.status.value;
         updatedDocument.paymentDate = this.documentForm.controls.paymentDate.value;
+        updatedDocument.passingDate = this.documentForm.controls.passingDate.value;
         updatedDocument.docType = this.documentForm.controls.docType.value;
         updatedDocument.agreement = this.documentForm.controls.agreement.value;
         updatedDocument.comment = this.documentForm.controls.comment.value;
@@ -145,8 +150,7 @@ export class DocumentDetailsComponent implements OnInit {
                     summary: 'Успешно!',
                     detail: 'Документ успешно изменен (ID=' + response.id + ')'
                 });
-            }
-    )
+            })
     }
 
     handleChange(event) {
@@ -167,6 +171,10 @@ export class DocumentDetailsComponent implements OnInit {
         return this.documentForm.controls.status.value.allowPaymentDate;
     }
 
+    checkAllowPassingDate() {
+        return this.documentForm.controls.status.value.allowPassingDate;
+    }
+
     confirmDeleting() {
         let msg = 'Документ \"' + this.document.number + '\" (ID=' + this.document.id + ') ';
         this.confirmationService.confirm({
@@ -182,12 +190,16 @@ export class DocumentDetailsComponent implements OnInit {
                                 summary: 'Успешно!',
                                 detail: (msg + ' успешно удален')
                             });
-                            this.documentService.goToUrl(['/clients']);
+                            this.documentService.goToUrl(['/documents']);
                         })
             },
             reject: () => {
             }
         });
+    }
+
+    goBackToDocuments(filterSet) {
+      // this.documentService.getDocumentsAccordingFilter();
     }
 
 }
