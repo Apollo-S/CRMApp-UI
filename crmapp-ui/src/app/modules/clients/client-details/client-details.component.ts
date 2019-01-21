@@ -9,6 +9,7 @@ import {Client} from '../../../models/Client';
     styleUrls: ['./client-details.component.css']
 })
 export class ClientDetailsComponent implements OnInit {
+
     clientId: number;
     client: Client = {};
     loadingState: boolean = true;
@@ -16,14 +17,16 @@ export class ClientDetailsComponent implements OnInit {
     constructor(private clientService: ClientService,
                 private route: ActivatedRoute) {
         this.clientId = +route.snapshot.params.id;
-        this.clientService.fetchAllClientDataPromise(this.clientId).then(
-            () => {
-                this.client = this.clientService.getCurrentClient();
-                this.loadingState = false;
-            });
+        this.clientService.fetchClientData(this.clientId);
     }
 
     ngOnInit() {
+        this.clientService.emitterClient.subscribe((data) => {
+            this.client = data;
+            this.loadingState = false;
+        });
     }
+
+
 
 }
