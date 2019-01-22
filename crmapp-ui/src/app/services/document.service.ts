@@ -43,7 +43,9 @@ export class DocumentService extends BaseService{
             selectedClients: [],
             selectedDocTypes: [],
             selectedSortField: {},
-            selectedSortType: ''
+            selectedSortType: '',
+            docDateStart: '',
+            docDateFinal: ''
         }
     }
 
