@@ -9,6 +9,7 @@ import {DocumentStatusService} from 'app/services/document-status.service';
 import {ClientService} from 'app/services/client.service';
 import {MenuItem, SortEvent, SelectItem} from 'primeng/api';
 import {Client} from 'app/models/Client';
+import {UtilService} from "../../services/util.service";
 
 @Component({
     selector: 'app-documents',
@@ -27,13 +28,16 @@ export class DocumentsComponent implements OnInit {
     loadingState: boolean;
     selectedSortType: string = '';
     selectedSortField: any = '';
-
+    years: string;
+    ru: any;
 
     constructor(public docService: DocumentService,
                 private docTypeService: DocumentTypeService,
                 private docStatusService: DocumentStatusService,
                 private clientService: ClientService,
                 private router: Router) {
+        this.ru = UtilService.getCalendarLocalSet();
+        this.years = UtilService.getCalendarYears(5);
     }
 
     ngOnInit() {

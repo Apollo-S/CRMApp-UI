@@ -7,3 +7,13 @@
     background-color: rgb(255, 118, 118) !important;
     color: #ffffff !important;
 }
+
+.title-text-center {
+    vertical-align: middle !important;
+}
+
+.button-block-right {
+    float: right;
+    display: block;
+    width: 100%
+}
