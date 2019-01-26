@@ -2,17 +2,27 @@
     <div class="ui-g-10" *ngIf="loading" style="text-align: center;">
         <p-card>
             <img
-                    src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+                src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
             />
         </p-card>
     </div>
     <div class="ui-g-10" *ngIf="!loading">
         <p-card>
             <p-table
-                    [columns]="columns" [responsive]="responsive" [sortField]="sortField" [sortOrder]="1"
-                    [value]="datasource" [reorderableColumns]="reorderableColumns" [autoLayout]="autoLayout"
-                    [rows]="rows" [rowHover]="rowHover" [paginator]="paginator" [selectionMode]="'single'" dataKey="id"
-                    [(selection)]="selectedItem" [loading]="loading">
+                [columns]="columns"
+                [responsive]="responsive"
+                [sortField]="sortField"
+                [sortOrder]="1"
+                [value]="datasource"
+                [reorderableColumns]="reorderableColumns"
+                [autoLayout]="autoLayout"
+                [rows]="rows"
+                [rowHover]="rowHover"
+                [paginator]="paginator"
+                [selectionMode]="'single'"
+                [dataKey]="'id'"
+                [(selection)]="selectedItem"
+                [loading]="loading">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 2.25em"></th>
@@ -30,8 +40,14 @@
                         </td>
                         <td *ngFor="let column of columns" style="text-align:center"
                             (dblclick)="goToEntry(datasource?.url)">
-                            <span class="ui-column-title">{{column.header}}</span>
-                            {{rowData[column.field]}}
+                            <div *ngIf="column.field!=='dateStart'">
+                                <span class="ui-column-title">{{column.header}}</span>
+                                {{rowData[column.field]}}
+                            </div>
+                            <div *ngIf="column.field==='dateStart'">
+                                <span class="ui-column-title">{{column.header}}</span>
+                                {{rowData[column.field] | date: 'dd.MM.y'}}
+                            </div>
                         </td>
                     </tr>
                 </ng-template>
@@ -49,13 +65,22 @@
         </p-card>
     </div>
     <div class="ui-g-2">
-        <button pButton type="button" [label]="addButtonTitle"
-                class="ui-button-rounded ui-button-primary btn-block" icon="fa fa-plus-circle"
-                [routerLink]="routerLinkUrl">
-        </button>
-        <button pButton type="button" [label]="editButtonTitle"
-                class="ui-button-rounded ui-button-success btn-block" icon="fa fa-edit" [disabled]="!selectedItem"
-                (click)="goToEntry(selectedItem?.url)">
-        </button>
+        <button
+            pButton
+            type="button"
+            [label]="addButtonTitle"
+            class="ui-button-rounded ui-button-primary btn-block"
+            icon="fa fa-plus-circle"
+            [routerLink]="routerLinkUrl"
+        ></button>
+        <button
+            pButton
+            type="button"
+            [label]="editButtonTitle"
+            class="ui-button-rounded ui-button-success btn-block"
+            icon="fa fa-edit"
+            [disabled]="!selectedItem"
+            (click)="goToEntry(selectedItem?.url)"
+        ></button>
     </div>
 </div>
