@@ -112,9 +112,11 @@ export class DocumentService extends BaseService{
             )));
     }
 
-    addDocument(document: Document): Observable<Document> {
-        const url = this.documentsUrl;
-        return this.http.post<Document>(url, document, {headers: this.headers})
+    addDocument(document: Document) {
+        return this.http.post<Document>(this.documentsUrl, document, {headers: this.headers})
+            .pipe(catchError(this.handleError<Document>(
+                'Ошибка при добавлении документа!'
+            )));
     }
 
     updateDocument(document: Document) {

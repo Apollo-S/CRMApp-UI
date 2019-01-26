@@ -47,10 +47,11 @@ export class DocumentDetailsComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.fetchData();
         this.documentId = +this.route.snapshot.params.id;
         if (this.documentId) {
             this.loadingState = true;
-            this.fetchData(this.documentId)
+            this.fetchDataByDocumentId(this.documentId)
                 .then(() => {
                     this.documentForm.controls.client.setValue(
                         this.clients.find(client => client.id === this.document.clientId)
@@ -77,24 +78,39 @@ export class DocumentDetailsComponent implements OnInit {
         }
     }
 
-    private async fetchData(documentId: number) {
+    private async fetchData() {
         let docTypesPromise = this.docTypeService.getDocumentTypes().toPromise();
         let docStatusesPromise = this.docStatusService.getDocumentStatuses().toPromise();
         let clientsPromise = this.clientService.fetchClients().toPromise();
-        let documentPromise = this.documentService.getDocumentById(documentId).toPromise();
         this.docTypes = await docTypesPromise;
         this.docStatuses = await docStatusesPromise;
         this.clients = await clientsPromise;
+    }
+
+    private async fetchDataByDocumentId(documentId: number) {
+        let documentPromise = this.documentService.getDocumentById(documentId).toPromise();
         this.document = await documentPromise;
         let agreementsPromise = this.clientService.fetchAgreementsByClientId(this.document.clientId).toPromise();
         this.agreements = await agreementsPromise;
     }
 
     onSubmit() {
+        let document: Document = new Document();
+        document.agreementId = this.documentForm.controls.agreement.value.id;
+        document.number = this.documentForm.controls.number.value;
+        document.amount = this.documentForm.controls.amount.value;
+        document.dated = this.documentForm.controls.dated.value;
+        document.status = this.documentForm.controls.status.value;
+        document.paymentDate = this.documentForm.controls.paymentDate.value;
+        document.passingDate = this.documentForm.controls.passingDate.value;
+        document.docType = this.documentForm.controls.docType.value;
+        document.agreement = this.documentForm.controls.agreement.value;
+        document.comment = this.documentForm.controls.comment.value;
         if (this.isNew) {
-            this.save();
+            this.save(document);
         } else {
-            this.update();
+            document.id = this.documentId;
+            this.update(document);
         }
     }
 
@@ -122,34 +138,31 @@ export class DocumentDetailsComponent implements OnInit {
                 Validators.required,
             ])],
             comment: [''],
-
         });
     }
 
-    save() {
-
+    save(document: Document) {
+        this.documentService.addDocument(document).subscribe(
+            response => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Успешно!',
+                    detail: 'Документ успешно добавлен (ID=' + response.id + ')'
+                });
+                this.clientService.goToUrl(['/documents', response.id]);
+            }
+        )
     }
 
-    update() {
-        let updatedDocument: Document = new Document();
-        updatedDocument.id = this.documentId;
-        updatedDocument.agreementId = this.documentForm.controls.agreement.value.id;
-        updatedDocument.number = this.documentForm.controls.number.value;
-        updatedDocument.amount = this.documentForm.controls.amount.value;
-        updatedDocument.dated = this.documentForm.controls.dated.value;
-        updatedDocument.status = this.documentForm.controls.status.value;
-        updatedDocument.paymentDate = this.documentForm.controls.paymentDate.value;
-        updatedDocument.passingDate = this.documentForm.controls.passingDate.value;
-        updatedDocument.docType = this.documentForm.controls.docType.value;
-        updatedDocument.agreement = this.documentForm.controls.agreement.value;
-        updatedDocument.comment = this.documentForm.controls.comment.value;
-        this.documentService.updateDocument(updatedDocument).subscribe(
+    update(document: Document) {
+        this.documentService.updateDocument(document).subscribe(
             response => {
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Успешно!',
                     detail: 'Документ успешно изменен (ID=' + response.id + ')'
                 });
+                this.document = response;
             })
     }
 
@@ -196,10 +209,6 @@ export class DocumentDetailsComponent implements OnInit {
             reject: () => {
             }
         });
-    }
-
-    goBackToDocuments(filterSet) {
-      // this.documentService.getDocumentsAccordingFilter();
     }
 
 }

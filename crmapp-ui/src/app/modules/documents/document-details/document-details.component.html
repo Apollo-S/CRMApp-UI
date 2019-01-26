@@ -41,6 +41,26 @@
                     <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
                         <div class="ui-grid-row">
                             <div class="ui-grid-col-3" style="margin: 5px 0px">
+                                <b>Тип документа:*</b>
+                            </div>
+                            <div class="ui-grid-col-6">
+                                <p-dropdown [options]="docTypes"
+                                            [showClear]="false"
+                                            [autoWidth]="false"
+                                            placeholder="..."
+                                            optionLabel="title"
+                                            formControlName="docType"
+                                ></p-dropdown>
+                            </div>
+                            <div class="ui-grid-col-3">
+                                <p-message severity="error"
+                                           text="Обязательное поле"
+                                           *ngIf="documentForm.controls['docType'].invalid"
+                                ></p-message>
+                            </div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-3" style="margin: 5px 0px">
                                 <b>Контрагент:*</b>
                             </div>
                             <div class="ui-grid-col-6">
@@ -77,26 +97,6 @@
                                 <p-message severity="error"
                                            text="Выберите договор"
                                            *ngIf="documentForm.controls['agreement'].invalid"
-                                ></p-message>
-                            </div>
-                        </div>
-                        <div class="ui-grid-row">
-                            <div class="ui-grid-col-3" style="margin: 5px 0px">
-                                <b>Тип документа:*</b>
-                            </div>
-                            <div class="ui-grid-col-6">
-                                <p-dropdown [options]="docTypes"
-                                            [showClear]="false"
-                                            [autoWidth]="false"
-                                            placeholder="..."
-                                            optionLabel="title"
-                                            formControlName="docType"
-                                ></p-dropdown>
-                            </div>
-                            <div class="ui-grid-col-3">
-                                <p-message severity="error"
-                                           text="Обязательное поле"
-                                           *ngIf="documentForm.controls['docType'].invalid"
                                 ></p-message>
                             </div>
                         </div>
@@ -223,18 +223,6 @@
                 </p-card>
             </div>
             <div class="ui-g-2">
-                <!--<button pButton type="button" label="Изменить"-->
-                        <!--class="ui-button-success btn-block" icon="fa fa-edit"-->
-                        <!--[routerLink]="['edit']">-->
-                <!--</button>-->
-                <p-toggleButton
-                    [style]="{'width':'100%'}"
-                    onIcon="fa fa-save"
-                    onLabel="Сохранить"
-                    offIcon="fa fa-edit"
-                    offLabel="Редактировать"
-                    (onChange)="handleChange($event)"
-                ></p-toggleButton>
                 <button pButton type="submit"
                         class="ui-button-success btn-block"
                         icon="fa fa-check-square-o"
