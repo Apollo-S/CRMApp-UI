@@ -1,6 +1,6 @@
 <app-dashboard-table
-    [title]="['Договоры с клиентами']"
-    [datasource]="getAgreements()"
+    [title]="'Договоры с клиентами'"
+    [datasource]="agreements"
     [columns]="columns"
     [menuModel]="items"
     [responsive]="true"
@@ -8,10 +8,10 @@
     [rows]="0"
     [paginator]="false"
     [rowHover]="true"
-    [loading]="true"
+    [loading]="loading"
     [autoLayout]="true"
     [sortField]="'clientAlias'"
     [addButtonTitle]="'Новый'"
     [editButtonTitle]="'Редакт.'"
-    [additionalButtonTitle]="'Прочее'">
-</app-dashboard-table>
+    [additionalButtonTitle]="'Прочее'"
+></app-dashboard-table>
