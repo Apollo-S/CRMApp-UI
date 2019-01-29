@@ -29,10 +29,6 @@ export class AgreementDetailsComponent implements OnInit, OnChanges {
 
 
     ngOnChanges() {
-        debugger
-        console.log('Getting old agr = ' + this.agreement);
-        this.agreement = this.agreementService.getAgreement();
-        console.log('Getting new agr = ' + this.agreement);
     }
 
 }

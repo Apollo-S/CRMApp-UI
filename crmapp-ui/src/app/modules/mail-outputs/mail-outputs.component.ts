@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {DatePipe} from '@angular/common';
-import {MailOutputService} from '../../services/mail-output.service';
-import {MailOutput} from '../../models/MailOutput';
+import {MailOutputService} from 'app/services/mail-output.service';
+import {MailOutput} from 'app/models/MailOutput';
 import {MenuItem, ConfirmationService, Message} from 'primeng/api';
-import {MailDocumentTypeService} from '../../services/mail-document-type.service';
-import {MailDocumentType} from '../../models/MailDocumentType';
-import {UtilService} from '../../services/util.service';
+import {MailDocumentTypeService} from 'app/services/mail-document-type.service';
+import {MailDocumentType} from 'app/models/MailDocumentType';
+import {UtilService} from 'app/services/util.service';
 
 @Component({
     selector: 'app-mail-outputs',
@@ -94,7 +94,7 @@ export class MailOutputsComponent implements OnInit {
         return mailOutput;
     }
 
-    private showDialogToAdd() {
+    showDialogToAdd() {
         this.headerText = "Новый исх. документ";
         this.newMailOutput = true;
         this.mailOutput = {};
