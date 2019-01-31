@@ -16,25 +16,12 @@ import {Employee} from "../models/Employee";
 @Injectable()
 export class ClientService extends BaseService {
 
-    private _currentClient$: BehaviorSubject<Client> = new BehaviorSubject<Client>({});
-
-    set currentClient(value: Client) {
-        this._currentClient$.next(value);
-    }
-
-    get currentClient$(): Observable<Client> {
-        return this._currentClient$.asObservable();
-    }
-
     private readonly headers: any;
     private readonly clientsUrl: string;
     private clients: Client[];
     private client: Client = {};
-    emitterClient: EventEmitter<Client> = new EventEmitter();
-    emitterLoadState: EventEmitter<boolean> = new EventEmitter();
     private loadingState: boolean;
-    // private _currentClient: Subject<Client> = new Subject<Client>();
-
+    private currentClient: BehaviorSubject<Client> = new BehaviorSubject(new Client());
 
     constructor(private http: HttpClient,
                 private appConst: AppConst,
@@ -46,7 +33,7 @@ export class ClientService extends BaseService {
         this.client.accounts = [];
         this.client.addresses = [];
         this.client.agreements = [];
-        this.client.directors = [];
+        this.client.agreements = [];
         this.loadingState = true;
     }
 
@@ -55,24 +42,6 @@ export class ClientService extends BaseService {
             .pipe(catchError(this.handleError<Client[]>(
                 'Ошибка при загрузке списка клиентов!'
             )));
-    }
-
-    async fetchAllClientDataPromise(clientId: number) {
-        let [client, addresses, accounts, agreements, directors] =
-            await Promise.all([
-                this.fetchClientById(clientId).toPromise(),
-                this.fetchAddressesByClientId(clientId).toPromise(),
-                this.fetchAccountsByClientId(clientId).toPromise(),
-                this.fetchAgreementsByClientId(clientId).toPromise(),
-                this.fetchDirectorsByClientId(clientId).toPromise()
-            ]);
-        this.client = client;
-        this.client.addresses = addresses;
-        this.client.accounts = accounts;
-        this.client.agreements = agreements;
-        this.client.directors = directors;
-        this.emitterLoadState.emit(false);
-        this.loadingState = false;
     }
 
     getClients() {
@@ -84,40 +53,18 @@ export class ClientService extends BaseService {
 
     fetchClientById(clientId: number) {
         const clientUrl = this.clientsUrl + clientId;
-        return this.http.get(clientUrl)
+        return this.http.get<Client>(clientUrl)
             .pipe(catchError(this.handleError<any>(
                 'Ошибка при загрузке данных о клиенте!'
             )));
     }
 
-    fetchClientData(clientId: number) {
-        this.fetchClientById(clientId).subscribe(
-            data => {
-                this.emitterClient.emit(data);
-                this.client = data;
-            });
-    }
-
     getCurrentClient() {
-        return this.client;
+        return this.currentClient.asObservable();
     }
 
-    getLoadingState() {
-        return this.loadingState;
-    }
-
-    fetchClient(clientId: number) {
-        if (this.client === undefined) {
-            const clientUrl = this.clientsUrl + clientId;
-            return this.http.get(clientUrl).toPromise().then(
-                data => {
-                    this.client = data;
-                    return data;
-                }
-            );
-        } else {
-            return this.client;
-        }
+    setCurrentClient(value: Client) {
+        this.currentClient.next(value);
     }
 
     addClient(client: Client) {
@@ -225,10 +172,6 @@ export class ClientService extends BaseService {
             .pipe(catchError(this.handleError<Array<ClientDirector>>(
                 'Ошибка при получении списка директоров!'
             )));
-    }
-
-    getDirectors() {
-        return this.client.directors;
     }
 
     getDirectorById(directorId: number, clientId: number) {
