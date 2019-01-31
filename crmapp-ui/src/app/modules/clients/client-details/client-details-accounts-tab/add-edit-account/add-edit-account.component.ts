@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ClientService} from "../../../../../services/client.service";
+import {ClientService} from "app/services/client.service";
 import {ActivatedRoute} from "@angular/router";
 import {ConfirmationService, MessageService} from "primeng/api";
-import {UtilService} from "../../../../../services/util.service";
-import {ClientAccount} from "../../../../../models/ClientAccount";
+import {UtilService} from "app/services/util.service";
+import {ClientAccount} from "app/models/ClientAccount";
+import {Client} from "app/models/Client";
 
 @Component({
-  selector: 'app-add-edit-account',
-  templateUrl: './add-edit-account.component.html',
-  styleUrls: ['./add-edit-account.component.css']
+    selector: 'app-add-edit-account',
+    templateUrl: './add-edit-account.component.html',
+    styleUrls: ['./add-edit-account.component.css']
 })
 export class AddEditAccountComponent implements OnInit {
     account: ClientAccount;
@@ -66,7 +67,9 @@ export class AddEditAccountComponent implements OnInit {
     }
 
     getClient() {
-        return this.clientService.getCurrentClient();
+        let client: Client = new Client();
+        this.clientService.getCurrentClient().subscribe(data => client = data);
+        return client;
     }
 
     private save() {

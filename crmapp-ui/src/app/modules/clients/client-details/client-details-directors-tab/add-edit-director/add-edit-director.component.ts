@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import {ClientDirector} from "../../../../../models/ClientDirector";
+import {Component, OnInit} from '@angular/core';
+import {ClientDirector} from "app/models/ClientDirector";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ClientService} from "../../../../../services/client.service";
+import {ClientService} from "app/services/client.service";
 import {ActivatedRoute} from "@angular/router";
 import {ConfirmationService, MessageService} from "primeng/api";
-import {UtilService} from "../../../../../services/util.service";
-import {PostService} from "../../../../../services/post.service";
-import {Post} from "../../../../../models/Post";
+import {UtilService} from "app/services/util.service";
+import {PostService} from "app/services/post.service";
+import {Post} from "app/models/Post";
+import {Client} from "app/models/Client";
 
 @Component({
-  selector: 'app-add-edit-director',
-  templateUrl: './add-edit-director.component.html',
-  styleUrls: ['./add-edit-director.component.css']
+    selector: 'app-add-edit-director',
+    templateUrl: './add-edit-director.component.html',
+    styleUrls: ['./add-edit-director.component.css']
 })
 export class AddEditDirectorComponent implements OnInit {
     director: ClientDirector;
@@ -82,7 +83,9 @@ export class AddEditDirectorComponent implements OnInit {
     }
 
     getClient() {
-        return this.clientService.getCurrentClient();
+        let client: Client = new Client();
+        this.clientService.getCurrentClient().subscribe(data => client = data);
+        return client;
     }
 
     getPosts() {

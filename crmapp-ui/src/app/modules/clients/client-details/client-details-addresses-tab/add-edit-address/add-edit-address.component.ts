@@ -6,6 +6,7 @@ import {ActivatedRoute} from "@angular/router";
 import {ClientService} from "app/services/client.service";
 import {AddressService} from "app/services/address.service";
 import {Address} from "app/models/Address";
+import {Client} from "../../../../../models/Client";
 
 @Component({
     selector: 'app-add-edit-address',
@@ -96,7 +97,9 @@ export class AddEditAddressComponent implements OnInit {
     }
 
     getClient() {
-        return this.clientService.getCurrentClient();
+        let client: Client = new Client();
+        this.clientService.getCurrentClient().subscribe(data => client = data);
+        return client;
     }
 
     private save() {
