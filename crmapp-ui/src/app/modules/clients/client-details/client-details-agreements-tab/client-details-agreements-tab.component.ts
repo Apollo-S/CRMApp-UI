@@ -1,32 +1,39 @@
-import {Component, OnInit} from '@angular/core';
-import {ClientService} from '../../../../services/client.service';
-import {ClientAgreement} from "../../../../models/ClientAgreement";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ClientService} from 'app/services/client.service';
+import {ClientAgreement} from "app/models/ClientAgreement";
+import {Subscription} from "rxjs";
+import {Client} from "app/models/Client";
 
 @Component({
     selector: 'app-client-details-agreements-tab',
     templateUrl: './client-details-agreements-tab.component.html',
     styleUrls: ['./client-details-agreements-tab.component.css']
 })
-export class ClientDetailsAgreementsTabComponent implements OnInit {
+export class ClientDetailsAgreementsTabComponent implements OnInit, OnDestroy {
+    private subscription: Subscription;
+    client: Client = {};
     columns: any[];
     agreements: ClientAgreement[] = [];
     loading: boolean;
 
     constructor(private clientService: ClientService) {
+        this.initColumns();
     }
 
     ngOnInit() {
         this.loading = true;
-        this.initColumns();
-        this.getAgreements().then(() => this.loading = false);
+        this.subscription = this.clientService.getCurrentClient().subscribe(client => {
+            this.client = client;
+            this.getAgreements().then(() => this.loading = false);
+        });
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 
     async getAgreements() {
-        this.agreements = await this.clientService.fetchAgreementsByClientId(this.getClient().id).toPromise();
-    }
-
-    getClient() {
-        return this.clientService.getCurrentClient();
+        this.agreements = await this.clientService.fetchAgreementsByClientId(this.client.id).toPromise();
     }
 
     private initColumns(): void {

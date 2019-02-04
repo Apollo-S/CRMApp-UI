@@ -1,45 +1,44 @@
-import {Component,OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {ClientService} from '../../../../services/client.service';
+import {ClientService} from 'app/services/client.service';
 import {ConfirmationService, MessageService} from 'primeng/api';
+import {Client} from "app/models/Client";
+import {Subscription} from "rxjs";
 
 @Component({
     selector: 'app-client-details-main-tab',
     templateUrl: './client-details-main-tab.component.html',
     styleUrls: ['./client-details-main-tab.component.css']
 })
-export class ClientDetailsMainTabComponent implements OnInit {
-
-    loadingState: boolean = true;
+export class ClientDetailsMainTabComponent implements OnInit, OnDestroy {
+    private subscription: Subscription;
+    client: Client = {};
+    loadingState: boolean;
 
     constructor(private clientService: ClientService,
                 private router: Router,
                 private confirmationService: ConfirmationService,
                 private messageService: MessageService) {
+        this.subscription = clientService.getCurrentClient()
+            .subscribe(client => this.client = client);
     }
 
     ngOnInit() {
-        this.clientService.emitterClient.subscribe((data) => {
-            console.log(data);
-        });
+        this.loadingState = false;
     }
 
-    getLoadingState() {
-        return this.clientService.getLoadingState();
-    }
-
-    getCurrentClient() {
-        return this.clientService.getCurrentClient();
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 
     confirmDeleting() {
-        let msg = 'Клиент \"' + this.getCurrentClient().title + '\" (ID=' + this.getCurrentClient().id + ') ';
+        let msg = 'Клиент \"' + this.client.title + '\" (ID=' + this.client.id + ') ';
         this.confirmationService.confirm({
-            message: 'Действительно удалить ' + this.getCurrentClient().title + ' ?',
+            message: 'Действительно удалить ' + this.client.title + ' ?',
             header: 'Удаление',
             icon: 'fa fa-trash',
             accept: () => {
-                this.clientService.deleteClient(this.getCurrentClient().id).toPromise()
+                this.clientService.deleteClient(this.client.id).toPromise()
                     .then(
                     () => {
                         this.messageService.add({

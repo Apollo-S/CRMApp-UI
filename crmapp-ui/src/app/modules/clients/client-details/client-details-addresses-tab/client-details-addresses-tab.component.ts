@@ -1,31 +1,40 @@
-import { Component, OnInit } from '@angular/core';
-import { ClientService } from '../../../../services/client.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ClientService} from 'app/services/client.service';
+import {Subscription} from "rxjs";
+import {Client} from "app/models/Client";
+import {ClientAddress} from "app/models/ClientAddress";
 
 @Component({
-  selector: 'app-client-details-addresses-tab',
-  templateUrl: './client-details-addresses-tab.component.html',
-  styleUrls: ['./client-details-addresses-tab.component.css']
+    selector: 'app-client-details-addresses-tab',
+    templateUrl: './client-details-addresses-tab.component.html',
+    styleUrls: ['./client-details-addresses-tab.component.css']
 })
-export class ClientDetailsAddressesTabComponent implements OnInit {
+export class ClientDetailsAddressesTabComponent implements OnInit, OnDestroy {
+    private subscription: Subscription;
+    client: Client = {};
     columns: any[] = [];
-    addresses: any[] = [];
+    addresses: ClientAddress[] = [];
     loading: boolean;
 
     constructor(public clientService: ClientService) {
+        this.initColumns();
     }
 
     ngOnInit() {
         this.loading = true;
-        this.initColumns();
-        this.getAddresses().then(() => this.loading = false);
+        this.subscription = this.clientService.getCurrentClient().subscribe(client => {
+            this.client = client;
+            this.getAddresses().then(() => this.loading = false);
+        });
     }
 
-    async getAddresses() {
-        this.addresses = await this.clientService.fetchAddressesByClientId(this.getClient().id).toPromise();
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 
-    getClient() {
-        return this.clientService.getCurrentClient();
+    getAddresses() {
+        return this.clientService.fetchAddressesByClientId(this.client.id).toPromise()
+            .then(addresses => this.addresses = addresses);
     }
 
     private initColumns(): void {

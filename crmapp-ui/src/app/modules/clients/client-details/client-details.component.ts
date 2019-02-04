@@ -1,32 +1,46 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {ClientService} from '../../../services/client.service';
-import {Client} from '../../../models/Client';
+import {ClientService} from 'app/services/client.service';
+import {Client} from 'app/models/Client';
+import {Subscription} from "rxjs";
 
 @Component({
     selector: 'app-client-details',
     templateUrl: './client-details.component.html',
     styleUrls: ['./client-details.component.css']
 })
-export class ClientDetailsComponent implements OnInit {
-
+export class ClientDetailsComponent implements OnInit, OnDestroy {
+    private subscription: Subscription;
     clientId: number;
     client: Client = {};
-    loadingState: boolean = true;
+    loadingState: boolean;
 
     constructor(private clientService: ClientService,
                 private route: ActivatedRoute) {
         this.clientId = +route.snapshot.params.id;
-        this.clientService.fetchClientData(this.clientId);
+
     }
 
     ngOnInit() {
-        this.clientService.emitterClient.subscribe((data) => {
-            this.client = data;
+        this.loadingState = true;
+        this.getClient().then(() => {
             this.loadingState = false;
         });
     }
 
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
+    }
+
+    getClient() {
+        return this.clientService.fetchClientById(this.clientId).toPromise()
+            .then(data => {
+                this.clientService.setCurrentClient(data);
+                this.subscription = this.clientService.getCurrentClient()
+                    .subscribe(client => this.client = client);
+                }
+            );
+    }
 
 
 }
