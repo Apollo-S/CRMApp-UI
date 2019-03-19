@@ -1,15 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {ClientService} from '../../../services/client.service';
 import {Client} from '../../../models/Client';
 import {MessageService} from 'primeng/api';
+import {Subscription} from "rxjs";
 
 @Component({
     selector: 'app-edit-client',
     templateUrl: './edit-client.component.html',
     styleUrls: ['./edit-client.component.css']
 })
-export class EditClientComponent implements OnInit {
+export class EditClientComponent implements OnInit, OnDestroy {
+    private subscription: Subscription;
+    client: Client = {};
     clientForm: FormGroup;
 
     constructor(private formBuilder: FormBuilder,
@@ -18,8 +21,24 @@ export class EditClientComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.subscription = this.clientService.getCurrentClient()
+            .subscribe(client => {
+                this.client = client;
+                this.initForm();
+            });
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
+
+    onSubmit() {
+        this.update();
+    }
+
+    private initForm() {
         this.clientForm = this.formBuilder.group({
-            title: [this.getClient().title, Validators.compose([
+            title: [this.client.title, Validators.compose([
                 Validators.required,
                 Validators.minLength(2)
             ]),],
@@ -39,24 +58,16 @@ export class EditClientComponent implements OnInit {
                 Validators.maxLength(20)
             ])]
         });
-        this.clientForm.controls.title.setValue(this.getClient().title);
-        this.clientForm.controls.alias.setValue(this.getClient().alias);
-        this.clientForm.controls.edrpou.setValue(this.getClient().edrpou);
-        this.clientForm.controls.vatCertificate.setValue(this.getClient().vatCertificate);
-        this.clientForm.controls.inn.setValue(this.getClient().inn);
-    }
-
-    onSubmit() {
-        this.update();
-    }
-
-    getClient() {
-        return this.clientService.getCurrentClient();
+        this.clientForm.controls.title.setValue(this.client.title);
+        this.clientForm.controls.alias.setValue(this.client.alias);
+        this.clientForm.controls.edrpou.setValue(this.client.edrpou);
+        this.clientForm.controls.vatCertificate.setValue(this.client.vatCertificate);
+        this.clientForm.controls.inn.setValue(this.client.inn);
     }
 
     private update() {
         let client: Client = {
-            id: this.getClient().id,
+            id: this.client.id,
             title: this.clientForm.controls.title.value,
             alias: this.clientForm.controls.alias.value,
             edrpou: this.clientForm.controls.edrpou.value,
@@ -71,20 +82,13 @@ export class EditClientComponent implements OnInit {
                     summary: 'Успешно!',
                     detail: msg + 'успешно обновлен'
                 });
-                this.clientService.fetchAllClientDataPromise(response.id)
-                    .then(() => this.goBackToClient());
+                this.clientService.setCurrentClient(response);
             })
-            .catch(() => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Ошибка!',
-                    detail: msg + 'не обновлен'
-                });
-            });
+            .then(() => this.goBackToClient());
     }
 
     private goBackToClient() {
-        this.clientService.goToUrl([this.getClient().url])
+        this.clientService.goToUrl([this.client.url])
             .then(() => {
             });
     }

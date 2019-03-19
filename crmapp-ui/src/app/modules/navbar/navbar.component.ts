@@ -82,7 +82,8 @@ export class NavbarComponent implements OnInit {
             },
             { label: 'Справочники', icon: 'fa fa-list', items: [
                 { label: 'Физические лица', routerLink: ['persons'] },
-                { label: 'Типы документов', routerLink: ['document-types'] } ]
+                { label: 'Типы документов', routerLink: ['document-types'] },
+                { label: 'Типы договоров', routerLink: ['agreement-types'] } ]
             },
             { label: 'Инфо', icon: 'fa fa-info-circle', routerLink: ['about'] }
         ];
