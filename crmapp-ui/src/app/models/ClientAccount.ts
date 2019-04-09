@@ -1,6 +1,5 @@
-export class ClientAccount {
-    public id?: number;
+import {Account} from "./Account";
+
+export class ClientAccount extends Account {
     public clientId?: number;
-    public presentation?: string;
-    public dateStart?: Date;
 }

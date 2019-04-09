@@ -1,6 +1,5 @@
-export class ClientAddress {
-    public id?: number;
+import {Address} from "./Address";
+
+export class ClientAddress extends Address {
     public clientId?: number;
-    public presentation?: string;
-    public dateStart?: Date;
 }
