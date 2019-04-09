@@ -1,82 +1,129 @@
 <div class="ui-g-12">
-  <form [formGroup]="accountForm" (ngSubmit)="onSubmit()">
-    <div class="ui-g-10">
-      <p-card>
-        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
-          <div class="ui-grid-row">
-            <div class="ui-grid-col-3">
-              <b>Адрес:</b>
-            </div>
-            <div class="ui-grid-col-6">
-              <input pInputText type="text"
-                     placeholder="Введите счет"
-                     formControlName="presentation"
-              >
-            </div>
-            <div class="ui-grid-col-3">
-              <p-message severity="error"
-                         text="Необходимо ввести счет!"
-                         *ngIf="!accountForm.controls['presentation'].valid&&accountForm.controls['presentation'].dirty">
-              </p-message>
-            </div>
-          </div>
-          <div class="ui-grid-row">
-            <div class="ui-grid-col-3">
-              <b>Действует с:</b>
-            </div>
-            <div class="ui-grid-col-3">
-              <p-calendar [monthNavigator]="true" [yearNavigator]="true" [yearRange]="years"
-                          [locale]="ru" showButtonBar="true" [showIcon]="true" dateFormat="dd.mm.yy"
-                          placeholder="Дата"
-                          formControlName="dateStart"
-              ></p-calendar>
-            </div>
-            <div class="ui-grid-col-3"></div>
-            <div class="ui-grid-col-3">
-              <p-message severity="error"
-                         text="Необходимо ввести дату!"
-                         *ngIf="accountForm.controls['dateStart'].invalid&&!accountForm.controls['dateStart'].dirty"
-              ></p-message>
-            </div>
-          </div>
+    <form [formGroup]="accountForm" (ngSubmit)="onSubmit()">
+        <div class="ui-g-10">
+            <p-card *ngIf="loadingState">
+                <div style="text-align: center;">
+                    <img
+                            src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+                    />
+                </div>
+            </p-card>
+
+            <p-card *ngIf="!loadingState">
+                <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-3">
+                            <b>Номер счета:</b>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <input pInputText
+                                   type="text"
+                                   formControlName="number"
+                            >
+                        </div>
+                        <div class="ui-grid-col-3">
+                            <p-message severity="error"
+                                       text="Необходимо ввести номер счета!"
+                                       *ngIf="!accountForm.controls['number'].valid&&accountForm.controls['number'].dirty">
+                            </p-message>
+                        </div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-3">
+                            <b>Наименование банка:</b>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <input pInputText
+                                   type="text"
+                                   formControlName="bankName"
+                            >
+                        </div>
+                        <div class="ui-grid-col-3">
+                            <p-message severity="error"
+                                       text="Необходимо ввести наименование банка!"
+                                       *ngIf="!accountForm.controls['bankName'].valid&&accountForm.controls['bankName'].dirty">
+                            </p-message>
+                        </div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-3">
+                            <b>МФО:</b>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <input pInputText
+                                   type="text"
+                                   formControlName="mfo"
+                            >
+                        </div>
+                        <div class="ui-grid-col-3">
+                            <p-message severity="error"
+                                       text="Необходимо ввести МФО банка!"
+                                       *ngIf="!accountForm.controls['mfo'].valid&&accountForm.controls['mfo'].dirty">
+                            </p-message>
+                        </div>
+                    </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-3">
+                            <b>Действует с:</b>
+                        </div>
+                        <div class="ui-grid-col-3">
+                            <p-calendar
+                                    [monthNavigator]="true"
+                                    [yearNavigator]="true"
+                                    [yearRange]="years"
+                                    [locale]="ru"
+                                    [showIcon]="true"
+                                    showButtonBar="true"
+                                    dateFormat="dd.mm.yy"
+                                    formControlName="dateStart"
+                            ></p-calendar>
+                        </div>
+                        <div class="ui-grid-col-3"></div>
+                        <div class="ui-grid-col-3">
+                            <p-message severity="error"
+                                       text="Необходимо ввести дату!"
+                                       *ngIf="accountForm.controls['dateStart'].invalid&&!accountForm.controls['dateStart'].dirty"
+                            ></p-message>
+                        </div>
+                    </div>
+                </div>
+            </p-card>
         </div>
-      </p-card>
-    </div>
-    <div class="ui-g-2" *ngIf="isNew">
-      <button pButton type="submit"
-              class="ui-button-success btn-block"
-              icon="fa fa-check-square-o"
-              label="Сохранить"
-              [disabled]="!accountForm.valid"
-      ></button>
-      <button pButton type="button"
-              class="ui-button-danger btn-block"
-              icon="fa fa-arrow-circle-o-left"
-              label="Отменить"
-              (click)="goBackToAccounts()"
-      ></button>
-    </div>
-    <div class="ui-g-2" *ngIf="!isNew">
-      <button pButton type="button" label="Назад к клиенту"
-              class="ui-button-info btn-block" icon="fa fa-arrow-circle-o-left"
-              (click)="goBackToAccounts()">
-      </button>
-      <button pButton type="submit" label="Сохранить"
-              class="ui-button-success btn-block" icon="fa fa-check-square-o">
-      </button>
-      <button pButton type="button" label="Удалить"
-              class="ui-button-danger btn-block" icon="fa fa-trash-o"
-              (click)="confirmDeleting()">
-      </button>
-    </div>
-  </form>
+        <div class="ui-g-2" *ngIf="isNew">
+            <button pButton type="submit"
+                    class="ui-button-success btn-block"
+                    icon="fa fa-check-square-o"
+                    label="Сохранить"
+                    [disabled]="!accountForm.valid"
+            ></button>
+            <button pButton type="button"
+                    class="ui-button-danger btn-block"
+                    icon="fa fa-arrow-circle-o-left"
+                    label="Отменить"
+                    (click)="goBackToAccounts()"
+            ></button>
+        </div>
+        <div class="ui-g-2" *ngIf="!isNew">
+            <button pButton type="button" label="Назад к клиенту"
+                    class="ui-button-info btn-block" icon="fa fa-arrow-circle-o-left"
+                    (click)="goBackToAccounts()">
+            </button>
+            <button pButton type="submit" label="Сохранить"
+                    class="ui-button-success btn-block" icon="fa fa-check-square-o">
+            </button>
+            <button pButton type="button" label="Удалить"
+                    class="ui-button-danger btn-block" icon="fa fa-trash-o"
+                    (click)="confirmDeleting()">
+            </button>
+        </div>
+    </form>
 </div>
 
 <p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" #cd>
-  <p-footer>
-    <button type="button" pButton icon="fa fa-check"
-            class="ui-button-primary" label="Ок" (click)="cd.accept()"></button>
-    <button type="button" pButton icon="fa fa-close"
-            class="ui-button-secondary" label="Отмена" (click)="cd.reject()"></button>
-  </p-footer>
+    <p-footer>
+        <button type="button" pButton icon="fa fa-check"
+                class="ui-button-primary" label="Ок" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="fa fa-close"
+                class="ui-button-secondary" label="Отмена" (click)="cd.reject()"></button>
+    </p-footer>
 </p-confirmDialog>

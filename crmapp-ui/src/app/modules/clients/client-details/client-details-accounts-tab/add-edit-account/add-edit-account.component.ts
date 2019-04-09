@@ -37,7 +37,9 @@ export class AddEditAccountComponent implements OnInit {
             this.clientService.getAccountById(accountId, this.getClient().id).toPromise()
                 .then(account => {
                     this.account = account;
-                    this.accountForm.controls.presentation.setValue(account.presentation);
+                    this.accountForm.controls.number.setValue(account.number);
+                    this.accountForm.controls.bankName.setValue(account.bankName);
+                    this.accountForm.controls.mfo.setValue(account.mfo);
                     this.accountForm.controls.dateStart.setValue(new Date(account.dateStart));
                     this.loadingState = false;
                 });
@@ -56,7 +58,15 @@ export class AddEditAccountComponent implements OnInit {
 
     private initAccountForm() {
         this.accountForm = this.formBuilder.group({
-            presentation: ['', Validators.compose([
+            number: ['', Validators.compose(
+                [Validators.required,
+                    Validators.minLength(1)]
+            )],
+            bankName: ['', Validators.compose([
+                Validators.required,
+                Validators.minLength(1)
+            ])],
+            mfo: ['', Validators.compose([
                 Validators.required,
                 Validators.minLength(1)
             ])],
@@ -73,9 +83,11 @@ export class AddEditAccountComponent implements OnInit {
     }
 
     private save() {
-        let msg = 'Счет для ' + this.getClient().alias;
+        let msg = 'Счет для ' + this.getClient().code;
         let account: ClientAccount = new ClientAccount();
-        account.presentation = this.accountForm.controls.presentation.value;
+        account.number = this.accountForm.controls.number.value;
+        account.bankName = this.accountForm.controls.bankName.value;
+        account.mfo = this.accountForm.controls.mfo.value;
         account.dateStart = this.accountForm.controls.dateStart.value;
         this.clientService.addAccount(account, this.getClient().id).toPromise()
             .then(response => {
@@ -129,12 +141,14 @@ export class AddEditAccountComponent implements OnInit {
     private update() {
         const account = {
             id: this.account.id,
-            presentation: this.accountForm.controls.presentation.value,
+            number: this.accountForm.controls.number.value,
+            bankName: this.accountForm.controls.bankName.value,
+            mfo: this.accountForm.controls.mfo.value,
             dateStart: this.accountForm.controls.dateStart.value
         };
         this.clientService.updateAccount(account, this.getClient().id).toPromise()
             .then(response => {
-                let msg = 'Счет (ID=' + response.id + ') для клиента ' + this.getClient().alias;
+                let msg = 'Счет (ID=' + response.id + ') для клиента ' + this.getClient().code;
                 this.clientService.fetchAccountsByClientId(this.getClient().id).toPromise()
                     .then(() => {
                         this.messageService.add({
