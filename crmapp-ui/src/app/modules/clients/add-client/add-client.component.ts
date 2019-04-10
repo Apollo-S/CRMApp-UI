@@ -64,14 +64,14 @@ export class AddClientComponent implements OnInit {
     private save() {
         let client: Client = {
             title: this.clientForm.controls.title.value,
-            alias: this.clientForm.controls.alias.value,
+            code: this.clientForm.controls.alias.value,
             edrpou: this.clientForm.controls.edrpou.value,
             vatCertificate: this.clientForm.controls.vatCertificate.value,
             inn: this.clientForm.controls.inn.value
         };
         this.clientService.addClient(client).toPromise()
             .then(response => {
-                let msg = 'Клиент ' + response.alias + ' успешно добавлен (ID=' + response.id + ')';
+                let msg = 'Клиент ' + response.code + ' успешно добавлен (ID=' + response.id + ')';
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Успешно!',
