@@ -42,7 +42,7 @@ export class EditClientComponent implements OnInit, OnDestroy {
                 Validators.required,
                 Validators.minLength(2)
             ]),],
-            alias: ['', Validators.compose([
+            code: ['', Validators.compose([
                 Validators.required,
                 Validators.minLength(2)
             ])],
@@ -59,7 +59,7 @@ export class EditClientComponent implements OnInit, OnDestroy {
             ])]
         });
         this.clientForm.controls.title.setValue(this.client.title);
-        this.clientForm.controls.alias.setValue(this.client.alias);
+        this.clientForm.controls.code.setValue(this.client.code);
         this.clientForm.controls.edrpou.setValue(this.client.edrpou);
         this.clientForm.controls.vatCertificate.setValue(this.client.vatCertificate);
         this.clientForm.controls.inn.setValue(this.client.inn);
@@ -69,12 +69,12 @@ export class EditClientComponent implements OnInit, OnDestroy {
         let client: Client = {
             id: this.client.id,
             title: this.clientForm.controls.title.value,
-            alias: this.clientForm.controls.alias.value,
+            code: this.clientForm.controls.code.value,
             edrpou: this.clientForm.controls.edrpou.value,
             vatCertificate: this.clientForm.controls.vatCertificate.value,
             inn: this.clientForm.controls.inn.value
         };
-        let msg = 'Клиент ' + client.alias + '(ID=' + client.id + ') ';
+        let msg = 'Клиент ' + client.code + '(ID=' + client.id + ') ';
         this.clientService.updateClient(client).toPromise()
             .then(response => {
                 this.messageService.add({
