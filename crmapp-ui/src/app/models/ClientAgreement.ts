@@ -1,11 +1,12 @@
-export interface ClientAgreement {
-    id: number;
-    client: Object;
-    clientId: number;
-    clientAlias: string;
-    clientTitle: string;
-    number: string;
-    dateStart: Date;
-    comment: string;
-    url: string;
+import {BaseModel} from "./BaseModel";
+import {Client} from "./Client";
+
+export class ClientAgreement extends BaseModel {
+    clientInfo?: Client;
+    clientCode?: string;
+    clientUrl?: string;
+    clientTitle?: string;
+    number?: string;
+    dateStart?: Date;
+    comment?: string;
 }
