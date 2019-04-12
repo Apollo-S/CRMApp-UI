@@ -22,10 +22,20 @@ export class ClientDetailsAddressesTabComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loading = true;
-        this.subscription = this.clientService.getCurrentClient().subscribe(client => {
-            this.client = client;
-            this.getAddresses().then(() => this.loading = false);
-        });
+        debugger;
+        this.subscription = this.clientService.getCurrentClient()
+            .subscribe(client => {
+                this.client = client;
+                try {
+                    this.clientService.fetchAddressesByClientId(this.client.id)
+                        .subscribe(addresses => {
+                            this.addresses = addresses;
+                            this.loading = false;
+                        })
+                } catch (e) {
+                    this.loading = false;
+                }
+            });
     }
 
     ngOnDestroy() {
@@ -33,8 +43,16 @@ export class ClientDetailsAddressesTabComponent implements OnInit, OnDestroy {
     }
 
     getAddresses() {
-        return this.clientService.fetchAddressesByClientId(this.client.id).toPromise()
-            .then(addresses => this.addresses = addresses);
+        try {
+            this.clientService.fetchAddressesByClientId(this.client.id).toPromise()
+                .then(addresses => this.addresses = addresses)
+        } catch {
+            console.log("Catch block")
+            this.loading = false;
+        } finally {
+            console.log("Finally block")
+            this.loading = false;
+        }
     }
 
     private initColumns(): void {

@@ -8,24 +8,23 @@ import {ClientService} from "./client.service";
     providedIn: 'root'
 })
 export class AddressService {
-    private readonly clientId: number;
-    private readonly addressesUrl: string;
-    private readonly countriesUrl: string;
+    private clientId: number;
+    private addressesUrl: string;
+    private countriesUrl: string;
 
     constructor(private http: HttpClient,
-                private appConst: AppConst, private clientService: ClientService) {
-        this.clientId = this.clientService.getCurrentClient().id;
-        this.addressesUrl = this.appConst.clientsUrl + this.clientId + '/addresses';
-        this.countriesUrl = this.appConst.baseUrl + this.appConst.countriesUrl;
+                private appConst: AppConst,
+                private clientService: ClientService) {
+        this.clientService.getCurrentClient().subscribe(data => {
+            this.clientId = data.id;
+            this.addressesUrl = appConst.clientsUrl + data.id + '/addresses';
+        });
+        this.countriesUrl = appConst.baseUrl + appConst.countriesUrl;
     }
 
     fetchAddressesByClientId(clientId: number) {
         return this.http.get<Array<Address>>(this.addressesUrl);
     }
-
-    // getAddresses() {
-    //     return this.client.addresses;
-    // }
 
     getAddressById(addressId: number, clientId: number) {
         const url = this.addressesUrl + addressId;

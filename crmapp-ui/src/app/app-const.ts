@@ -10,5 +10,6 @@ export class AppConst {
     postsUrl = '/posts';
     countriesUrl = '/countries';
     docStatusesUrl = '/document-statuses';
+    agreementTypesUrl = '/agreement-types';
 
 }

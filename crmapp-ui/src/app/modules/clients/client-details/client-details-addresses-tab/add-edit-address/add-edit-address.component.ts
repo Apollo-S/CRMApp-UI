@@ -103,7 +103,7 @@ export class AddEditAddressComponent implements OnInit {
     }
 
     private save() {
-        let msg = 'Адрес для ' + this.getClient().alias;
+        let msg = 'Адрес для ' + this.getClient().code;
         let address = <Address>{};
         address.country = this.addressForm.controls.country.value;
         address.region = this.addressForm.controls.region.value;
@@ -176,7 +176,7 @@ export class AddEditAddressComponent implements OnInit {
         };
         this.clientService.updateAddress(address, this.getClient().id).toPromise()
             .then(response => {
-                let msg = 'Адрес (ID=' + response.id + ') для клиента ' + this.getClient().alias;
+                let msg = 'Адрес (ID=' + response.id + ') для клиента ' + this.getClient().code;
                 this.clientService.fetchAddressesByClientId(this.getClient().id).toPromise()
                     .then(() => {
                         this.messageService.add({

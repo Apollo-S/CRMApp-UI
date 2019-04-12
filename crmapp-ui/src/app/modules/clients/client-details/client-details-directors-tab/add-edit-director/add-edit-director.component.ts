@@ -96,7 +96,7 @@ export class AddEditDirectorComponent implements OnInit {
     }
 
     private save() {
-        let msg = 'Директор для ' + this.getClient().alias;
+        let msg = 'Директор для ' + this.getClient().code;
         let director: ClientDirector = new ClientDirector();
         director.fullName = this.directorForm.controls.fullName.value;
         director.shortName = this.directorForm.controls.shortName.value;
@@ -161,7 +161,7 @@ export class AddEditDirectorComponent implements OnInit {
         };
         this.clientService.updateDirector(director, this.getClient().id).toPromise()
             .then(response => {
-                let msg = 'Директор (ID=' + response.id + ') для клиента ' + this.getClient().alias;
+                let msg = 'Директор (ID=' + response.id + ') для клиента ' + this.getClient().code;
                 this.clientService.fetchDirectorsByClientId(this.getClient().id).toPromise()
                     .then(() => {
                         this.messageService.add({

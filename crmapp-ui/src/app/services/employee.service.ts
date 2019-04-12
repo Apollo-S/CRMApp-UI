@@ -22,6 +22,10 @@ export class EmployeeService {
       return this._property$.asObservable();
   }
 
+  getEmployee() {
+    return this._property$.asObservable();
+  }
+
   constructor(private http: HttpClient) {}
   
   getEmployees(): Observable<Employee[]> {

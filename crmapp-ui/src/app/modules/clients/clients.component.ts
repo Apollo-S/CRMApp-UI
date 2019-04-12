@@ -35,7 +35,7 @@ export class ClientsComponent implements OnInit {
     private initColumns() {
         this.columns = [
             {field: 'id', header: 'ID'},
-            {field: 'alias', header: 'Наименование'},
+            {field: 'code', header: 'Наименование'},
             {field: 'title', header: 'Полное наименование'},
             {field: 'edrpou', header: 'ЕГРПОУ'}
         ];
