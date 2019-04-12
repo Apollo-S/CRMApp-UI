@@ -1,101 +1,83 @@
-import {EventEmitter, Injectable} from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of, BehaviorSubject } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
-import { ClientAgreement } from '../models/ClientAgreement';
-import { Document } from '../models/Document';
-import { AppConst } from "../app-const";
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {ClientAgreement} from 'app/models/ClientAgreement';
+import {Document} from 'app/models/Document';
+import {AppConst} from "app/app-const";
+import {BaseService} from "./base.service";
+import {Router} from "@angular/router";
+import {MessageService} from "primeng/api";
 
 @Injectable()
-export class AgreementService {
+export class AgreementService extends BaseService {
 
     private readonly agreementsUrl: string;
-    private agreement: ClientAgreement;
-    emitterAgreement = new EventEmitter<ClientAgreement>();
-    private agreements = [];
-    private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    private readonly headers;
+    private currentAgreement: BehaviorSubject<ClientAgreement> = new BehaviorSubject(new ClientAgreement());
 
     constructor(private http: HttpClient,
-                private appConst: AppConst) {
-        this.agreementsUrl = appConst.baseUrl + appConst.agreementsUrl;
-        this.getAgreementsList();
+                private appConst: AppConst,
+                router: Router,
+                messageService: MessageService) {
+        super(router, messageService);
+        this.headers = appConst.headersJSON;
+        this.agreementsUrl = appConst.baseUrl + appConst.agreementsUrl + '/';
     }
 
-    getAgreementsList() {
+    fetchAgreements() {
         return this.http.get<ClientAgreement[]>(this.agreementsUrl, {headers: this.headers})
-            .subscribe(
-                agreements => {
-                    this.agreements = agreements;
-                }
-            )
-    }
-
-    getAgreements() {
-        return this.agreements;
+            .pipe(catchError(this.handleError<ClientAgreement[]>(
+                'Ошибка при загрузке списка договоров!'
+            )));
     }
 
     fetchAgreementById(id: number) {
-        this.http.get(this.agreementsUrl + '/' + id, {headers: this.headers})
-            .subscribe(
-                (agreement: ClientAgreement) => {
-                    this.agreement = agreement;
-                    this.emitterAgreement.emit(agreement);
-                }
-            )
+        const url = this.agreementsUrl + id;
+        return this.http.get<ClientAgreement>(url, {headers: this.headers})
+            .pipe(catchError(this.handleError<ClientAgreement>(
+                'Ошибка при загрузке договора (ID=' + id + ')!'
+            )));
     }
 
-    getAgreement() {
-        return this.agreement;
+    getCurrentAgreement() {
+        return this.currentAgreement.asObservable();
     }
 
-  getDocumentsByAgreementId(agreementId: number): Observable<Document[]> {
-    const url = `${this.agreementsUrl}/${agreementId}/documents`;
-    return this.http
-      .get<Document[]>(url, { headers: this.headers })
-      .pipe(
-        catchError(this.handleError('getDocumentsByAgreementId', []))
-      )
-  }
+    setCurrentAgreement(value: ClientAgreement) {
+        this.currentAgreement.next(value);
+    }
 
-  addAgreement(agreement: ClientAgreement): Observable<ClientAgreement> {
-    const url = `${this.agreementsUrl}`;
-    return this.http
-      .post<ClientAgreement>(url, agreement, { headers: this.headers })
-      .pipe(
-        tap(_ => console.log(`added ClientAgreement (number=${agreement.number})`)),
-        catchError(this.handleError<ClientAgreement>('addAgreement'))
-      ); 
-  }
+    getDocumentsByAgreementId(agreementId: number) {
+        const url = this.agreementsUrl + agreementId + '/documents';
+        return this.http.get<Document[]>(url, {headers: this.headers})
+            .pipe(catchError(this.handleError<Document[]>(
+                'Ошибка при загрузке документов!'
+            )));
+    }
 
-  updateAgreement(agreement: ClientAgreement): Observable<ClientAgreement> {
-    const url = `${this.agreementsUrl}/${agreement.id}`;
-    return this.http
-      .put<ClientAgreement>(url, agreement, { headers: this.headers })
-      .pipe(
-        tap(_ => console.log(`updated ClientAgreement (ID=${agreement.id}, alias=${agreement.number})`)),
-        catchError(this.handleError<ClientAgreement>('updateAgreement'))
-      );
-  }
+    addAgreement(agreement: ClientAgreement) {
+        const url = this.agreementsUrl;
+        return this.http.post<ClientAgreement>(url, agreement, {headers: this.headers})
+            .pipe(catchError(this.handleError<ClientAgreement>(
+                'Ошибка при добавлении договора!'
+            )));
+    }
 
-  deleteAgreement(agreement: ClientAgreement): Observable<void> {
-    const url = `${this.agreementsUrl}/${agreement.id}`;
-    return this.http
-      .delete(url, { headers: this.headers })
-      .pipe(
-        tap(_ => console.log(`deleted ClientAgreement ${agreement.number} (ID=${agreement.id})`)),
-        catchError(this.handleError<any>('deleteAgreement'))
-      );
-  }
+    updateAgreement(agreement: ClientAgreement) {
+        const url = this.agreementsUrl + agreement.id;
+        return this.http.put<ClientAgreement>(url, agreement, {headers: this.headers})
+            .pipe(catchError(this.handleError<ClientAgreement>(
+                'Ошибка при обновлении договора (ID=' + agreement.id + ')!'
+            )));
+    }
 
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-      // TODO: better job of transforming error for user consumption
-      console.log(`${operation} failed: ${error.message}`);
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
-  }
+    deleteAgreement(agreementId: number) {
+        const url = this.agreementsUrl + agreementId;
+        return this.http.delete(url, {headers: this.headers})
+            .pipe(catchError(this.handleError<ClientAgreement>(
+                'Ошибка при удалении договора клиента (ID=' + agreementId + ')!'
+            )));
+    }
 
 }

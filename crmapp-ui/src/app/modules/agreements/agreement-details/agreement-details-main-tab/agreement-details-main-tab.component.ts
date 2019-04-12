@@ -1,64 +1,65 @@
-import {Component, OnInit} from '@angular/core';
-import {Message, ConfirmationService} from 'primeng/api';
-import {AgreementService} from '../../../../services/agreement.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Message, ConfirmationService, MessageService} from 'primeng/api';
+import {AgreementService} from 'app/services/agreement.service';
 import {Router} from '@angular/router';
-import {ClientAgreement} from '../../../../models/ClientAgreement';
-import {ClientService} from '../../../../services/client.service';
+import {ClientAgreement} from 'app/models/ClientAgreement';
+import {ClientService} from 'app/services/client.service';
+import {Subscription} from "rxjs";
 
 @Component({
     selector: 'app-agreement-details-main-tab',
     templateUrl: './agreement-details-main-tab.component.html',
     styleUrls: ['./agreement-details-main-tab.component.css']
 })
-export class AgreementDetailsMainTabComponent implements OnInit {
-    msgs: Message[] = [];
+export class AgreementDetailsMainTabComponent implements OnInit, OnDestroy {
+    private subscription: Subscription;
+    agreement: ClientAgreement = {};
+    loadingState: boolean = true;
 
     constructor(private agreementService: AgreementService,
                 private clientService: ClientService,
                 private router: Router,
-                private confirmationService: ConfirmationService) {
+                private confirmationService: ConfirmationService,
+                private messageService: MessageService) {
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.getCurrentAgreement();
+    }
 
-    getAgreement() {
-        return this.agreementService.getAgreement();
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
+
+    private getCurrentAgreement() {
+        this.subscription = this.agreementService.getCurrentAgreement()
+            .subscribe(agreement => {
+                this.agreement = agreement;
+                this.loadingState = false;
+            });
     }
 
     confirmDeleting() {
-        let msg = 'Договор \"' + this.getAgreement().number + '(ID=' + this.getAgreement().id + ')\" успешно удален';
+        let msg = 'Договор \"' + this.agreement.number + '(ID=' + this.agreement.id + ')\" успешно удален';
         this.confirmationService.confirm({
-            message: 'Действительно удалить договор?',
+            message: 'Действительно удалить договор № ' + this.agreement.number + '?',
             header: 'Удаление объекта',
             icon: 'fa fa-trash',
             accept: () => {
-                this.delete();
-                this.msgs = [{severity: 'success', summary: 'Успешно', detail: msg}];
+                this.agreementService.deleteAgreement(this.agreement.id).toPromise()
+                    .then(
+                        () => {
+                            this.messageService.add({
+                                severity: 'success',
+                                summary: 'Успешно!',
+                                detail: (msg + ' успешно удален')
+                            });
+                            this.router.navigate(['/agreements']);
+                        })
             },
             reject: () => {
             }
         });
-    }
-
-    private getClientById(clientId: number) {
-        this.clientService.fetchClientById(clientId)
-            // .subscribe(
-            //     client => this.getAgreement().client = client
-            // );
-    }
-
-    private delete(): void {
-        this.agreementService.deleteAgreement(this.getAgreement())
-            .subscribe(
-                () => this.goBackToAgreements()
-            );
-    }
-
-    private goBackToAgreements(): void {
-        setTimeout(
-            () => {
-                this.router.navigate(['/agreements']);
-            }, 1500);
     }
 
 }

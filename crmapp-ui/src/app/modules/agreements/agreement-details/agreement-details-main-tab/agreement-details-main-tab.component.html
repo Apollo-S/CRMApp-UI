@@ -1,28 +1,22 @@
-<p-growl [value]="msgs"></p-growl>
-
-<p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" #cd>
-    <p-footer>
-        <button type="button" pButton icon="fa fa-check" 
-          class="ui-button-primary" label="Ок" (click)="cd.accept()">
-        </button>
-        <button type="button" pButton icon="fa fa-close" 
-          class="ui-button-secondary" label="Отмена" (click)="cd.reject()">
-        </button>
-    </p-footer>
-</p-confirmDialog>
-
 <div class="ui-g-12">
-    <div class="ui-g-10">
+    <div class="ui-g-10" *ngIf="loadingState" style="text-align: center;">
+        <p-card>
+            <img
+                    src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+            />
+        </p-card>
+    </div>
+    <div class="ui-g-10" *ngIf="!loadingState">
       <p-card>
-        <div class="ui-g" >
+        <div class="ui-g">
             <div class="ui-g-4 ui-sm-6"><b>Номер договора:</b></div>
-            <div class="ui-g-8 ui-sm-6">{{getAgreement().number}}</div>
+            <div class="ui-g-8 ui-sm-6">{{agreement?.number}}</div>
             <div class="ui-g-4 ui-sm-6"><b>Дата:</b></div>
-            <div class="ui-g-8 ui-sm-6">{{getAgreement().dateStart | date: 'dd.MM.y'}}</div>
+            <div class="ui-g-8 ui-sm-6">{{agreement?.dateStart | date: 'dd.MM.y'}}</div>
             <div class="ui-g-4 ui-sm-6"><b>Клиент:</b></div>
-            <div class="ui-g-8 ui-sm-6">{{getAgreement().clientTitle}}</div>
+            <div class="ui-g-8 ui-sm-6"><a [routerLink]="['/' + agreement?.clientInfo?.url]">{{agreement?.clientInfo?.title}}</a> </div>
             <div class="ui-g-4 ui-sm-6"><b>Примечание:</b></div>
-            <div class="ui-g-8 ui-sm-6"><i>{{getAgreement().comment}}</i></div>
+            <div class="ui-g-8 ui-sm-6"><i>{{agreement?.comment}}</i></div>
           </div>
       </p-card>
     </div>
@@ -37,3 +31,14 @@
         </button>
     </div>
 </div>
+
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" #cd>
+    <p-footer>
+        <button type="button" pButton icon="fa fa-check"
+                class="ui-button-primary" label="Ок" (click)="cd.accept()">
+        </button>
+        <button type="button" pButton icon="fa fa-close"
+                class="ui-button-secondary" label="Отмена" (click)="cd.reject()">
+        </button>
+    </p-footer>
+</p-confirmDialog>
