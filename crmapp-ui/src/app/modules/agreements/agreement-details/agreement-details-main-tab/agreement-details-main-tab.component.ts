@@ -1,7 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Message, ConfirmationService, MessageService} from 'primeng/api';
+import {ConfirmationService, MessageService} from 'primeng/api';
 import {AgreementService} from 'app/services/agreement.service';
-import {Router} from '@angular/router';
 import {ClientAgreement} from 'app/models/ClientAgreement';
 import {ClientService} from 'app/services/client.service';
 import {Subscription} from "rxjs";
@@ -18,7 +17,6 @@ export class AgreementDetailsMainTabComponent implements OnInit, OnDestroy {
 
     constructor(private agreementService: AgreementService,
                 private clientService: ClientService,
-                private router: Router,
                 private confirmationService: ConfirmationService,
                 private messageService: MessageService) {
     }
@@ -54,7 +52,7 @@ export class AgreementDetailsMainTabComponent implements OnInit, OnDestroy {
                                 summary: 'Успешно!',
                                 detail: (msg + ' успешно удален')
                             });
-                            this.router.navigate(['/agreements']);
+                            this.agreementService.goToUrl(['/agreements']);
                         })
             },
             reject: () => {
