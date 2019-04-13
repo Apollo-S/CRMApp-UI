@@ -14,7 +14,7 @@
             <div class="ui-g-4 ui-sm-6"><b>Дата:</b></div>
             <div class="ui-g-8 ui-sm-6">{{agreement?.dateStart | date: 'dd.MM.y'}}</div>
             <div class="ui-g-4 ui-sm-6"><b>Клиент:</b></div>
-            <div class="ui-g-8 ui-sm-6"><a [routerLink]="['/' + agreement?.clientInfo?.url]">{{agreement?.clientInfo?.title}}</a> </div>
+            <div class="ui-g-8 ui-sm-6"><a [routerLink]="['/' + agreement?.clientInfo?.url + '/agreements']">{{agreement?.clientInfo?.title}}</a> </div>
             <div class="ui-g-4 ui-sm-6"><b>Примечание:</b></div>
             <div class="ui-g-8 ui-sm-6"><i>{{agreement?.comment}}</i></div>
           </div>
