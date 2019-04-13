@@ -13,10 +13,20 @@ export class ClientsComponent implements OnInit {
     items: MenuItem[] = [];
     clients: Client[] = [];
     loading: boolean;
+    sortField: string;
+    title: string = 'Клиенты';
+    buttonTitle = {add: 'Новый', edit: 'Редакт.', additional: 'Прочее'};
+    autoLayout = true;
+    rowHover = true;
+    paginator = false;
+    reorderableColumns = true;
+    responsive = true;
+    rows = 0;
 
     constructor(public clientService: ClientService) {
         this.initColumns();
         this.initMenu();
+        this.sortField = this.columns[0].field;
     }
 
     ngOnInit() {

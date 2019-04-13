@@ -9,12 +9,18 @@ import {Agreement} from "app/models/Agreement";
     styleUrls: ['./agreements.component.css']
 })
 export class AgreementsComponent implements OnInit {
-    columns: any[] = [];
+    columns = [];
     items: MenuItem[] = [];
     agreements: Agreement[] = [];
     loading: boolean;
     sortField: string;
-    title: string;
+    title: string = 'Договоры с клиентами';
+    buttonTitle = {add: 'Новый', edit: 'Редакт.', additional: 'Прочее'};
+    autoLayout = true;
+    rowHover = true;
+    paginator = false;
+    reorderableColumns = true;
+    responsive = true;
 
     constructor(private agreementService: AgreementService) {
         this.initColumns();
@@ -23,6 +29,10 @@ export class AgreementsComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.refreshDatasource();
+    }
+
+    refreshDatasource() {
         this.loading = true;
         this.agreementService.fetchAgreements().toPromise().then(
             agreements => {
