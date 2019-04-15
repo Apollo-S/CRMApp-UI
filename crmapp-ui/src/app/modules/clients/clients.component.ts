@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {ClientService} from '../../services/client.service';
+import {ClientService} from 'app/services/client.service';
 import {MenuItem} from 'primeng/api';
-import {Client} from "../../models/Client";
+import {Client} from "app/models/Client";
 
 @Component({
     selector: 'app-clients',
