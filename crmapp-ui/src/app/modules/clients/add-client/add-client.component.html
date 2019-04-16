@@ -1,7 +1,13 @@
 <div class="ui-g">
     <div class="ui-g-4">
-        <button pButton type="button" label="Вернуться" class="ui-button-info"
-                icon="fa fa-arrow-circle-o-left" routerLink="../"></button>
+        <button
+                pButton
+                type="button"
+                label="Вернуться"
+                class="ui-button-info"
+                icon="fa fa-arrow-circle-o-left"
+                routerLink="../"
+        ></button>
     </div>
     <div class="ui-g-8">
         <h4 style="font-weight:normal">
@@ -26,15 +32,17 @@
                             <b>Полное название: *</b>
                         </div>
                         <div class="ui-grid-col-6">
-                            <input pInputText type="text"
-                                   placeholder="Обязательное поле"
-                                   formControlName="title"
+                            <input
+                                    pInputText
+                                    type="text"
+                                    formControlName="title"
                             >
                         </div>
                         <div class="ui-grid-col-3">
-                            <p-message severity="error"
-                                       text="Введите полное название (не менее 2 символов)!"
-                                       *ngIf="!clientForm.controls['title'].valid&&clientForm.controls['title'].dirty">
+                            <p-message
+                                    severity="error"
+                                    text="Введите полное название (не менее 2 символов)!"
+                                    *ngIf="!clientForm.controls['title'].valid&&clientForm.controls['title'].dirty">
                             </p-message>
                         </div>
                     </div>
@@ -43,15 +51,17 @@
                             <b>Псевдоним: *</b>
                         </div>
                         <div class="ui-grid-col-6">
-                            <input pInputText type="text"
-                                   placeholder="Обязательное поле"
-                                   formControlName="alias"
+                            <input
+                                    pInputText
+                                    type="text"
+                                    formControlName="code"
                             >
                         </div>
                         <div class="ui-grid-col-3">
-                            <p-message severity="error"
-                                       text="Введите псевдоним (не менее 2 символов)!"
-                                       *ngIf="!clientForm.controls['code'].valid&&clientForm.controls['code'].dirty">
+                            <p-message
+                                    severity="error"
+                                    text="Введите псевдоним (не менее 2 символов)!"
+                                    *ngIf="!clientForm.controls['code'].valid&&clientForm.controls['code'].dirty">
                             </p-message>
                         </div>
                     </div>
@@ -60,16 +70,17 @@
                             <b>ЕДРПОУ: *</b>
                         </div>
                         <div class="ui-grid-col-6">
-                            <input pInputText type="text"
-                                   placeholder="Обязательное поле"
-                                   pKeyFilter="num"
-                                   formControlName="edrpou"
+                            <input
+                                    pInputText type="text"
+                                    pKeyFilter="num"
+                                    formControlName="edrpou"
                             >
                         </div>
                         <div class="ui-grid-col-3">
-                            <p-message severity="error"
-                                       text="Введите ЕДРПОУ (не менее 6 и не более 14 цифр)!"
-                                       *ngIf="!clientForm.controls['edrpou'].valid&&clientForm.controls['edrpou'].dirty">
+                            <p-message
+                                    severity="error"
+                                    text="Введите ЕДРПОУ (не менее 6 и не более 14 цифр)!"
+                                    *ngIf="!clientForm.controls['edrpou'].valid&&clientForm.controls['edrpou'].dirty">
                             </p-message>
                         </div>
                     </div>
@@ -78,15 +89,16 @@
                             <b>ИНН:</b>
                         </div>
                         <div class="ui-grid-col-6">
-                            <input pInputText type="text"
-                                   placeholder="Введите ИНН (необязательное поле)"
-                                   formControlName="inn"
+                            <input
+                                    pInputText type="text"
+                                    formControlName="inn"
                             >
                         </div>
                         <div class="ui-grid-col-3">
-                            <p-message severity="error"
-                                       text="Введите не более 14 цифр)!"
-                                       *ngIf="!clientForm.controls['inn'].valid">
+                            <p-message
+                                    severity="error"
+                                    text="Введите не более 14 цифр)!"
+                                    *ngIf="!clientForm.controls['inn'].valid">
                             </p-message>
                         </div>
                     </div>
@@ -95,15 +107,16 @@
                             <b>№ свидетельства плат. НДС:</b>
                         </div>
                         <div class="ui-grid-col-6">
-                            <input pInputText type="text"
-                                   placeholder="Введите № свид. НДС (необязательное поле)"
-                                   formControlName="vatCertificate"
+                            <input
+                                    pInputText type="text"
+                                    formControlName="vatCertificate"
                             >
                         </div>
                         <div class="ui-grid-col-3">
-                            <p-message severity="error"
-                                       text="Введите не более 20 цифр)!"
-                                       *ngIf="!clientForm.controls['vatCertificate'].valid">
+                            <p-message
+                                    severity="error"
+                                    text="Введите не более 20 цифр)!"
+                                    *ngIf="!clientForm.controls['vatCertificate'].valid">
                             </p-message>
                         </div>
                     </div>
@@ -111,14 +124,22 @@
             </p-card>
         </div>
         <div class="ui-g-2">
-            <button pButton type="submit" label="Записать" [disabled]="!clientForm.valid"
-                    class="ui-button-success btn-block" icon="fa fa-check-square-o">
-            </button>
-            <button pButton type="button" label="Отмена"
+            <button
+                    pButton
+                    type="submit"
+                    label="Записать"
+                    class="ui-button-success btn-block"
+                    icon="fa fa-check-square-o"
+                    [disabled]="!clientForm.valid"
+            ></button>
+            <button
+                    pButton
+                    type="button"
+                    label="Отмена"
                     class="ui-button-danger btn-block"
                     icon="fa fa-times-rectangle-o"
-                    [routerLink]="['../']">
-            </button>
+                    [routerLink]="['../']"
+            ></button>
         </div>
     </form>
 </div>

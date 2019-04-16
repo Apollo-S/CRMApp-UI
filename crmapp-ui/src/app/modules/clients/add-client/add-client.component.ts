@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {ClientService} from '../../../services/client.service';
-import {Client} from '../../../models/Client';
+import {ClientService} from 'app/services/client.service';
+import {Client} from 'app/models/Client';
 import {MenuItem, MessageService} from 'primeng/api';
 
 @Component({
@@ -33,7 +33,7 @@ export class AddClientComponent implements OnInit {
                 Validators.required,
                 Validators.minLength(2)
             ])],
-            alias: ['', Validators.compose([
+            code: ['', Validators.compose([
                 Validators.required,
                 Validators.minLength(2)
             ])],
@@ -64,7 +64,7 @@ export class AddClientComponent implements OnInit {
     private save() {
         let client: Client = {
             title: this.clientForm.controls.title.value,
-            code: this.clientForm.controls.alias.value,
+            code: this.clientForm.controls.code.value,
             edrpou: this.clientForm.controls.edrpou.value,
             vatCertificate: this.clientForm.controls.vatCertificate.value,
             inn: this.clientForm.controls.inn.value
