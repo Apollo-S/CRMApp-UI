@@ -5,8 +5,6 @@ import {AboutComponent} from './modules/about/about.component';
 import {DashboardComponent} from './modules/dashboard/dashboard.component';
 
 import {ClientsComponent} from './modules/clients/clients.component';
-import {AddClientComponent} from './modules/clients/add-client/add-client.component';
-import {EditClientComponent} from './modules/clients/edit-client/edit-client.component';
 import {ClientDetailsComponent} from './modules/clients/client-details/client-details.component';
 import {ClientDetailsMainTabComponent} from './modules/clients/client-details/client-details-main-tab/client-details-main-tab.component';
 import {ClientDetailsAddressesTabComponent} from './modules/clients/client-details/client-details-addresses-tab/client-details-addresses-tab.component';
@@ -46,6 +44,7 @@ import {AddEditAccountComponent} from "./modules/clients/client-details/client-d
 import {AddEditDirectorComponent} from "./modules/clients/client-details/client-details-directors-tab/add-edit-director/add-edit-director.component";
 import {DocumentDetailsComponent} from "./modules/documents/document-details/document-details.component";
 import {AddEditDocumentComponent} from "./modules/documents/document-details/add-edit-document/add-edit-document.component";
+import {AddEditClientComponent} from "./modules/clients/add-edit-client/add-edit-client.component";
 
 const appRoutes: Routes = [
 
@@ -54,13 +53,13 @@ const appRoutes: Routes = [
         children: [
             {path: '', component: MainPageComponent},
             {path: 'clients', component: ClientsComponent},
-            {path: 'clients/add', component: AddClientComponent},
+            {path: 'clients/add', component: AddEditClientComponent},
             {
                 path: 'clients/:id', component: ClientDetailsComponent,
                 children: [
                     {path: '', redirectTo: 'main', pathMatch: 'full'},
                     {path: 'main', component: ClientDetailsMainTabComponent},
-                    {path: 'main/edit', component: EditClientComponent},
+                    {path: 'main/edit', component: AddEditClientComponent},
                     {path: 'addresses', component: ClientDetailsAddressesTabComponent},
                     {path: 'addresses/add', component: AddEditAddressComponent},
                     {

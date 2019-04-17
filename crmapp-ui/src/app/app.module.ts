@@ -74,8 +74,7 @@ import { DashboardTableComponent } from './modules/dashboard/dashboard-table/das
 import { PageNotFoundComponent } from './modules/page-not-found/page-not-found.component';
 
 import { ClientsComponent } from './modules/clients/clients.component';
-import { AddClientComponent } from './modules/clients/add-client/add-client.component';
-import { EditClientComponent } from './modules/clients/edit-client/edit-client.component';
+import { AddEditClientComponent } from './modules/clients/add-edit-client/add-edit-client.component';
 import { ClientDetailsComponent } from './modules/clients/client-details/client-details.component';
 import { ClientDetailsTabsComponent } from './modules/clients/client-details/client-details-tabs/client-details-tabs.component';
 import { ClientDetailsMainTabComponent } from './modules/clients/client-details/client-details-main-tab/client-details-main-tab.component';
@@ -131,12 +130,10 @@ import { AddEditDocumentComponent } from './modules/documents/document-details/a
     AppComponent,
     AboutComponent,
     ClientsComponent,
-    AddClientComponent,
     AgreementsComponent,
     NavbarComponent,
     NavbarBottomComponent,
     ClientDetailsComponent,
-    EditClientComponent,
     SidebarComponent,
     DashboardComponent,
     DashboardMenuComponent,
@@ -184,6 +181,7 @@ import { AddEditDocumentComponent } from './modules/documents/document-details/a
     EmployeeDetailsSicksTabComponent,
     DocumentDetailsComponent,
     AddEditDocumentComponent,
+    AddEditClientComponent
   ],
   imports: [
     AppRoutingModule, 

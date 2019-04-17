@@ -1,4 +1,4 @@
-<div class="ui-g">
+<div class="ui-g" *ngIf="isNew">
     <div class="ui-g-4">
         <button
                 pButton
@@ -18,7 +18,7 @@
     </div>
 </div>
 
-<div>
+<div *ngIf="isNew">
     <p-tabMenu [model]="tabs"></p-tabMenu>
 </div>
 
@@ -42,7 +42,7 @@
                             <p-message
                                     severity="error"
                                     text="Введите полное название (не менее 2 символов)!"
-                                    *ngIf="!clientForm.controls['title'].valid&&clientForm.controls['title'].dirty">
+                                    *ngIf="clientForm.controls['title'].invalid&&clientForm.controls['title'].dirty">
                             </p-message>
                         </div>
                     </div>
@@ -125,21 +125,33 @@
         </div>
         <div class="ui-g-2">
             <button
+                    *ngIf="!isNew"
+                    pButton
+                    type="button"
+                    label="Назад к клиенту"
+                    class="ui-button-info btn-block"
+                    icon="fa fa-arrow-circle-o-left"
+                    (click)="goBackToClient()"
+            ></button>
+            <button
                     pButton
                     type="submit"
                     label="Записать"
+                    [disabled]="!clientForm.valid"
                     class="ui-button-success btn-block"
                     icon="fa fa-check-square-o"
-                    [disabled]="!clientForm.valid"
             ></button>
             <button
+                    *ngIf="isNew"
                     pButton
                     type="button"
                     label="Отмена"
                     class="ui-button-danger btn-block"
                     icon="fa fa-times-rectangle-o"
                     [routerLink]="['../']"
+
             ></button>
         </div>
     </form>
 </div>
+

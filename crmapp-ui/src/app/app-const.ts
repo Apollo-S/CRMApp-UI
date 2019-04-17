@@ -5,6 +5,7 @@ export class AppConst {
     headersJSON = new HttpHeaders({'Content-Type': 'application/json'});
     baseUrl = '/api';
     clientsUrl = '/clients';
+    static ADD_CLIENT_URL = 'clients/add';
     agreementsUrl = '/agreements';
     documentsUrl = '/documents';
     postsUrl = '/posts';
