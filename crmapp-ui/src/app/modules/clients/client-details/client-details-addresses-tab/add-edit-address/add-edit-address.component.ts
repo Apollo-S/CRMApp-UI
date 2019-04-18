@@ -5,8 +5,8 @@ import {UtilService} from "app/services/util.service";
 import {ActivatedRoute} from "@angular/router";
 import {ClientService} from "app/services/client.service";
 import {AddressService} from "app/services/address.service";
-import {Address} from "app/models/Address";
-import {Client} from "../../../../../models/Client";
+import {Client} from "app/models/Client";
+import {ClientAddress} from "app/models/ClientAddress";
 
 @Component({
     selector: 'app-add-edit-address',
@@ -14,7 +14,7 @@ import {Client} from "../../../../../models/Client";
     styleUrls: ['./add-edit-address.component.css']
 })
 export class AddEditAddressComponent implements OnInit {
-    address: Address = <Address>{};
+    address: ClientAddress = new ClientAddress();
     isNew: boolean = false;
     years: string;
     ru: any;
@@ -104,7 +104,7 @@ export class AddEditAddressComponent implements OnInit {
 
     private save() {
         let msg = 'Адрес для ' + this.getClient().code;
-        let address = <Address>{};
+        let address = new ClientAddress();
         address.country = this.addressForm.controls.country.value;
         address.region = this.addressForm.controls.region.value;
         address.city = this.addressForm.controls.city.value;
@@ -163,17 +163,15 @@ export class AddEditAddressComponent implements OnInit {
     }
 
     private update() {
-        const address = <Address>{
-            id: this.address.id,
-            country: this.addressForm.controls.country.value,
-            region: this.addressForm.controls.region.value,
-            city: this.addressForm.controls.city.value,
-            street: this.addressForm.controls.street.value,
-            building: this.addressForm.controls.building.value,
-            apartment: this.addressForm.controls.apartment.value,
-            zip: this.addressForm.controls.zip.value,
-            dateStart: this.addressForm.controls.dateStart.value
-        };
+        let address = new ClientAddress();
+        address.country = this.addressForm.controls.country.value;
+        address.region = this.addressForm.controls.region.value;
+        address.city = this.addressForm.controls.city.value;
+        address.street = this.addressForm.controls.street.value;
+        address.building = this.addressForm.controls.building.value;
+        address.apartment = this.addressForm.controls.apartment.value;
+        address.zip = this.addressForm.controls.zip.value;
+        address.dateStart = this.addressForm.controls.dateStart.value;
         this.clientService.updateAddress(address, this.getClient().id).toPromise()
             .then(response => {
                 let msg = 'Адрес (ID=' + response.id + ') для клиента ' + this.getClient().code;
