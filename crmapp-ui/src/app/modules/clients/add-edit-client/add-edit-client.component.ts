@@ -29,8 +29,8 @@ export class AddEditClientComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.isNew = (this.route.routeConfig.path === AppConst.ADD_CLIENT_URL);
+        this.loadingState = true;
         if (!this.isNew) {
-            this.loadingState = true;
             this.subscription = this.clientService.getCurrentClient()
                 .subscribe(client => {
                     this.client = client;
@@ -43,6 +43,7 @@ export class AddEditClientComponent implements OnInit, OnDestroy {
                 });
         } else {
             this.initTabs();
+            this.loadingState = false;
         }
     }
 
