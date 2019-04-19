@@ -6,6 +6,7 @@ export class AppConst {
     baseUrl = '/api';
     clientsUrl = '/clients';
     static ADD_CLIENT_URL = 'clients/add';
+    static ADD_AGREEMENT_URL = 'agreements/add';
     agreementsUrl = '/agreements';
     documentsUrl = '/documents';
     postsUrl = '/posts';

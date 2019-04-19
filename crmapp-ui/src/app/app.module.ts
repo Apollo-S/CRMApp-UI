@@ -84,8 +84,6 @@ import { ClientDetailsDirectorsTabComponent } from './modules/clients/client-det
 import { ClientDetailsAgreementsTabComponent } from './modules/clients/client-details/client-details-agreements-tab/client-details-agreements-tab.component';
 
 import { AgreementsComponent } from './modules/agreements/agreements.component';
-import { AddAgreementComponent } from './modules/agreements/add-agreement/add-agreement.component';
-import { EditAgreementComponent } from './modules/agreements/edit-agreement/edit-agreement.component';
 import { AgreementDetailsComponent } from './modules/agreements/agreement-details/agreement-details.component';
 import { AgreementDetailsDocumentsTabComponent } from './modules/agreements/agreement-details/agreement-details-documents-tab/agreement-details-documents-tab.component';
 
@@ -124,6 +122,7 @@ import { AddEditAccountComponent } from './modules/clients/client-details/client
 import { AddEditDirectorComponent } from './modules/clients/client-details/client-details-directors-tab/add-edit-director/add-edit-director.component';
 import { AddressService } from "./services/address.service";
 import { AddEditDocumentComponent } from './modules/documents/document-details/add-edit-document/add-edit-document.component';
+import { AddEditAgreementComponent } from './modules/agreements/add-edit-agreement/add-edit-agreement.component';
 
 @NgModule({
   declarations: [
@@ -151,8 +150,6 @@ import { AddEditDocumentComponent } from './modules/documents/document-details/a
     EmployeeDetailsAddressesTabComponent,
     EmployeeDetailsAccountsTabComponent,
     AgreementDetailsComponent,
-    AddAgreementComponent,
-    EditAgreementComponent,
     VacationsComponent,
     VacationDetailsComponent,
     EmployeeDetailsMainTabComponent,
@@ -181,7 +178,8 @@ import { AddEditDocumentComponent } from './modules/documents/document-details/a
     EmployeeDetailsSicksTabComponent,
     DocumentDetailsComponent,
     AddEditDocumentComponent,
-    AddEditClientComponent
+    AddEditClientComponent,
+    AddEditAgreementComponent
   ],
   imports: [
     AppRoutingModule, 

@@ -1,7 +1,38 @@
+<div class="ui-g" *ngIf="isNew">
+    <div class="ui-g-4">
+        <button
+                pButton
+                type="button"
+                label="Вернуться"
+                class="ui-button-info"
+                icon="fa fa-arrow-circle-o-left"
+                routerLink="../"
+        ></button>
+    </div>
+    <div class="ui-g-8">
+        <h4 style="font-weight:normal">
+            <b>
+                <ins>Договор [без названия]</ins>
+            </b>
+        </h4>
+    </div>
+</div>
+
+<div *ngIf="isNew">
+    <p-tabMenu [model]="tabs"></p-tabMenu>
+</div>
+
 <div class="ui-g-12">
     <form [formGroup]="agreementForm" (ngSubmit)="onSubmit()">
         <div class="ui-g-10">
-            <p-card>
+            <p-card *ngIf="loadingState">
+                <div style="text-align: center;">
+                    <img
+                            src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+                    />
+                </div>
+            </p-card>
+            <p-card *ngIf="!loadingState">
                 <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-3">
@@ -30,6 +61,7 @@
                         </div>
                         <div class="ui-grid-col-6">
                             <p-dropdown
+                                    [filter]="true"
                                     [options]="clients"
                                     formControlName="client"
                                     optionLabel="title"
@@ -87,19 +119,30 @@
         </div>
         <div class="ui-g-2">
             <button
+                    *ngIf="!isNew"
                     pButton
                     type="button"
                     label="Назад"
                     class="ui-button-info btn-block"
                     icon="fa fa-arrow-circle-o-left"
-                    (click)="goBackToAgreement(0)"
+                    (click)="goBackToAgreement()"
             ></button>
             <button
                     pButton
                     type="submit"
                     label="Сохранить"
+                    [disabled]="agreementForm.invalid"
                     class="ui-button-success btn-block"
                     icon="fa fa-check-square-o"
+            ></button>
+            <button
+                    *ngIf="isNew"
+                    pButton
+                    type="button"
+                    label="Отмена"
+                    class="ui-button-danger btn-block"
+                    icon="fa fa-times-rectangle-o"
+                    [routerLink]="['../']"
             ></button>
         </div>
     </form>
@@ -125,3 +168,4 @@
         ></button>
     </p-footer>
 </p-confirmDialog>
+
