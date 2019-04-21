@@ -6,7 +6,7 @@ import {Client} from "app/models/Client";
 import {ClientService} from "app/services/client.service";
 import {AgreementService} from "app/services/agreement.service";
 import {UtilService} from "app/services/util.service";
-import {MenuItem} from "primeng/api";
+import {MenuItem, MessageService} from "primeng/api";
 import {AppConst} from "app/app-const";
 import {ActivatedRoute} from "@angular/router";
 
@@ -29,10 +29,10 @@ export class AddEditAgreementComponent implements OnInit, OnDestroy {
     constructor(private clientService: ClientService,
                 private agreementService: AgreementService,
                 private formBuilder: FormBuilder,
+                private messageService: MessageService,
                 private route: ActivatedRoute) {
         this.initCalendarSettings();
         this.initForm();
-
     }
 
     ngOnInit() {
@@ -104,14 +104,22 @@ export class AddEditAgreementComponent implements OnInit, OnDestroy {
     }
 
     private save() {
-        this.agreementService.addAgreement(this.agreement)
-            .subscribe(
-                response => {
-                    this.agreement = response;
-                    let msg = 'Договор №' + this.agreement.number + ' успешно добавлен (ID=' + response.id + ')';
-                    // this.msgs = [{severity:'success', summary:'Успешно!', detail: msg}];
-                }
-            );
+        let agreement: ClientAgreement = new ClientAgreement();
+        agreement.number = this.agreementForm.controls.number.value;
+        agreement.clientInfo = this.agreementForm.controls.client.value;
+        agreement.dateStart = new Date(this.agreementForm.controls.dateStart.value);
+        agreement.comment = this.agreementForm.controls.comment.value;
+        let msg = 'Договор № ' + agreement.number + ' ';
+        this.agreementService.addAgreement(this.agreement).toPromise()
+            .then(response => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Успешно!',
+                    detail: msg + 'успешно добавлен (ID=' + response.id + ')'
+                });
+                this.agreementService.setCurrentAgreement(response);
+            })
+            .then(() => this.goBackToAgreement());
     }
 
     private update() {
