@@ -59,10 +59,16 @@ export class AddEditAgreementComponent implements OnInit, OnDestroy {
     }
 
     onSubmit() {
+        const agreement = {
+            number: this.agreementForm.controls.number.value,
+            client: this.agreementForm.controls.client.value,
+            dateStart: new Date(this.agreementForm.controls.dateStart.value),
+            comment: this.agreementForm.controls.comment.value
+        };
         if (this.isNew) {
-            this.save();
+            this.save(agreement);
         } else {
-            this.update();
+            this.update(agreement);
         }
     }
 
@@ -103,14 +109,9 @@ export class AddEditAgreementComponent implements OnInit, OnDestroy {
         ];
     }
 
-    private save() {
-        let agreement: ClientAgreement = new ClientAgreement();
-        agreement.number = this.agreementForm.controls.number.value;
-        agreement.clientInfo = this.agreementForm.controls.client.value;
-        agreement.dateStart = new Date(this.agreementForm.controls.dateStart.value);
-        agreement.comment = this.agreementForm.controls.comment.value;
+    private save(agreement) {
         let msg = 'Договор № ' + agreement.number + ' ';
-        this.agreementService.addAgreement(this.agreement).toPromise()
+        this.agreementService.addAgreement(agreement).toPromise()
             .then(response => {
                 this.messageService.add({
                     severity: 'success',
@@ -118,22 +119,22 @@ export class AddEditAgreementComponent implements OnInit, OnDestroy {
                     detail: msg + 'успешно добавлен (ID=' + response.id + ')'
                 });
                 this.agreementService.setCurrentAgreement(response);
+                this.agreementService.goToUrl([response.url]);
             })
-            .then(() => this.goBackToAgreement());
     }
 
-    private update() {
-        this.agreementService.updateAgreement(this.agreement).toPromise()
+    private update(agreement) {
+        let msg = 'Договор № ' + agreement.number + ' ';
+        this.agreementService.updateAgreement(agreement).toPromise()
             .then(response => {
-                    this.agreement = response;
-                    let msg = 'Договор №' + this.agreement.number + ' успешно изменен (ID=' + response.id + ')';
-                    // this.msgs = [{severity: 'success', summary: 'Успешно!', detail: msg}];
-                }
-            );
-    }
-
-    private goBackToAgreement() {
-        this.agreementService.goToUrl([this.agreement.url]);
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Успешно!',
+                    detail: msg + 'успешно изменен (ID=' + response.id + ')'
+                });
+                this.agreementService.setCurrentAgreement(response);
+                this.agreementService.goToUrl([response.url]);
+            })
     }
 
 }
