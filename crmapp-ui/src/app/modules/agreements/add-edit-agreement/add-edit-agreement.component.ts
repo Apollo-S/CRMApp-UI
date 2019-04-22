@@ -68,6 +68,7 @@ export class AddEditAgreementComponent implements OnInit, OnDestroy {
         if (this.isNew) {
             this.save(agreement);
         } else {
+            agreement['id'] = this.agreement.id;
             this.update(agreement);
         }
     }
