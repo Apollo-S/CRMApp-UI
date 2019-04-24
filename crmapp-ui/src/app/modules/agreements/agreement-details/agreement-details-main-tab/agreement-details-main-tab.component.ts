@@ -13,7 +13,7 @@ import {Subscription} from "rxjs";
 export class AgreementDetailsMainTabComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
     agreement: ClientAgreement = {};
-    loadingState: boolean = true;
+    loadingState: boolean;
 
     constructor(private agreementService: AgreementService,
                 private clientService: ClientService,
@@ -30,6 +30,7 @@ export class AgreementDetailsMainTabComponent implements OnInit, OnDestroy {
     }
 
     private getCurrentAgreement() {
+        this.loadingState = true;
         this.subscription = this.agreementService.getCurrentAgreement()
             .subscribe(agreement => {
                 this.agreement = agreement;
