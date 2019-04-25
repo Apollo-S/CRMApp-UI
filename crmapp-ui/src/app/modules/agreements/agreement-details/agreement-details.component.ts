@@ -10,7 +10,7 @@ import {Subscription} from "rxjs";
     styleUrls: ['./agreement-details.component.css']
 })
 export class AgreementDetailsComponent implements OnInit, OnDestroy {
-    private subscription: Subscription;
+    private subscription: Subscription = new Subscription();
     agreementId: number;
     agreement: ClientAgreement;
     loadingState: boolean;
@@ -28,7 +28,8 @@ export class AgreementDetailsComponent implements OnInit, OnDestroy {
         });
     }
 
-    ngOnDestroy(): void {
+    ngOnDestroy() {
+        this.agreementService.setCurrentAgreement(new ClientAgreement());
         this.subscription.unsubscribe();
     }
 
