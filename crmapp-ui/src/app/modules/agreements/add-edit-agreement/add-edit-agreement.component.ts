@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from "rxjs";
+import {BehaviorSubject, Subscription} from "rxjs";
 import {ClientAgreement} from "app/models/ClientAgreement";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Client} from "app/models/Client";
@@ -74,6 +74,7 @@ export class AddEditAgreementComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        this.agreementService.setCurrentAgreement(undefined);
         this.subscription.unsubscribe();
     }
 
