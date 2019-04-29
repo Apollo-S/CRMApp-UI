@@ -19,12 +19,19 @@ export class ClientDetailsMainTabComponent implements OnInit, OnDestroy {
                 private router: Router,
                 private confirmationService: ConfirmationService,
                 private messageService: MessageService) {
-        this.subscription = clientService.getCurrentClient()
-            .subscribe(client => this.client = client);
+        this.loadingState = true;
     }
 
     ngOnInit() {
-        this.loadingState = false;
+        try {
+            this.subscription = this.clientService.getCurrentClient()
+                .subscribe(client => {
+                    this.client = client;
+                    this.loadingState = false;
+                });
+        } catch (e) {
+            this.loadingState = false;
+        }
     }
 
     ngOnDestroy() {
