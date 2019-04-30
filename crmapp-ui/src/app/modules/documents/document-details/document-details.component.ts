@@ -95,21 +95,21 @@ export class DocumentDetailsComponent implements OnInit {
     }
 
     onSubmit() {
-        let document: Document = new Document();
-        document.agreementId = this.documentForm.controls.agreement.value.id;
-        document.number = this.documentForm.controls.number.value;
-        document.amount = this.documentForm.controls.amount.value;
-        document.dated = this.documentForm.controls.dated.value;
-        document.status = this.documentForm.controls.status.value;
-        document.paymentDate = this.documentForm.controls.paymentDate.value;
-        document.passingDate = this.documentForm.controls.passingDate.value;
-        document.docType = this.documentForm.controls.docType.value;
-        document.agreement = this.documentForm.controls.agreement.value;
-        document.comment = this.documentForm.controls.comment.value;
+        let document = {
+            number: this.documentForm.controls.number.value,
+            amount: this.documentForm.controls.amount.value,
+            dated: this.documentForm.controls.dated.value,
+            status: this.documentForm.controls.status.value,
+            paymentDate: this.documentForm.controls.paymentDate.value,
+            passingDate: this.documentForm.controls.passingDate.value,
+            docType: this.documentForm.controls.docType.value,
+            agreement: this.documentForm.controls.agreement.value,
+            comment: this.documentForm.controls.comment.value
+        };
         if (this.isNew) {
             this.save(document);
         } else {
-            document.id = this.documentId;
+            document['id'] = this.documentId;
             this.update(document);
         }
     }
