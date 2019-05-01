@@ -1,257 +1,255 @@
 <p *ngIf="docService.getFilterState()">
     <p-card>
-
-        <div class="ui-g">
-            <div class="ui-g-12 ui-md-6 ui-lg-3">
-                <h6 class="first">
-                    <b>Клиент</b>
-                </h6>
-                <p-multiSelect
-                    [options]="clients"
-                    optionLabel="title"
-                    selectedItemsLabel="{0} эл. выбрано"
-                    maxSelectedLabels="1"
-                    [resetFilterOnHide]="true"
-                    [panelStyle]="{minWidth:'12em'}"
-                    [style]="{width:'100%'}"
-                    defaultLabel="Не выбрано"
-                    [(ngModel)]="docService.docFilter.selectedClients"
-                ></p-multiSelect>
-            </div>
-            <div class="ui-g-12 ui-md-6 ui-lg-3">
-                <h6 class="first">
-                    <b>Тип документа</b>
-                </h6>
-                <p-multiSelect
-                    [options]="docTypes"
-                    optionLabel="title"
-                    selectedItemsLabel="{0} эл. выбрано"
-                    maxSelectedLabels="1"
-                    [resetFilterOnHide]="true"
-                    [panelStyle]="{minWidth:'12em'}"
-                    [style]="{width:'100%'}"
-                    defaultLabel="Не выбрано"
-                    [(ngModel)]="docService.docFilter.selectedDocTypes"
-                ></p-multiSelect>
-            </div>
-            <div class="ui-g-12 ui-md-3">
-                <h6 class="first">
-                    <b>Статус</b>
-                </h6>
-                <p-multiSelect
-                    [options]="docStatuses"
-                    optionLabel="status"
-                    selectedItemsLabel="{0} эл. выбрано"
-                    maxSelectedLabels="1"
-                    [resetFilterOnHide]="true"
-                    [panelStyle]="{minWidth:'12em'}"
-                    [style]="{width:'100%'}"
-                    defaultLabel="Не выбрано"
-                    [(ngModel)]="docService.docFilter.selectedDocStatuses"
-                ></p-multiSelect>
-            </div>
-            <div class="ui-g-12 ui-md-3"></div>
-        </div>
-
-        <br>
-
-        <div class="ui-g ui-fluid">
-            <div class="ui-g-12 ui-md-6 ui-lg-3">
-                <h6 class="first">
-                    <b>Дата документа</b>
-                </h6>
-                <div class="ui-g">
-                    <div class="ui-g-1" style="margin-top: 6px">
-                        <b>с</b>
-                    </div>
-                    <div class="ui-g-8">
-                        <p-calendar
-                            id="float-field-docDateStart"
-                            [monthNavigator]="true"
-                            [yearNavigator]="true"
-                            [yearRange]="years"
-                            [locale]="ru"
-                            [showButtonBar]="true"
-                            [showIcon]="true"
-                            [dateFormat]="'dd.mm.yy'"
-                            [(ngModel)]="docService.docFilter.docDateStart"
-                        ></p-calendar>
-                    </div>
+        <form [formGroup]="filterForm" (ngSubmit)="onSubmit()">
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                    <h6 class="first">
+                        <b>Клиент</b>
+                    </h6>
+                    <p-multiSelect
+                        [options]="clients"
+                        optionLabel="title"
+                        selectedItemsLabel="{0} эл. выбрано"
+                        maxSelectedLabels="1"
+                        [resetFilterOnHide]="true"
+                        [panelStyle]="{minWidth:'12em'}"
+                        [style]="{width:'100%'}"
+                        defaultLabel="Не выбрано"
+                        formControlName="selectedClients"
+                    ></p-multiSelect>
                 </div>
-                <div class="ui-g">
-                    <div class="ui-g-1" style="margin-top: 6px">
-                        <b>по</b>
-                    </div>
-                    <div class="ui-g-8">
-                        <p-calendar
-                            id="float-field-docDateFinal"
-                            [monthNavigator]="true"
-                            [yearNavigator]="true"
-                            [yearRange]="years"
-                            [locale]="ru"
-                            [showButtonBar]="true"
-                            [showIcon]="true"
-                            [dateFormat]="'dd.mm.yy'"
-                            [(ngModel)]="docService.docFilter.docDateFinal"
-                        ></p-calendar>
-                    </div>
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                    <h6 class="first">
+                        <b>Тип документа</b>
+                    </h6>
+                    <p-multiSelect
+                        [options]="docTypes"
+                        optionLabel="title"
+                        selectedItemsLabel="{0} эл. выбрано"
+                        maxSelectedLabels="1"
+                        [resetFilterOnHide]="true"
+                        [panelStyle]="{minWidth:'12em'}"
+                        [style]="{width:'100%'}"
+                        defaultLabel="Не выбрано"
+                        formControlName="selectedDocTypes"
+                    ></p-multiSelect>
                 </div>
+                <div class="ui-g-12 ui-md-3">
+                    <h6 class="first">
+                        <b>Статус</b>
+                    </h6>
+                    <p-multiSelect
+                        [options]="docStatuses"
+                        optionLabel="status"
+                        selectedItemsLabel="{0} эл. выбрано"
+                        maxSelectedLabels="1"
+                        [resetFilterOnHide]="true"
+                        [panelStyle]="{minWidth:'12em'}"
+                        [style]="{width:'100%'}"
+                        defaultLabel="Не выбрано"
+                        formControlName="selectedDocStatuses"
+                    ></p-multiSelect>
+                </div>
+                <div class="ui-g-12 ui-md-3"></div>
             </div>
 
-            <div class="ui-g-12 ui-md-6 ui-lg-3">
-                <h6 class="first">
-                    <b>Дата оплаты</b>
-                </h6>
-                <div class="ui-g">
-                    <div class="ui-g-1" style="margin-top: 6px">
-                        <b>с</b>
-                    </div>
-                    <div class="ui-g-8">
-                        <p-calendar
-                            [monthNavigator]="true"
-                            [yearNavigator]="true"
-                            [yearRange]="years"
-                            [locale]="ru"
-                            [showButtonBar]="true"
-                            [showIcon]="true"
-                            [dateFormat]="'dd.mm.yy'"
-                            [(ngModel)]="docService.docFilter.paymentDateStart"
-                        ></p-calendar>
-                    </div>
-                </div>
-                <div class="ui-g">
-                    <div class="ui-g-1" style="margin-top: 6px">
-                        <b>по</b>
-                    </div>
-                    <div class="ui-g-8">
-                        <p-calendar
-                            [monthNavigator]="true"
-                            [yearNavigator]="true"
-                            [yearRange]="years"
-                            [locale]="ru"
-                            [showButtonBar]="true"
-                            [showIcon]="true"
-                            [dateFormat]="'dd.mm.yy'"
-                            [(ngModel)]="docService.docFilter.paymentDateFinal"
-                        ></p-calendar>
-                    </div>
-                </div>
-            </div>
+            <br>
 
-            <div class="ui-g-12 ui-md-6 ui-lg-3">
-                <h6 class="first">
-                    <b>Дата передачи</b>
-                </h6>
-                <div class="ui-g">
-                    <div class="ui-g-1" style="margin-top: 6px">
-                        <b>с</b>
+            <div class="ui-g ui-fluid">
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                    <h6 class="first">
+                        <b>Дата документа</b>
+                    </h6>
+                    <div class="ui-g">
+                        <div class="ui-g-1" style="margin-top: 6px">
+                            <b>с</b>
+                        </div>
+                        <div class="ui-g-8">
+                            <p-calendar
+                                id="float-field-docDateStart"
+                                [monthNavigator]="true"
+                                [yearNavigator]="true"
+                                [yearRange]="years"
+                                [locale]="ru"
+                                [showButtonBar]="true"
+                                [showIcon]="true"
+                                [dateFormat]="'dd.mm.yy'"
+                                formControlName="docDateStart"
+                            ></p-calendar>
+                        </div>
                     </div>
-                    <div class="ui-g-8">
-                        <p-calendar
-                            [monthNavigator]="true"
-                            [yearNavigator]="true"
-                            [yearRange]="years"
-                            [locale]="ru"
-                            [showButtonBar]="true"
-                            [showIcon]="true"
-                            [dateFormat]="'dd.mm.yy'"
-                            [(ngModel)]="docService.docFilter.passingDateStart"
-                        ></p-calendar>
+                    <div class="ui-g">
+                        <div class="ui-g-1" style="margin-top: 6px">
+                            <b>по</b>
+                        </div>
+                        <div class="ui-g-8">
+                            <p-calendar
+                                id="float-field-docDateFinal"
+                                [monthNavigator]="true"
+                                [yearNavigator]="true"
+                                [yearRange]="years"
+                                [locale]="ru"
+                                [showButtonBar]="true"
+                                [showIcon]="true"
+                                [dateFormat]="'dd.mm.yy'"
+                                formControlName="docDateFinal"
+                            ></p-calendar>
+                        </div>
                     </div>
                 </div>
-                <div class="ui-g">
-                    <div class="ui-g-1" style="margin-top: 6px">
-                        <b>по</b>
-                    </div>
-                    <div class="ui-g-8">
-                        <p-calendar
-                            [monthNavigator]="true"
-                            [yearNavigator]="true"
-                            [yearRange]="years"
-                            [locale]="ru"
-                            [showButtonBar]="true"
-                            [showIcon]="true"
-                            [dateFormat]="'dd.mm.yy'"
-                            [(ngModel)]="docService.docFilter.passingDateFinal"
-                        ></p-calendar>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <br>
-
-        <div class="ui-g ui-fluid">
-            <div class="ui-g-12 ui-md-8 ui-lg-6">
-                <h6 class="first">
-                    <b>Сортировка</b>
-                </h6>
-                <div class="ui-g">
-                    <div class="ui-g-4" style="margin-top: 6px">
-                        <b>Столбец</b>
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                    <h6 class="first">
+                        <b>Дата оплаты</b>
+                    </h6>
+                    <div class="ui-g">
+                        <div class="ui-g-1" style="margin-top: 6px">
+                            <b>с</b>
+                        </div>
+                        <div class="ui-g-8">
+                            <p-calendar
+                                [monthNavigator]="true"
+                                [yearNavigator]="true"
+                                [yearRange]="years"
+                                [locale]="ru"
+                                [showButtonBar]="true"
+                                [showIcon]="true"
+                                [dateFormat]="'dd.mm.yy'"
+                                formControlName="paymentDateStart"
+                            ></p-calendar>
+                        </div>
                     </div>
-                    <div class="ui-g-8">
-                        <p-dropdown
-                            [options]="columns"
-                            [style]="{'width':'90%'}"
-                            optionLabel="header"
-                            [autoWidth]="false"
-                            [showClear]="false"
-                            [(ngModel)]="docService.docFilter.selectedSortField"
-                        ></p-dropdown>
+                    <div class="ui-g">
+                        <div class="ui-g-1" style="margin-top: 6px">
+                            <b>по</b>
+                        </div>
+                        <div class="ui-g-8">
+                            <p-calendar
+                                [monthNavigator]="true"
+                                [yearNavigator]="true"
+                                [yearRange]="years"
+                                [locale]="ru"
+                                [showButtonBar]="true"
+                                [showIcon]="true"
+                                [dateFormat]="'dd.mm.yy'"
+                                formControlName="paymentDateFinal"
+                            ></p-calendar>
+                        </div>
                     </div>
                 </div>
-                <div class="ui-g">
-                    <div class="ui-g-4" style="margin-top: 6px">
-                        <b>Тип сортировки</b>
+
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                    <h6 class="first">
+                        <b>Дата передачи</b>
+                    </h6>
+                    <div class="ui-g">
+                        <div class="ui-g-1" style="margin-top: 6px">
+                            <b>с</b>
+                        </div>
+                        <div class="ui-g-8">
+                            <p-calendar
+                                [monthNavigator]="true"
+                                [yearNavigator]="true"
+                                [yearRange]="years"
+                                [locale]="ru"
+                                [showButtonBar]="true"
+                                [showIcon]="true"
+                                [dateFormat]="'dd.mm.yy'"
+                                formControlName="passingDateStart"
+                            ></p-calendar>
+                        </div>
                     </div>
-                    <div class="ui-g-8">
-                        <p-dropdown
-                            [options]="sortTypes"
-                            [style]="{'width':'90%'}"
-                            [autoWidth]="false"
-                            [showClear]="false"
-                            [(ngModel)]="docService.docFilter.selectedSortType"
-                        ></p-dropdown>
+                    <div class="ui-g">
+                        <div class="ui-g-1" style="margin-top: 6px">
+                            <b>по</b>
+                        </div>
+                        <div class="ui-g-8">
+                            <p-calendar
+                                [monthNavigator]="true"
+                                [yearNavigator]="true"
+                                [yearRange]="years"
+                                [locale]="ru"
+                                [showButtonBar]="true"
+                                [showIcon]="true"
+                                [dateFormat]="'dd.mm.yy'"
+                                formControlName="passingDateFinal"
+                            ></p-calendar>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <br>
+            <br>
 
-
-        <div class="ui-g">
-            <div class="ui-g-12 ui-md-6"></div>
-            <div class="ui-g-12 ui-md-2">
-                <button
-                    pButton type="button"
-                    class="ui-button-raised ui-button-info button-block-right"
-                    icon="fa fa-filter"
-                    label="Фильтровать"
-                    (click)="useFilter('id', 'asc')"
-                ></button>
+            <div class="ui-g ui-fluid">
+                <div class="ui-g-12 ui-md-8 ui-lg-6">
+                    <h6 class="first">
+                        <b>Сортировка</b>
+                    </h6>
+                    <div class="ui-g">
+                        <div class="ui-g-4" style="margin-top: 6px">
+                            <b>Столбец</b>
+                        </div>
+                        <div class="ui-g-8">
+                            <p-dropdown
+                                [options]="columns"
+                                [style]="{'width':'90%'}"
+                                optionLabel="header"
+                                [autoWidth]="false"
+                                [showClear]="false"
+                                formControlName="selectedSortField"
+                            ></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="ui-g">
+                        <div class="ui-g-4" style="margin-top: 6px">
+                            <b>Тип сортировки</b>
+                        </div>
+                        <div class="ui-g-8">
+                            <p-dropdown
+                                [options]="sortTypes"
+                                [style]="{'width':'90%'}"
+                                [autoWidth]="false"
+                                [showClear]="false"
+                                formControlName="selectedSortType"
+                            ></p-dropdown>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="ui-g-12 ui-md-2">
-                <button
-                    pButton type="button"
-                    class="ui-button-raised ui-button-success button-block-right"
-                    icon="fa fa-trash"
-                    label="Очистить"
-                    (click)="clearFilter()"
-                ></button>
-            </div>
-            <div class="ui-g-12 ui-md-2">
-                <button
-                    pButton type="button"
-                    class="ui-button-raised ui-button-danger button-block-right"
-                    icon="fa fa-times"
-                    label="Закрыть"
-                    (click)="changeFilterState()"
-                ></button>
-            </div>
-        </div>
 
+            <br>
+
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-6"></div>
+                <div class="ui-g-12 ui-md-2">
+                    <button
+                        pButton type="submit"
+                        class="ui-button-raised ui-button-info button-block-right"
+                        icon="fa fa-filter"
+                        label="Фильтровать"
+                    ></button>
+                </div>
+                <div class="ui-g-12 ui-md-2">
+                    <button
+                        pButton type="button"
+                        class="ui-button-raised ui-button-success button-block-right"
+                        icon="fa fa-trash"
+                        label="Очистить"
+                        (click)="clearFilter()"
+                    ></button>
+                </div>
+                <div class="ui-g-12 ui-md-2">
+                    <button
+                        pButton type="button"
+                        class="ui-button-raised ui-button-danger button-block-right"
+                        icon="fa fa-times"
+                        label="Закрыть"
+                        (click)="changeFilterState()"
+                    ></button>
+                </div>
+            </div>
+        </form>
     </p-card>
 </p>
 

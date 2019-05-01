@@ -9,7 +9,8 @@ import {DocumentStatusService} from 'app/services/document-status.service';
 import {ClientService} from 'app/services/client.service';
 import {MenuItem, SortEvent, SelectItem} from 'primeng/api';
 import {Client} from 'app/models/Client';
-import {UtilService} from "../../services/util.service";
+import {UtilService} from "app/services/util.service";
+import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
     selector: 'app-documents',
@@ -17,7 +18,6 @@ import {UtilService} from "../../services/util.service";
     styleUrls: ['./documents.component.css']
 })
 export class DocumentsComponent implements OnInit {
-
     clients: Client[] = [];
     documents: Document[] = [];
     docTypes: DocumentType[] = [];
@@ -30,25 +30,31 @@ export class DocumentsComponent implements OnInit {
     selectedSortField: any = '';
     years: string;
     ru: any;
+    filterForm: FormGroup;
 
     constructor(public docService: DocumentService,
                 private docTypeService: DocumentTypeService,
                 private docStatusService: DocumentStatusService,
                 private clientService: ClientService,
-                private router: Router) {
+                private router: Router,
+                private formBuilder: FormBuilder) {
+        this.initFilterForm();
+        this.initColumns();
+        this.initSortTypes();
         this.ru = UtilService.getCalendarLocalSet();
         this.years = UtilService.getCalendarYears(5);
     }
 
     ngOnInit() {
         this.loadingState = true;
-        this.initColumns();
-        this.getDocumentTypes();
-        this.getDocumentStatuses();
-        this.getClients();
-        // this.getDocuments();
+        this.takeFilterState();
+        this.fetchData();
         this.useFilter("id", "asc");
-        this.initSortTypes();
+    }
+
+    onSubmit() {
+        this.saveFilterState();
+        this.useFilter("id", "asc");
     }
 
     private getDocuments() {
@@ -71,30 +77,31 @@ export class DocumentsComponent implements OnInit {
             );
     }
 
+    private takeFilterState() {
+        this.filterForm.controls.selectedClients.setValue(this.docService.getSelectedClients());
+        this.filterForm.controls.selectedDocTypes.setValue(this.docService.getSelectedDocTypes());
+        this.filterForm.controls.selectedDocStatuses.setValue(this.docService.getSelectedDocStatuses());
+    }
+
+    private saveFilterState() {
+        this.docService.setSelectedDocTypes(this.filterForm.controls.selectedDocTypes.value);
+        this.docService.setSelectedDocStatuses(this.filterForm.controls.selectedDocStatuses.value);
+        this.docService.setSelectedClients(this.filterForm.controls.selectedClients.value);
+    }
+
     customSort(event: SortEvent) {
         let sortField = event.field;
         let sortType = (event.order == 1 ? "asc" : "desc");
         this.useFilter(sortField, sortType)
     }
 
-    private getDocumentTypes() {
-        this.docTypeService.getDocumentTypes()
-            .subscribe(
-                docTypes => this.docTypes = docTypes
-            );
-    }
-
-    private getDocumentStatuses() {
-        this.docStatusService.getDocumentStatuses()
-            .subscribe(
-                docStatuses => this.docStatuses = docStatuses
-            );
-    }
-
-    private getClients() {
-        return this.clientService.fetchClients().subscribe(
-            clients => this.clients = clients
-        );
+    private async fetchData() {
+        let clientsPromise = this.clientService.fetchClients().toPromise();
+        let docTypesPromise = this.docTypeService.getDocumentTypes().toPromise();
+        let docDocStatusesPromise = this.docStatusService.getDocumentStatuses().toPromise();
+        this.docTypes = await docTypesPromise;
+        this.docStatuses = await docDocStatusesPromise;
+        this.clients = await clientsPromise;
     }
 
     private initColumns() {
@@ -109,6 +116,22 @@ export class DocumentsComponent implements OnInit {
             {field: 'passingDate', header: 'Дата передачи', colStyle: 'text-align:center'}
         ];
         this.selectedSortField = this.columns[0];
+    }
+
+    private initFilterForm() {
+        this.filterForm = this.formBuilder.group({
+            selectedClients: [''],
+            selectedDocTypes: [''],
+            selectedDocStatuses: [''],
+            docDateStart: [''],
+            docDateFinal: [''],
+            paymentDateStart: [''],
+            paymentDateFinal: [''],
+            passingDateStart: [''],
+            passingDateFinal: [''],
+            selectedSortField: [''],
+            selectedSortType: [''],
+        });
     }
 
     private initSortTypes() {
@@ -131,8 +154,8 @@ export class DocumentsComponent implements OnInit {
         this.docService.setSelectedClients([]);
         this.docService.setSelectedDocTypes([]);
         this.docService.setSelectedDocStatuses([]);
+        this.takeFilterState();
         this.useFilter("id", "asc");
-
     }
 
     changeFilterState() {
@@ -142,4 +165,5 @@ export class DocumentsComponent implements OnInit {
     refresh() {
         this.ngOnInit();
     }
+
 }
