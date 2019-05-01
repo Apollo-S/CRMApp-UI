@@ -10,15 +10,14 @@ import {Subscription} from "rxjs";
     styleUrls: ['./client-details.component.css']
 })
 export class ClientDetailsComponent implements OnInit, OnDestroy {
-    private subscription: Subscription;
+    private subscription: Subscription = new Subscription();
     clientId: number;
-    client: Client = {};
+    client: Client = new Client();
     loadingState: boolean;
 
     constructor(private clientService: ClientService,
                 private route: ActivatedRoute) {
         this.clientId = +route.snapshot.params.id;
-
     }
 
     ngOnInit() {
@@ -28,7 +27,8 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
         });
     }
 
-    ngOnDestroy(): void {
+    ngOnDestroy() {
+        // this.clientService.setCurrentClient(new Client());
         this.subscription.unsubscribe();
     }
 
@@ -41,6 +41,5 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
                 }
             );
     }
-
 
 }

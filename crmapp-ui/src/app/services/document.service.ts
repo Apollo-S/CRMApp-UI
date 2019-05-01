@@ -37,7 +37,7 @@ export class DocumentService extends BaseService{
         super(router, messageService);
         this.documentsUrl = appConst.baseUrl + appConst.documentsUrl + '/';
         this.headers = appConst.headersJSON;
-        this.docFilter = <DocumentFilter>{
+        this.docFilter = {
             filterState: false,
             selectedDocStatuses: [],
             selectedClients: [],

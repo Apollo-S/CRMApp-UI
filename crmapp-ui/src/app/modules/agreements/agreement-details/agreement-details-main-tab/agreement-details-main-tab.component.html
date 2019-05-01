@@ -21,14 +21,22 @@
         </p-card>
     </div>
     <div class="ui-g-2">
-        <button pButton type="button" label="Изменить"
-                class="ui-button-success btn-block" icon="fa fa-edit"
-                [routerLink]="['edit']">
-        </button>
-        <button pButton type="button" label="Удалить"
-                class="ui-button-danger btn-block" icon="fa fa-trash-o"
-                (click)="confirmDeleting()">
-        </button>
+        <button
+                pButton
+                type="button"
+                label="Изменить"
+                class="ui-button-success btn-block"
+                icon="fa fa-edit"
+                [routerLink]="['edit']"
+        ></button>
+        <button
+                pButton
+                type="button"
+                label="Удалить"
+                class="ui-button-danger btn-block"
+                icon="fa fa-trash-o"
+                (click)="confirmDeleting()"
+        ></button>
     </div>
 </div>
 

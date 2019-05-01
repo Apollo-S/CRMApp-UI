@@ -24,7 +24,6 @@ export class ClientDetailsDirectorsTabComponent implements OnInit, OnDestroy {
         this.loading = true;
         this.subscription = this.clientService.getCurrentClient().subscribe(client => {
             this.client = client;
-            //     this.getDirectors().then(() => this.loading = false);
             try{
                 this.clientService.fetchDirectorsByClientId(client.id)
                     .subscribe(directors => {
