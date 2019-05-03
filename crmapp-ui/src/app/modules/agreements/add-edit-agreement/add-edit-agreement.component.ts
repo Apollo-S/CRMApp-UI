@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {BehaviorSubject, Subscription} from "rxjs";
+import {Subscription} from "rxjs";
 import {ClientAgreement} from "app/models/ClientAgreement";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Client} from "app/models/Client";
@@ -51,9 +51,12 @@ export class AddEditAgreementComponent implements OnInit, OnDestroy {
                     });
             } else {
                 this.initDisabledTabs();
-                this.agreementForm.controls.client.setValue(this.clientService.getCurrentClient());
-                this.agreementForm.controls.dateStart.setValue(new Date());
-                this.loadingState = false;
+                this.clientService.getCurrentClient().subscribe(
+                    client => {
+                        this.agreementForm.controls.client.setValue(client);
+                        this.agreementForm.controls.dateStart.setValue(new Date());
+                        this.loadingState = false;
+                    });
             }
         });
     }
