@@ -19,6 +19,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { FieldsetModule } from 'primeng/fieldset';
 import { GrowlModule } from 'primeng/growl';
 import { InplaceModule } from 'primeng/inplace';
+import { InputMaskModule } from 'primeng/inputmask';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputSwitchModule } from 'primeng/inputswitch';
@@ -202,6 +203,7 @@ import { AddEditAgreementComponent } from './modules/agreements/add-edit-agreeme
     GrowlModule,
     FieldsetModule,
     InplaceModule,
+    InputMaskModule,
     InputTextareaModule,
     InputTextModule, 
     InputSwitchModule,
