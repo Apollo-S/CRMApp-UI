@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ClientAccount} from '../../../../models/ClientAccount';
-import {ClientService} from '../../../../services/client.service';
-import {Client} from '../../../../models/Client';
+import {ClientAccount} from 'app/models/ClientAccount';
+import {ClientService} from 'app/services/client.service';
+import {Client} from 'app/models/Client';
 import {Subscription} from "rxjs";
 
 @Component({
@@ -24,7 +24,9 @@ export class ClientDetailsAccountsTabComponent implements OnInit, OnDestroy {
         this.loading = true;
         this.subscription = this.clientService.getCurrentClient().subscribe(client => {
             this.client = client;
-            this.getAccounts().then(() => this.loading = false);
+            if (client.id !== undefined) {
+                this.getAccounts().then(() => this.loading = false);
+            }
         });
     }
 

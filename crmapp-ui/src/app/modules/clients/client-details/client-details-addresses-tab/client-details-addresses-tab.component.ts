@@ -26,33 +26,22 @@ export class ClientDetailsAddressesTabComponent implements OnInit, OnDestroy {
         this.subscription = this.clientService.getCurrentClient()
             .subscribe(client => {
                 this.client = client;
-                try {
-                    this.clientService.fetchAddressesByClientId(this.client.id)
-                        .subscribe(addresses => {
-                            this.addresses = addresses;
-                            this.loading = false;
-                        })
-                } catch (e) {
-                    this.loading = false;
+                if (client.id !== undefined) {
+                    try {
+                        this.clientService.fetchAddressesByClientId(this.client.id)
+                            .subscribe(addresses => {
+                                this.addresses = addresses;
+                                this.loading = false;
+                            })
+                    } catch (e) {
+                        this.loading = false;
+                    }
                 }
             });
     }
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
-    }
-
-    getAddresses() {
-        try {
-            this.clientService.fetchAddressesByClientId(this.client.id).toPromise()
-                .then(addresses => this.addresses = addresses)
-        } catch {
-            console.log("Catch block")
-            this.loading = false;
-        } finally {
-            console.log("Finally block")
-            this.loading = false;
-        }
     }
 
     private initColumns(): void {

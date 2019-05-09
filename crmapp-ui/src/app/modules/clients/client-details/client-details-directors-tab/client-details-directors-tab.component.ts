@@ -24,25 +24,23 @@ export class ClientDetailsDirectorsTabComponent implements OnInit, OnDestroy {
         this.loading = true;
         this.subscription = this.clientService.getCurrentClient().subscribe(client => {
             this.client = client;
-            try{
-                this.clientService.fetchDirectorsByClientId(client.id)
-                    .subscribe(directors => {
-                        this.directors = directors;
-                        this.loading = false;
-                    })
+            if (client.id !== undefined) {
+                try {
+                    this.clientService.fetchDirectorsByClientId(client.id)
+                        .subscribe(directors => {
+                            this.directors = directors;
+                            this.loading = false;
+                        })
                 } catch (e) {
                     console.log("Catch block error", e);
                     this.loading = false;
                 }
+            }
         });
     }
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
-    }
-
-    async getDirectors() {
-        this.directors = await this.clientService.fetchDirectorsByClientId(this.client.id).toPromise();
     }
 
     private initColumns() {

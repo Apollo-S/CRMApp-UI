@@ -24,16 +24,22 @@ export class ClientDetailsAgreementsTabComponent implements OnInit, OnDestroy {
         this.loading = true;
         this.subscription = this.clientService.getCurrentClient().subscribe(client => {
             this.client = client;
-            this.getAgreements().then(() => this.loading = false);
+            if (client.id !== undefined) {
+                try {
+                    this.clientService.fetchAgreementsByClientId(this.client.id)
+                        .subscribe(agreements => {
+                            this.agreements = agreements;
+                            this.loading = false;
+                        })
+                } catch (e) {
+                    this.loading = false;
+                }
+            }
         });
     }
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
-    }
-
-    async getAgreements() {
-        this.agreements = await this.clientService.fetchAgreementsByClientId(this.client.id).toPromise();
     }
 
     private initColumns(): void {
