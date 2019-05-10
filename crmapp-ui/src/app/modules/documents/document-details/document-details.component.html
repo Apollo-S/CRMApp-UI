@@ -1,11 +1,11 @@
 <div class="ui-g">
     <div class="ui-g-4">
         <button
-            pButton type="button"
-            label="Вернуться"
-            class="ui-button-info"
-            icon="fa fa-arrow-circle-o-left"
-            routerLink="../"
+                pButton type="button"
+                label="Вернуться"
+                class="ui-button-info"
+                icon="fa fa-arrow-circle-o-left"
+                routerLink="../"
         ></button>
     </div>
     <div class="ui-g-8" *ngIf="loadingState">
@@ -18,7 +18,7 @@
             <b>
                 <ins *ngIf="!isNew">
                     {{document?.docType?.title + ' № '}} {{document?.number + ' от '}} {{document?.dated | date:
-                    'dd.MM.y' + 'г.'}}
+                'dd.MM.y' + 'г.'}}
                 </ins>
                 <ins *ngIf="isNew">
                     Добавление нового документа
@@ -44,18 +44,20 @@
                                 <b>Тип документа:*</b>
                             </div>
                             <div class="ui-grid-col-6">
-                                <p-dropdown [options]="docTypes"
-                                            [showClear]="false"
-                                            [autoWidth]="false"
-                                            placeholder="..."
-                                            optionLabel="title"
-                                            formControlName="docType"
+                                <p-dropdown
+                                        [options]="docTypes"
+                                        [showClear]="false"
+                                        [autoWidth]="false"
+                                        placeholder="..."
+                                        optionLabel="title"
+                                        formControlName="docType"
                                 ></p-dropdown>
                             </div>
                             <div class="ui-grid-col-3">
-                                <p-message severity="error"
-                                           text="Обязательное поле"
-                                           *ngIf="documentForm.controls['docType'].invalid"
+                                <p-message
+                                        severity="error"
+                                        text="Обязательное поле"
+                                        *ngIf="documentForm.controls['docType'].invalid"
                                 ></p-message>
                             </div>
                         </div>
@@ -64,19 +66,21 @@
                                 <b>Контрагент:*</b>
                             </div>
                             <div class="ui-grid-col-6">
-                                <p-dropdown [options]="clients"
-                                            [showClear]="false"
-                                            [autoWidth]="false"
-                                            placeholder="..."
-                                            optionLabel="title"
-                                            formControlName="client"
-                                            (onChange)="changeClient($event)"
+                                <p-dropdown
+                                        [options]="clients"
+                                        [showClear]="false"
+                                        [autoWidth]="false"
+                                        placeholder="..."
+                                        optionLabel="title"
+                                        formControlName="client"
+                                        (onChange)="changeClient($event)"
                                 ></p-dropdown>
                             </div>
                             <div class="ui-grid-col-3">
-                                <p-message severity="error"
-                                           text="Выберите клиента"
-                                           *ngIf="documentForm.controls['client'].invalid"
+                                <p-message
+                                        severity="error"
+                                        text="Выберите клиента"
+                                        *ngIf="documentForm.controls['client'].invalid"
                                 ></p-message>
                             </div>
                         </div>
@@ -85,18 +89,20 @@
                                 <b>Договор:*</b>
                             </div>
                             <div class="ui-grid-col-6">
-                                <p-dropdown [options]="agreements"
-                                            [showClear]="false"
-                                            [autoWidth]="false"
-                                            placeholder="..."
-                                            optionLabel="number"
-                                            formControlName="agreement"
+                                <p-dropdown
+                                        [options]="agreements"
+                                        [showClear]="false"
+                                        [autoWidth]="false"
+                                        placeholder="..."
+                                        optionLabel="number"
+                                        formControlName="agreement"
                                 ></p-dropdown>
                             </div>
                             <div class="ui-grid-col-3">
-                                <p-message severity="error"
-                                           text="Выберите договор"
-                                           *ngIf="documentForm.controls['agreement'].invalid"
+                                <p-message
+                                        severity="error"
+                                        text="Выберите договор"
+                                        *ngIf="documentForm.controls['agreement'].invalid"
                                 ></p-message>
                             </div>
                         </div>
@@ -105,8 +111,10 @@
                                 <b>Номер:</b>
                             </div>
                             <div class="ui-grid-col-3">
-                                <input pInputText type="text"
-                                       formControlName="number"
+                                <input
+                                        pInputText
+                                        type="text"
+                                        formControlName="number"
                                 >
                             </div>
                             <div class="ui-grid-col-6"></div>
@@ -116,22 +124,24 @@
                                 <b>Дата документа:*</b>
                             </div>
                             <div class="ui-grid-col-3">
-                                <p-calendar [monthNavigator]="true"
-                                            [yearNavigator]="true"
-                                            [yearRange]="years"
-                                            [locale]="ru"
-                                            [showButtonBar]="true"
-                                            [showIcon]="true"
-                                            [dateFormat]="'dd.mm.yy'"
-                                            placeholder="..."
-                                            formControlName="dated"
+                                <p-calendar
+                                        [monthNavigator]="true"
+                                        [yearNavigator]="true"
+                                        [yearRange]="years"
+                                        [locale]="ru"
+                                        [showButtonBar]="true"
+                                        [showIcon]="true"
+                                        [dateFormat]="'dd.mm.yy'"
+                                        placeholder="..."
+                                        formControlName="dated"
                                 ></p-calendar>
                             </div>
                             <div class="ui-grid-col-3"></div>
                             <div class="ui-grid-col-3">
-                                <p-message severity="error"
-                                           text="Обязательное поле"
-                                           *ngIf="documentForm.controls['dated'].invalid"
+                                <p-message
+                                        severity="error"
+                                        text="Обязательное поле"
+                                        *ngIf="documentForm.controls['dated'].invalid"
                                 ></p-message>
                             </div>
                         </div>
@@ -140,7 +150,9 @@
                                 <b>Сумма:</b>
                             </div>
                             <div class="ui-grid-col-6">
-                                <input pInputText type="text" [pKeyFilter]="'money'"
+                                <input pInputText
+                                       type="text"
+                                       [pKeyFilter]="'money'"
                                        [value]="documentForm.get('amount').value | number:'1.2-2'"
                                        formControlName="amount"
                                 >
@@ -151,18 +163,20 @@
                                 <b>Статус:</b>
                             </div>
                             <div class="ui-grid-col-6">
-                                <p-dropdown [options]="docStatuses"
-                                            [showClear]="false"
-                                            [autoWidth]="false"
-                                            placeholder="..."
-                                            optionLabel="status"
-                                            formControlName="status"
+                                <p-dropdown
+                                        [options]="docStatuses"
+                                        [showClear]="false"
+                                        [autoWidth]="false"
+                                        placeholder="..."
+                                        optionLabel="status"
+                                        formControlName="status"
                                 ></p-dropdown>
                             </div>
                             <div class="ui-grid-col-3">
-                                <p-message severity="error"
-                                           text="Обязательное поле"
-                                           *ngIf="documentForm.controls['status'].invalid"
+                                <p-message
+                                        severity="error"
+                                        text="Обязательное поле"
+                                        *ngIf="documentForm.controls['status'].invalid"
                                 ></p-message>
                             </div>
                         </div>
@@ -172,15 +186,15 @@
                             </div>
                             <div class="ui-grid-col-3">
                                 <p-calendar
-                                    [monthNavigator]="true"
-                                    [yearNavigator]="true"
-                                    [yearRange]="years"
-                                    [locale]="ru"
-                                    [showButtonBar]="true"
-                                    [showIcon]="true"
-                                    [dateFormat]="'dd.mm.yy'"
-                                    placeholder="..."
-                                    formControlName="paymentDate"
+                                        [monthNavigator]="true"
+                                        [yearNavigator]="true"
+                                        [yearRange]="years"
+                                        [locale]="ru"
+                                        [showButtonBar]="true"
+                                        [showIcon]="true"
+                                        [dateFormat]="'dd.mm.yy'"
+                                        placeholder="..."
+                                        formControlName="paymentDate"
                                 ></p-calendar>
                             </div>
                             <div class="ui-grid-col-3"></div>
@@ -212,10 +226,10 @@
                             </div>
                             <div class="ui-grid-col-6">
                                 <textarea
-                                    pInputTextarea
-                                    rows="5"
-                                    cols="30"
-                                    formControlName="comment"
+                                        pInputTextarea
+                                        rows="5"
+                                        cols="30"
+                                        formControlName="comment"
                                 ></textarea>
                             </div>
                         </div>
@@ -223,19 +237,22 @@
                 </p-card>
             </div>
             <div class="ui-g-2">
-                <button pButton type="submit"
+                <button
+                        pButton
+                        type="submit"
                         class="ui-button-success btn-block"
                         icon="fa fa-check-square-o"
                         label="Сохранить"
                         [disabled]="!documentForm.valid"
                 ></button>
                 <button
-                    style="margin-top:10px"
-                    pButton type="button"
-                    label="Удалить"
-                    class="ui-button-danger btn-block"
-                    icon="fa fa-trash-o"
-                    (click)="confirmDeleting()"
+                        pButton
+                        style="margin-top:10px"
+                        type="button"
+                        label="Удалить"
+                        class="ui-button-danger btn-block"
+                        icon="fa fa-trash-o"
+                        (click)="confirmDeleting()"
                 ></button>
             </div>
         </form>
@@ -246,18 +263,20 @@
 <p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" #cd>
     <p-footer>
         <button
-            type="button" pButton
-            icon="fa fa-check"
-            class="ui-button-primary"
-            label="Ок"
-            (click)="cd.accept()"
+                pButton
+                type="button"
+                icon="fa fa-check"
+                class="ui-button-primary"
+                label="Ок"
+                (click)="cd.accept()"
         ></button>
         <button
-            type="button" pButton
-            icon="fa fa-close"
-            class="ui-button-secondary"
-            label="Отмена"
-            (click)="cd.reject()"
+                pButton
+                type="button"
+                icon="fa fa-close"
+                class="ui-button-secondary"
+                label="Отмена"
+                (click)="cd.reject()"
         ></button>
     </p-footer>
 </p-confirmDialog>
