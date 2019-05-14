@@ -11,6 +11,7 @@ import {MenuItem, SortEvent, SelectItem} from 'primeng/api';
 import {Client} from 'app/models/Client';
 import {UtilService} from "app/services/util.service";
 import {FormBuilder, FormGroup} from "@angular/forms";
+import {DocumentFilter} from "app/models/DocumentFilter";
 
 @Component({
     selector: 'app-documents',
@@ -65,10 +66,15 @@ export class DocumentsComponent implements OnInit {
     }
 
     useFilter(sortField: string, sortType: string) {
-        let docTypeIDs: number[] = this.docService.getIDs(this.docService.getSelectedDocTypes());
-        let docStatusIDs: number[] = this.docService.getIDs(this.docService.getSelectedDocStatuses());
-        let clientIDs: number[] = this.docService.getIDs(this.docService.getSelectedClients());
-        this.docService.getDocumentsAccordingFilter(docTypeIDs, docStatusIDs, clientIDs, sortField, sortType)
+        let body: DocumentFilter = {};
+        body.selectedDocTypes = this.docService.getIDs(this.docService.getSelectedDocTypes());
+        body.selectedDocStatuses = this.docService.getIDs(this.docService.getSelectedDocStatuses());
+        body.selectedClients = this.docService.getIDs(this.docService.getSelectedClients());
+        body.datedStart = this.docService.getDatedStart();
+        body.datedFinal = this.docService.getDatedFinal();
+        body.selectedSortField = sortField;
+        body.selectedSortType = sortType;
+        this.docService.getDocumentsAccordingFilter(body)
             .subscribe(
                 documents => {
                     this.documents = documents;
@@ -81,12 +87,16 @@ export class DocumentsComponent implements OnInit {
         this.filterForm.controls.selectedClients.setValue(this.docService.getSelectedClients());
         this.filterForm.controls.selectedDocTypes.setValue(this.docService.getSelectedDocTypes());
         this.filterForm.controls.selectedDocStatuses.setValue(this.docService.getSelectedDocStatuses());
+        this.filterForm.controls.datedStart.setValue(this.docService.getDatedStart());
+        this.filterForm.controls.datedFinal.setValue(this.docService.getDatedFinal());
     }
 
     private saveFilterState() {
         this.docService.setSelectedDocTypes(this.filterForm.controls.selectedDocTypes.value);
         this.docService.setSelectedDocStatuses(this.filterForm.controls.selectedDocStatuses.value);
         this.docService.setSelectedClients(this.filterForm.controls.selectedClients.value);
+        this.docService.setDatedStart(this.filterForm.controls.datedStart.value);
+        this.docService.setDatedFinal(this.filterForm.controls.datedFinal.value);
     }
 
     customSort(event: SortEvent) {
@@ -154,6 +164,8 @@ export class DocumentsComponent implements OnInit {
         this.docService.setSelectedClients([]);
         this.docService.setSelectedDocTypes([]);
         this.docService.setSelectedDocStatuses([]);
+        this.docService.setDatedStart(null);
+        this.docService.setDatedFinal(null);
         this.takeFilterState();
         this.useFilter("id", "asc");
     }
