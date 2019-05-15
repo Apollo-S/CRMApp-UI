@@ -110,12 +110,12 @@ export class DocumentService extends BaseService{
         return this.http.get<Document[]>(this.documentsUrl, {headers: this.headers})
     }
 
-    // getDocumentsAccordingFilter(docTypes: number[], docStatuses: number[], clients: number[],
-    //                             datedStart: Date, datedFinal: Date,
-    //                             sortField: string, sortType: string) {
-    getDocumentsAccordingFilter(body: DocumentFilter) {
+    getDocumentsAccordingFilter(docTypes: number[], docStatuses: number[], clients: number[],
+                                datedStart: Date, datedFinal: Date,
+                                sortField: string, sortType: string) {
         const url = this.documentsUrl + 'filter/';
-        // let body = {docTypes, docStatuses, clients, sortField, sortType};
+        let body = {docTypes, docStatuses, clients, datedStart, datedFinal, sortField, sortType};
+        debugger;
         return this.http.post<Document[]>(url, body ,{headers: this.headers})
             .pipe(catchError(this.handleError<Document[]>(
                 'Ошибка при получении списка документов!'

@@ -1,10 +1,10 @@
 export class DocumentFilter {
-    filterState?: boolean;
-    selectedDocTypes?: any[];
-    selectedDocStatuses?: any[];
-    selectedClients?: any[];
-    selectedSortType?: string;
-    selectedSortField?: string;
-    datedStart?: Date;
-    datedFinal?: Date;
+    public filterState?: boolean;
+    public selectedDocTypes?: any[];
+    public selectedDocStatuses?: any[];
+    public selectedClients?: any[];
+    public selectedSortType?: string;
+    public selectedSortField?: string;
+    public datedStart?: Date;
+    public datedFinal?: Date;
 }

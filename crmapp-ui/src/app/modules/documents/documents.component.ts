@@ -11,7 +11,6 @@ import {MenuItem, SortEvent, SelectItem} from 'primeng/api';
 import {Client} from 'app/models/Client';
 import {UtilService} from "app/services/util.service";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {DocumentFilter} from "app/models/DocumentFilter";
 
 @Component({
     selector: 'app-documents',
@@ -66,15 +65,12 @@ export class DocumentsComponent implements OnInit {
     }
 
     useFilter(sortField: string, sortType: string) {
-        let body: DocumentFilter = {};
-        body.selectedDocTypes = this.docService.getIDs(this.docService.getSelectedDocTypes());
-        body.selectedDocStatuses = this.docService.getIDs(this.docService.getSelectedDocStatuses());
-        body.selectedClients = this.docService.getIDs(this.docService.getSelectedClients());
-        body.datedStart = this.docService.getDatedStart();
-        body.datedFinal = this.docService.getDatedFinal();
-        body.selectedSortField = sortField;
-        body.selectedSortType = sortType;
-        this.docService.getDocumentsAccordingFilter(body)
+        let docTypeIDs: number[] = this.docService.getIDs(this.docService.getSelectedDocTypes());
+        let docStatusIDs: number[] = this.docService.getIDs(this.docService.getSelectedDocStatuses());
+        let clientIDs: number[] = this.docService.getIDs(this.docService.getSelectedClients());
+        let datedStart: Date = this.docService.getDatedStart();
+        let datedFinal: Date = this.docService.getDatedFinal();
+        this.docService.getDocumentsAccordingFilter(docTypeIDs, docStatusIDs, clientIDs, datedStart, datedFinal, sortField, sortType)
             .subscribe(
                 documents => {
                     this.documents = documents;
@@ -133,8 +129,8 @@ export class DocumentsComponent implements OnInit {
             selectedClients: [''],
             selectedDocTypes: [''],
             selectedDocStatuses: [''],
-            docDateStart: [''],
-            docDateFinal: [''],
+            datedStart: [''],
+            datedFinal: [''],
             paymentDateStart: [''],
             paymentDateFinal: [''],
             passingDateStart: [''],
