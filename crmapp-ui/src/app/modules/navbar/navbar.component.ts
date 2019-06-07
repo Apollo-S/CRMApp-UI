@@ -42,9 +42,11 @@ export class NavbarComponent implements OnInit {
     
     private initCategories() {
         this.panelMenuItems = [
-        { label: 'Клиенты', icon: 'fa fa-folder-o', expanded: false, visible: true, items: 
+        { label: 'Контрагенты', icon: 'fa fa-folder-o', expanded: false, visible: true, items:
             [
-                { label: 'Все клиенты', icon: 'fa fa-asterisk', routerLink: '/clients', visible: true },
+                { label: 'Клиенты', icon: 'fa fa-asterisk', routerLink: '/clients', visible: true },
+                { label: 'Поставщики', icon: 'fa fa-asterisk', routerLink: '/suppliers', visible: true },
+                { label: 'Наши компании', icon: 'fa fa-asterisk', routerLink: '/our-companies', visible: true },
             ]
         },
         { label: 'Документооборот', icon: 'fa fa-folder', expanded: false, visible: true, items: 

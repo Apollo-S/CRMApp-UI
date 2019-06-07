@@ -85,6 +85,7 @@ export class AddEditAccountComponent implements OnInit {
     private save() {
         let msg = 'Счет для ' + this.getClient().code;
         let account: ClientAccount = new ClientAccount();
+        account.client = this.getClient();
         account.number = this.accountForm.controls.number.value;
         account.bankName = this.accountForm.controls.bankName.value;
         account.mfo = this.accountForm.controls.mfo.value;
