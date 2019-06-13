@@ -1,9 +1,11 @@
 import {BaseModel} from "./BaseModel";
+import {Bank} from "./Bank";
+import {CurrencyType} from "./CurrencyType";
 
 export abstract class Account extends BaseModel {
     number?: string;
-    bankName?: string;
-    mfo?: string;
+    bank?: Bank;
+    currencyType?: CurrencyType;
     presentation?: string;
     dateStart?: Date;
 }

@@ -16,49 +16,61 @@
                             <b>Номер счета:</b>
                         </div>
                         <div class="ui-grid-col-6">
-                            <input pInputText
-                                   type="text"
-                                   formControlName="number"
+                            <input
+                                    pInputText
+                                    type="text"
+                                    formControlName="number"
                             >
                         </div>
                         <div class="ui-grid-col-3">
-                            <p-message severity="error"
-                                       text="Необходимо ввести номер счета!"
-                                       *ngIf="!accountForm.controls['number'].valid&&accountForm.controls['number'].dirty">
+                            <p-message
+                                    severity="error"
+                                    text="Необходимо ввести номер счета!"
+                                    *ngIf="accountForm.controls['number'].invalid&&accountForm.controls['number'].dirty">
                             </p-message>
                         </div>
                     </div>
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-3">
-                            <b>Наименование банка:</b>
+                            <b>Банк:</b>
                         </div>
                         <div class="ui-grid-col-6">
-                            <input pInputText
-                                   type="text"
-                                   formControlName="bankName"
-                            >
+                            <p-dropdown
+                                    [options]="banks"
+                                    [showClear]="false"
+                                    [autoWidth]="false"
+                                    placeholder="Выберите банк"
+                                    optionLabel="title"
+                                    formControlName="bank"
+                            ></p-dropdown>
                         </div>
                         <div class="ui-grid-col-3">
-                            <p-message severity="error"
-                                       text="Необходимо ввести наименование банка!"
-                                       *ngIf="!accountForm.controls['bankName'].valid&&accountForm.controls['bankName'].dirty">
+                            <p-message
+                                    severity="error"
+                                    text="Необходимо выбрать банк!"
+                                    *ngIf="accountForm.controls['bank'].invalid">
                             </p-message>
                         </div>
                     </div>
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-3">
-                            <b>МФО:</b>
+                            <b>Валюта:</b>
                         </div>
                         <div class="ui-grid-col-6">
-                            <input pInputText
-                                   type="text"
-                                   formControlName="mfo"
-                            >
+                            <p-dropdown
+                                    [options]="currencyTypes"
+                                    [showClear]="false"
+                                    [autoWidth]="false"
+                                    placeholder="Выберите валюту"
+                                    optionLabel="currShortName"
+                                    formControlName="currencyType"
+                            ></p-dropdown>
                         </div>
                         <div class="ui-grid-col-3">
-                            <p-message severity="error"
-                                       text="Необходимо ввести МФО банка!"
-                                       *ngIf="!accountForm.controls['mfo'].valid&&accountForm.controls['mfo'].dirty">
+                            <p-message
+                                    severity="error"
+                                    text="Необходимо выбрать валюту!"
+                                    *ngIf="accountForm.controls['currencyType'].invalid">
                             </p-message>
                         </div>
                     </div>
@@ -80,9 +92,10 @@
                         </div>
                         <div class="ui-grid-col-3"></div>
                         <div class="ui-grid-col-3">
-                            <p-message severity="error"
-                                       text="Необходимо ввести дату!"
-                                       *ngIf="accountForm.controls['dateStart'].invalid&&!accountForm.controls['dateStart'].dirty"
+                            <p-message
+                                    severity="error"
+                                    text="Необходимо ввести дату!"
+                                    *ngIf="accountForm.controls['dateStart'].invalid&&accountForm.controls['dateStart'].dirty"
                             ></p-message>
                         </div>
                     </div>

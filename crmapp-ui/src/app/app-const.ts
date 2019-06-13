@@ -13,5 +13,7 @@ export class AppConst {
     countriesUrl = '/countries';
     docStatusesUrl = '/document-statuses';
     agreementTypesUrl = '/agreement-types';
+    currencyTypesUrl = '/currency-types';
+    banksUrl = '/banks';
 
 }

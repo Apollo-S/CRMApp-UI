@@ -124,6 +124,8 @@ import { AddEditDirectorComponent } from './modules/clients/client-details/clien
 import { AddressService } from "./services/address.service";
 import { AddEditDocumentComponent } from './modules/documents/document-details/add-edit-document/add-edit-document.component';
 import { AddEditAgreementComponent } from './modules/agreements/add-edit-agreement/add-edit-agreement.component';
+import {CurrencyTypeService} from "./services/currency-type.service";
+import {BankService} from "./services/bank.service";
 
 @NgModule({
   declarations: [
@@ -246,7 +248,9 @@ import { AddEditAgreementComponent } from './modules/agreements/add-edit-agreeme
     PostService,
     VacationService,
     UtilService,
-    AddressService
+    AddressService,
+    CurrencyTypeService,
+    BankService
   ],
   bootstrap: [AppComponent]
 })
