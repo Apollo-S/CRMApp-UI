@@ -105,6 +105,7 @@ export class AddEditAddressComponent implements OnInit {
     private save() {
         let msg = 'Адрес для ' + this.getClient().code;
         let address = new ClientAddress();
+        address.client = this.getClient();
         address.country = this.addressForm.controls.country.value;
         address.region = this.addressForm.controls.region.value;
         address.city = this.addressForm.controls.city.value;
@@ -164,6 +165,7 @@ export class AddEditAddressComponent implements OnInit {
 
     private update() {
         let address = new ClientAddress();
+        address.client = this.getClient();
         address.country = this.addressForm.controls.country.value;
         address.region = this.addressForm.controls.region.value;
         address.city = this.addressForm.controls.city.value;
