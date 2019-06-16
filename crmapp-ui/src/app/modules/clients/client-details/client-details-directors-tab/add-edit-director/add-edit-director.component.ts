@@ -54,10 +54,17 @@ export class AddEditDirectorComponent implements OnInit {
     }
 
     onSubmit() {
+        let director: ClientDirector = new ClientDirector();
+        director.client = this.getClient();
+        director.fullName = this.directorForm.controls.fullName.value;
+        director.shortName = this.directorForm.controls.shortName.value;
+        director.post = this.directorForm.controls.post.value;
+        director.dateStart = this.directorForm.controls.dateStart.value;
         if (this.isNew) {
-            this.save();
+            this.save(director);
         } else {
-            this.update();
+            director.id = this.director.id;
+            this.update(director);
         }
     }
 
@@ -95,13 +102,8 @@ export class AddEditDirectorComponent implements OnInit {
             });
     }
 
-    private save() {
+    private save(director: ClientDirector) {
         let msg = 'Директор для ' + this.getClient().code;
-        let director: ClientDirector = new ClientDirector();
-        director.fullName = this.directorForm.controls.fullName.value;
-        director.shortName = this.directorForm.controls.shortName.value;
-        director.post = this.directorForm.controls.post.value;
-        director.dateStart = this.directorForm.controls.dateStart.value;
         this.clientService.addDirector(director, this.getClient().id).toPromise()
             .then(response => {
                 this.clientService.fetchDirectorsByClientId(this.getClient().id).toPromise()
@@ -151,14 +153,7 @@ export class AddEditDirectorComponent implements OnInit {
         });
     }
 
-    private update() {
-        const director = {
-            id: this.director.id,
-            fullName: this.directorForm.controls.fullName.value,
-            shortName: this.directorForm.controls.shortName.value,
-            post: this.directorForm.controls.post.value,
-            dateStart: this.directorForm.controls.dateStart.value,
-        };
+    private update(director: ClientDirector) {
         this.clientService.updateDirector(director, this.getClient().id).toPromise()
             .then(response => {
                 let msg = 'Директор (ID=' + response.id + ') для клиента ' + this.getClient().code;

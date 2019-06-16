@@ -1,11 +1,25 @@
 import {Router} from "@angular/router";
 import {Observable, of} from "rxjs";
 import {MessageService} from "primeng/api";
+import {Client} from "../models/Client";
+import {catchError} from "rxjs/operators";
+import {AppConst} from "../app-const";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 
-export abstract class BaseService {
+export abstract class BaseService<T> {
 
-    protected constructor(private router: Router,
-                          private messageService: MessageService) {
+    protected readonly headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+    protected constructor(protected router: Router,
+                          protected messageService: MessageService,
+                          protected http: HttpClient) {
+    }
+
+    fetchAll(url) {
+        return this.http.get<T[]>(url, {headers: this.headers})
+            .pipe(catchError(this.handleError<T[]>(
+                'Error while fetching all'
+            )));
     }
 
     goToUrl(address: any[]) {

@@ -30,6 +30,8 @@ export class ClientDetailsMainTabComponent implements OnInit, OnDestroy {
                     this.loadingState = false;
                 });
         } catch (e) {
+            console.log(e);
+        } finally {
             this.loadingState = false;
         }
     }

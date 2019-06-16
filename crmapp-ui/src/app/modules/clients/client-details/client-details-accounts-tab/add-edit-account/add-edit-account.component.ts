@@ -66,10 +66,17 @@ export class AddEditAccountComponent implements OnInit {
     }
 
     onSubmit() {
+        let account: ClientAccount = new ClientAccount();
+        account.client = this.getClient();
+        account.number = this.accountForm.controls.number.value;
+        account.bank = this.accountForm.controls.bank.value;
+        account.currencyType = this.accountForm.controls.currencyType.value;
+        account.dateStart = this.accountForm.controls.dateStart.value;
         if (this.isNew) {
-            this.save();
+            this.save(account);
         } else {
-            this.update();
+            account.id = this.account.id;
+            this.update(account);
         }
     }
 
@@ -97,14 +104,8 @@ export class AddEditAccountComponent implements OnInit {
         return client;
     }
 
-    private save() {
+    private save(account: ClientAccount) {
         let msg = 'Счет для ' + this.getClient().code;
-        let account: ClientAccount = new ClientAccount();
-        account.client = this.getClient();
-        account.number = this.accountForm.controls.number.value;
-        account.bank = this.accountForm.controls.bank.value;
-        account.currencyType = this.accountForm.controls.currencyType.value;
-        account.dateStart = this.accountForm.controls.dateStart.value;
         this.clientService.addAccount(account, this.getClient().id).toPromise()
             .then(response => {
                 this.clientService.fetchAccountsByClientId(this.getClient().id).toPromise()
@@ -152,15 +153,7 @@ export class AddEditAccountComponent implements OnInit {
         });
     }
 
-    private update() {
-        const account = {
-            id: this.account.id,
-            client: this.getClient(),
-            number: this.accountForm.controls.number.value,
-            bank: this.accountForm.controls.bank.value,
-            currencyType: this.accountForm.controls.currencyType.value,
-            dateStart: this.accountForm.controls.dateStart.value
-        };
+    private update(account: ClientAccount) {
         this.clientService.updateAccount(account, this.getClient().id).toPromise()
             .then(response => {
                 let msg = 'Счет (ID=' + response.id + ') для клиента ' + this.getClient().code;

@@ -1,11 +1,8 @@
 import { Post } from './Post';
+import {Director} from "./Director";
+import {Client} from "./Client";
 
-export class ClientDirector {
-    public id?: number;
-    public post?: Post;
+export class ClientDirector extends Director {
     public clientId?: number;
-    public fullName?: string;
-    public shortName?: string;
-    public dateStart?: Date;
-    public postTitle?: string;
+    public client?: Client;
 }

@@ -9,16 +9,16 @@ import {catchError} from "rxjs/operators";
 @Injectable({
     providedIn: 'root'
 })
-export class AgreementTypeService extends BaseService {
+export class AgreementTypeService extends BaseService<any> {
 
-    private headers: HttpHeaders;
+    protected headers: HttpHeaders;
     private agreementTypesUrl: string;
 
-    constructor(private http: HttpClient,
+    constructor(http: HttpClient,
                 private appConst: AppConst,
                 router: Router,
                 messageService: MessageService) {
-        super(router, messageService);
+        super(router, messageService, http);
         this.headers = appConst.headersJSON;
         this.agreementTypesUrl = appConst.baseUrl + appConst.agreementTypesUrl + '/';
     }

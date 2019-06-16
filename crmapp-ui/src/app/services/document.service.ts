@@ -14,10 +14,10 @@ import {Client} from "../models/Client";
 import {DocumentFilter} from "../models/DocumentFilter";
 
 @Injectable()
-export class DocumentService extends BaseService{
+export class DocumentService extends BaseService<Document> {
 
     private readonly documentsUrl;
-    private readonly headers;
+    protected readonly headers;
     protected docFilter;
 
     private _property$: BehaviorSubject<Document> = new BehaviorSubject({});
@@ -30,11 +30,11 @@ export class DocumentService extends BaseService{
         return this._property$.asObservable();
     }
 
-    constructor(private http: HttpClient,
+    constructor(http: HttpClient,
                 private appConst: AppConst,
                 router: Router,
                 messageService: MessageService) {
-        super(router, messageService);
+        super(router, messageService, http);
         this.documentsUrl = appConst.baseUrl + appConst.documentsUrl + '/';
         this.headers = appConst.headersJSON;
         this.docFilter = {

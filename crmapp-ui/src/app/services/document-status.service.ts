@@ -8,16 +8,16 @@ import {Router} from "@angular/router";
 import {MessageService} from "primeng/api";
 
 @Injectable()
-export class DocumentStatusService extends BaseService {
+export class DocumentStatusService extends BaseService<DocumentStatus> {
 
     private readonly docStatusesUrl;
-    private readonly headers;
+    protected readonly headers;
 
-    constructor(private http: HttpClient,
+    constructor(http: HttpClient,
                 private appConst: AppConst,
                 router: Router,
                 messageService: MessageService) {
-        super(router, messageService);
+        super(router, messageService, http);
         this.docStatusesUrl = appConst.baseUrl + appConst.docStatusesUrl + '/';
         this.headers = appConst.headersJSON;
     }

@@ -10,16 +10,16 @@ import {catchError} from "rxjs/operators";
 @Injectable({
     providedIn: 'root'
 })
-export class BankService extends BaseService {
+export class BankService extends BaseService<Bank> {
 
-    private readonly headers: any;
+    readonly headers: any;
     private readonly banksUrl: string;
 
-    constructor(private http: HttpClient,
+    constructor(http: HttpClient,
                 private appConst: AppConst,
                 router: Router,
                 messageService: MessageService) {
-        super(router, messageService);
+        super(router, messageService, http);
         this.banksUrl = appConst.baseUrl + appConst.banksUrl + '/';
         this.headers = appConst.headersJSON;
     }

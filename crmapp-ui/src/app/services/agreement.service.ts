@@ -8,19 +8,20 @@ import {AppConst} from "app/app-const";
 import {BaseService} from "./base.service";
 import {Router} from "@angular/router";
 import {MessageService} from "primeng/api";
+import {Agreement} from "../models/Agreement";
 
 @Injectable()
-export class AgreementService extends BaseService {
+export class AgreementService extends BaseService<Agreement> {
 
     private readonly agreementsUrl: string;
-    private readonly headers;
+    readonly headers;
     private currentAgreement: BehaviorSubject<ClientAgreement> = new BehaviorSubject(new ClientAgreement());
 
-    constructor(private http: HttpClient,
+    constructor(http: HttpClient,
                 private appConst: AppConst,
                 router: Router,
                 messageService: MessageService) {
-        super(router, messageService);
+        super(router, messageService, http);
         this.headers = appConst.headersJSON;
         this.agreementsUrl = appConst.baseUrl + appConst.agreementsUrl + '/';
     }

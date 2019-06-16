@@ -60,10 +60,21 @@ export class AddEditAddressComponent implements OnInit {
     }
 
     onSubmit() {
+        let address = new ClientAddress();
+        address.client = this.getClient();
+        address.country = this.addressForm.controls.country.value;
+        address.region = this.addressForm.controls.region.value;
+        address.city = this.addressForm.controls.city.value;
+        address.street = this.addressForm.controls.street.value;
+        address.building = this.addressForm.controls.building.value;
+        address.apartment = this.addressForm.controls.apartment.value;
+        address.zip = this.addressForm.controls.zip.value;
+        address.dateStart = this.addressForm.controls.dateStart.value;
         if (this.isNew) {
-            this.save();
+            this.save(address);
         } else {
-            this.update();
+            address.id = this.address.id;
+            this.update(address);
         }
     }
 
@@ -102,18 +113,8 @@ export class AddEditAddressComponent implements OnInit {
         return client;
     }
 
-    private save() {
+    private save(address: ClientAddress) {
         let msg = 'Адрес для ' + this.getClient().code;
-        let address = new ClientAddress();
-        address.client = this.getClient();
-        address.country = this.addressForm.controls.country.value;
-        address.region = this.addressForm.controls.region.value;
-        address.city = this.addressForm.controls.city.value;
-        address.street = this.addressForm.controls.street.value;
-        address.building = this.addressForm.controls.building.value;
-        address.apartment = this.addressForm.controls.apartment.value;
-        address.zip = this.addressForm.controls.zip.value;
-        address.dateStart = this.addressForm.controls.dateStart.value;
         this.clientService.addAddress(address, this.getClient().id).toPromise()
             .then(response => {
                 this.clientService.fetchAddressesByClientId(this.getClient().id).toPromise()
@@ -163,17 +164,7 @@ export class AddEditAddressComponent implements OnInit {
         });
     }
 
-    private update() {
-        let address = new ClientAddress();
-        address.client = this.getClient();
-        address.country = this.addressForm.controls.country.value;
-        address.region = this.addressForm.controls.region.value;
-        address.city = this.addressForm.controls.city.value;
-        address.street = this.addressForm.controls.street.value;
-        address.building = this.addressForm.controls.building.value;
-        address.apartment = this.addressForm.controls.apartment.value;
-        address.zip = this.addressForm.controls.zip.value;
-        address.dateStart = this.addressForm.controls.dateStart.value;
+    private update(address: ClientAddress) {
         this.clientService.updateAddress(address, this.getClient().id).toPromise()
             .then(response => {
                 let msg = 'Адрес (ID=' + response.id + ') для клиента ' + this.getClient().code;

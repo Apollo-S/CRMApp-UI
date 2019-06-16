@@ -10,16 +10,16 @@ import {CurrencyType} from "app/models/CurrencyType";
 @Injectable({
     providedIn: 'root'
 })
-export class CurrencyTypeService extends BaseService {
+export class CurrencyTypeService extends BaseService<CurrencyType> {
 
-    private readonly headers: any;
+    readonly headers: any;
     private readonly currencyTypesUrl: string;
 
-    constructor(private http: HttpClient,
+    constructor(http: HttpClient,
                 private appConst: AppConst,
                 router: Router,
                 messageService: MessageService) {
-        super(router, messageService);
+        super(router, messageService, http);
         this.currencyTypesUrl = appConst.baseUrl + appConst.currencyTypesUrl + '/';
         this.headers = appConst.headersJSON;
     }

@@ -14,20 +14,20 @@ import {BehaviorSubject, Observable, Subject} from "rxjs";
 import {Employee} from "../models/Employee";
 
 @Injectable()
-export class ClientService extends BaseService {
+export class ClientService extends BaseService<Client> {
 
-    private readonly headers: any;
+    protected readonly headers: any;
     private readonly clientsUrl: string;
     private clients: Client[];
     private client: Client = {};
     private loadingState: boolean;
     private currentClient: BehaviorSubject<Client> = new BehaviorSubject(new Client());
 
-    constructor(private http: HttpClient,
+    constructor(http: HttpClient,
                 private appConst: AppConst,
                 router: Router,
                 messageService: MessageService) {
-        super(router, messageService);
+        super(router, messageService, http);
         this.clientsUrl = appConst.baseUrl + appConst.clientsUrl + '/';
         this.headers = appConst.headersJSON;
         this.client.accounts = [];
@@ -38,10 +38,7 @@ export class ClientService extends BaseService {
     }
 
     fetchClients() {
-        return this.http.get<Client[]>(this.clientsUrl, {headers: this.headers})
-            .pipe(catchError(this.handleError<Client[]>(
-                'Ошибка при загрузке списка клиентов!'
-            )));
+        return super.fetchAll(this.clientsUrl);
     }
 
     getClients() {
