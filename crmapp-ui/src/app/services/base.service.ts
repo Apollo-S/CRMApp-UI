@@ -1,9 +1,7 @@
 import {Router} from "@angular/router";
 import {Observable, of} from "rxjs";
 import {MessageService} from "primeng/api";
-import {Client} from "../models/Client";
 import {catchError} from "rxjs/operators";
-import {AppConst} from "../app-const";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 export abstract class BaseService<T> {
@@ -22,8 +20,36 @@ export abstract class BaseService<T> {
             )));
     }
 
+    fetchOne(url) {
+        return this.http.get<T>(url, {headers: this.headers})
+            .pipe(catchError(this.handleError<T>(
+                'Error while fetching'
+            )));
+    }
+
+    save(url, obj: T) {
+        return this.http.post<T>(url, obj, {headers: this.headers})
+            .pipe(catchError(this.handleError<T>(
+                'Error while saving object'
+            )));
+    }
+
+    update(url, obj: T) {
+        return this.http.put<T>(url, obj, {headers: this.headers})
+            .pipe(catchError(this.handleError<T>(
+                'Error while updating object'
+            )));
+    }
+
+    delete(url) {
+        return this.http.delete<T>(url, {headers: this.headers})
+            .pipe(catchError(this.handleError<T>(
+                'Error while deleting object'
+            )));
+    }
+
     goToUrl(address: any[]) {
-       return this.router.navigate(address);
+        return this.router.navigate(address);
     }
 
     handleError<T>(operation = 'operation', result?: T) {

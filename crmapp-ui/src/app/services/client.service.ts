@@ -1,4 +1,4 @@
-import {EventEmitter, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Client} from '../models/Client';
 import {ClientAddress} from '../models/ClientAddress';
@@ -10,8 +10,7 @@ import {BaseService} from "./base.service";
 import {Router} from "@angular/router";
 import {catchError} from "rxjs/operators";
 import {MessageService} from "primeng/api";
-import {BehaviorSubject, Observable, Subject} from "rxjs";
-import {Employee} from "../models/Employee";
+import {BehaviorSubject} from "rxjs";
 
 @Injectable()
 export class ClientService extends BaseService<Client> {
@@ -41,19 +40,8 @@ export class ClientService extends BaseService<Client> {
         return super.fetchAll(this.clientsUrl);
     }
 
-    getClients() {
-        if (this.clients === undefined) {
-            return this.clients = [];
-        }
-        return this.clients;
-    }
-
-    fetchClientById(clientId: number) {
-        const clientUrl = this.clientsUrl + clientId;
-        return this.http.get<Client>(clientUrl)
-            .pipe(catchError(this.handleError<any>(
-                'Ошибка при загрузке данных о клиенте!'
-            )));
+    fetchClientById(id: number) {
+        return super.fetchOne(this.clientsUrl + id);
     }
 
     getCurrentClient() {
@@ -65,24 +53,21 @@ export class ClientService extends BaseService<Client> {
     }
 
     addClient(client: Client) {
-        return this.http.post<Client>(this.clientsUrl, client, {headers: this.headers});
+        return super.save(this.clientsUrl, client);
     }
 
     updateClient(client: Client) {
-        return this.http.put<Client>( this.clientsUrl + client.id, client, {headers: this.headers});
+        return super.update(this.clientsUrl + client.id, client);
     }
 
-    deleteClient(clientId: number) {
-        return this.http.delete(this.clientsUrl + clientId, {headers: this.headers});
+    deleteClient(id: number) {
+        return super.delete(this.clientsUrl + id);
     }
 
     // Addresses
     fetchAddressesByClientId(clientId: number) {
         const url = this.clientsUrl + clientId + '/addresses';
-        return this.http.get<ClientAddress[]>(url)
-            .pipe(catchError(this.handleError<ClientAddress[]>(
-                'Ошибка при получении списка адресов!'
-            )));
+        return super.fetchAll(url);
     }
 
     getAddresses() {
