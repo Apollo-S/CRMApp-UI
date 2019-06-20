@@ -1,4 +1,3 @@
-import { Post } from './Post';
 import {Director} from "./Director";
 import {Client} from "./Client";
 

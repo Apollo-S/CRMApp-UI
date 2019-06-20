@@ -1,7 +1,8 @@
 import {BaseModel} from "./BaseModel";
+import {Country} from "./Country";
 
 export abstract class Address extends BaseModel {
-    country?: Object;
+    country?: Country;
     region?: string;
     city?: string;
     street?: string;

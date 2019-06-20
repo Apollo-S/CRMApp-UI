@@ -6,15 +6,17 @@ import {ConfirmationService, MessageService} from "primeng/api";
 import {UtilService} from "app/services/util.service";
 import {ClientAccount} from "app/models/ClientAccount";
 import {Client} from "app/models/Client";
-import {CurrencyType} from "../../../../../models/CurrencyType";
-import {Bank} from "../../../../../models/Bank";
-import {CurrencyTypeService} from "../../../../../services/currency-type.service";
-import {BankService} from "../../../../../services/bank.service";
+import {CurrencyType} from "app/models/CurrencyType";
+import {Bank} from "app/models/Bank";
+import {CurrencyTypeService} from "app/services/currency-type.service";
+import {BankService} from "app/services/bank.service";
+import {ClientAccountService} from "app/services/client-account.service";
 
 @Component({
     selector: 'app-add-edit-account',
     templateUrl: './add-edit-account.component.html',
-    styleUrls: ['./add-edit-account.component.css']
+    styleUrls: ['./add-edit-account.component.css'],
+    providers: [ClientAccountService, BankService, CurrencyTypeService]
 })
 export class AddEditAccountComponent implements OnInit {
     account: ClientAccount;
@@ -27,6 +29,7 @@ export class AddEditAccountComponent implements OnInit {
     banks: Bank[] = [];
 
     constructor(private clientService: ClientService,
+                private accountService: ClientAccountService,
                 private curTypeService: CurrencyTypeService,
                 private bankService: BankService,
                 private formBuilder: FormBuilder,
@@ -41,28 +44,30 @@ export class AddEditAccountComponent implements OnInit {
     ngOnInit() {
         let accountId = +this.route.snapshot.params.id;
         this.loadingState = true;
-        this.curTypeService.fetchCurrencyTypes().toPromise()
-            .then(currencyTypes => {
-                this.currencyTypes = currencyTypes;
-                this.bankService.fetchBanks().toPromise()
-                    .then(banks => {
-                        this.banks = banks;
-                        if (accountId) {
-                            this.clientService.getAccountById(accountId, this.getClient().id).toPromise()
-                                .then(account => {
-                                    this.account = account;
-                                    this.accountForm.controls.number.setValue(account.number);
-                                    this.accountForm.controls.bank.setValue(account.bank);
-                                    this.accountForm.controls.currencyType.setValue(account.currencyType);
-                                    this.accountForm.controls.dateStart.setValue(new Date(account.dateStart));
-                                    this.loadingState = false;
-                                });
-                        } else {
-                            this.isNew = true;
-                            this.loadingState = false;
-                        }
-                    })
-            });
+
+        this.fetchBankData().then(() => {
+            if (accountId) {
+                this.accountService.fetchAccountBy(accountId, this.getClient().id).toPromise()
+                    .then(account => {
+                        this.account = account;
+                        this.accountForm.controls.number.setValue(account.number);
+                        this.accountForm.controls.bank.setValue(account.bank);
+                        this.accountForm.controls.currencyType.setValue(account.currencyType);
+                        this.accountForm.controls.dateStart.setValue(new Date(account.dateStart));
+                        this.loadingState = false;
+                    });
+            } else {
+                this.isNew = true;
+                this.loadingState = false;
+            }
+        });
+    }
+
+    async fetchBankData() {
+        let banksPromise = this.bankService.fetchBanks().toPromise();
+        let currencyTypesPromise = this.curTypeService.fetchCurrencyTypes().toPromise();
+        this.banks = await banksPromise;
+        this.currencyTypes = await currencyTypesPromise;
     }
 
     onSubmit() {
@@ -106,20 +111,15 @@ export class AddEditAccountComponent implements OnInit {
 
     private save(account: ClientAccount) {
         let msg = 'Счет для ' + this.getClient().code;
-        this.clientService.addAccount(account, this.getClient().id).toPromise()
+        this.accountService.addAccount(account, this.getClient().id).toPromise()
             .then(response => {
-                this.clientService.fetchAccountsByClientId(this.getClient().id).toPromise()
-                    .then(() => {
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: 'Успешно!',
-                            detail: msg + ' успешно добавлен (ID=' + response.id + ')'
-                        });
-                    })
-                    .then(() => {
-                        this.goBackToAccounts();
-                    });
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Успешно!',
+                    detail: msg + ' успешно добавлен (ID=' + response.id + ')'
+                });
             })
+            .then(() => this.goBackToAccounts());
     }
 
     private goBackToAccounts() {
@@ -133,7 +133,7 @@ export class AddEditAccountComponent implements OnInit {
             icon: 'fa fa-trash',
             accept: () => {
                 let msg = 'Счет (ID=' + this.account.id + ')';
-                this.clientService.deleteAccount(this.account.id, this.getClient().id).toPromise()
+                this.accountService.deleteAccount(this.account.id, this.getClient().id).toPromise()
                     .then(() => {
                         this.messageService.add({
                             severity: 'success',
@@ -141,12 +141,7 @@ export class AddEditAccountComponent implements OnInit {
                             detail: msg + ' успешно удален'
                         });
                     })
-                    .then(() => {
-                        this.clientService.fetchAccountsByClientId(this.getClient().id).toPromise()
-                            .then(() => {
-                                this.goBackToAccounts();
-                            })
-                    })
+                    .then(() => this.goBackToAccounts())
             },
             reject: () => {
             }
@@ -154,21 +149,16 @@ export class AddEditAccountComponent implements OnInit {
     }
 
     private update(account: ClientAccount) {
-        this.clientService.updateAccount(account, this.getClient().id).toPromise()
+        this.accountService.updateAccount(account, this.getClient().id).toPromise()
             .then(response => {
                 let msg = 'Счет (ID=' + response.id + ') для клиента ' + this.getClient().code;
-                this.clientService.fetchAccountsByClientId(this.getClient().id).toPromise()
-                    .then(() => {
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: 'Успешно!',
-                            detail: msg + ' успешно обновлен'
-                        });
-                    })
-                    .then(() => {
-                        this.goBackToAccounts();
-                    })
-            });
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Успешно!',
+                    detail: msg + ' успешно обновлен'
+                });
+            })
+            .then(() => this.goBackToAccounts())
     }
 
 }

@@ -3,11 +3,13 @@ import {ClientAccount} from 'app/models/ClientAccount';
 import {ClientService} from 'app/services/client.service';
 import {Client} from 'app/models/Client';
 import {Subscription} from "rxjs";
+import {ClientAccountService} from "../../../../services/client-account.service";
 
 @Component({
     selector: 'app-client-details-accounts-tab',
     templateUrl: './client-details-accounts-tab.component.html',
-    styleUrls: ['./client-details-accounts-tab.component.css']
+    styleUrls: ['./client-details-accounts-tab.component.css'],
+    providers: [ClientAccountService]
 })
 export class ClientDetailsAccountsTabComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
@@ -16,7 +18,8 @@ export class ClientDetailsAccountsTabComponent implements OnInit, OnDestroy {
     client: Client = {};
     loading: boolean;
 
-    constructor(private clientService: ClientService) {
+    constructor(private clientService: ClientService,
+                private accountService: ClientAccountService) {
         this.initColumns();
     }
 
@@ -35,7 +38,7 @@ export class ClientDetailsAccountsTabComponent implements OnInit, OnDestroy {
     }
 
     async getAccounts() {
-        this.accounts = await this.clientService.fetchAccountsByClientId(this.client.id).toPromise();
+        this.accounts = await this.accountService.fetchAllByClientId(this.client.id).toPromise();
     }
 
     private initColumns(): void {

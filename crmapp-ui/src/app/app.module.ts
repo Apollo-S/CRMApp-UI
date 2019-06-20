@@ -248,9 +248,6 @@ import {BankService} from "./services/bank.service";
     PostService,
     VacationService,
     UtilService,
-    AddressService,
-    CurrencyTypeService,
-    BankService
   ],
   bootstrap: [AppComponent]
 })

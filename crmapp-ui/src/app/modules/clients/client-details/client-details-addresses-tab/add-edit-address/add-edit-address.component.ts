@@ -4,14 +4,17 @@ import {ConfirmationService, MessageService} from "primeng/api";
 import {UtilService} from "app/services/util.service";
 import {ActivatedRoute} from "@angular/router";
 import {ClientService} from "app/services/client.service";
-import {AddressService} from "app/services/address.service";
 import {Client} from "app/models/Client";
 import {ClientAddress} from "app/models/ClientAddress";
+import {CountryService} from "app/services/country.service";
+import {ClientAddressService} from "app/services/client-address.service";
+import {Country} from "app/models/Country";
 
 @Component({
     selector: 'app-add-edit-address',
     templateUrl: './add-edit-address.component.html',
-    styleUrls: ['./add-edit-address.component.css']
+    styleUrls: ['./add-edit-address.component.css'],
+    providers: [CountryService, ClientAddressService]
 })
 export class AddEditAddressComponent implements OnInit {
     address: ClientAddress = new ClientAddress();
@@ -19,11 +22,12 @@ export class AddEditAddressComponent implements OnInit {
     years: string;
     ru: any;
     addressForm: FormGroup;
-    countries: any[];
+    countries: Country[] = [];
     loadingState: boolean;
 
     constructor(private clientService: ClientService,
-                private addressService: AddressService,
+                private addressService: ClientAddressService,
+                private countryService: CountryService,
                 private formBuilder: FormBuilder,
                 private route: ActivatedRoute,
                 private confirmationService: ConfirmationService,
@@ -31,32 +35,34 @@ export class AddEditAddressComponent implements OnInit {
         this.initAddressForm();
         this.ru = UtilService.getCalendarLocalSet();
         this.years = UtilService.getCalendarYears(5);
-        this.addressService.fetchCountries().toPromise()
-            .then(response => {
-                this.countries = response
-            });
+
     }
 
     ngOnInit() {
         let addressId = +this.route.snapshot.params.id;
-        if (addressId) {
-            this.loadingState = true;
-            this.clientService.getAddressById(addressId, this.getClient().id).toPromise()
-                .then(address => {
-                    this.address = address;
-                    this.addressForm.controls.country.setValue(address.country);
-                    this.addressForm.controls.region.setValue(address.region);
-                    this.addressForm.controls.city.setValue(address.city);
-                    this.addressForm.controls.street.setValue(address.street);
-                    this.addressForm.controls.building.setValue(address.building);
-                    this.addressForm.controls.apartment.setValue(address.apartment);
-                    this.addressForm.controls.zip.setValue(address.zip);
-                    this.addressForm.controls.dateStart.setValue(new Date(address.dateStart));
+        this.loadingState = true;
+        this.countryService.fetchAllCountries().toPromise()
+            .then(response => {
+                this.countries = response;
+                if (addressId) {
+                    this.addressService.fetchAddressBy(addressId, this.getClient().id).toPromise()
+                        .then(address => {
+                            this.address = address;
+                            this.addressForm.controls.country.setValue(address.country);
+                            this.addressForm.controls.region.setValue(address.region);
+                            this.addressForm.controls.city.setValue(address.city);
+                            this.addressForm.controls.street.setValue(address.street);
+                            this.addressForm.controls.building.setValue(address.building);
+                            this.addressForm.controls.apartment.setValue(address.apartment);
+                            this.addressForm.controls.zip.setValue(address.zip);
+                            this.addressForm.controls.dateStart.setValue(new Date(address.dateStart));
+                            this.loadingState = false;
+                        });
+                } else {
+                    this.isNew = true;
                     this.loadingState = false;
-                });
-        } else {
-            this.isNew = true;
-        }
+                }
+            });
     }
 
     onSubmit() {
@@ -115,26 +121,19 @@ export class AddEditAddressComponent implements OnInit {
 
     private save(address: ClientAddress) {
         let msg = 'Адрес для ' + this.getClient().code;
-        this.clientService.addAddress(address, this.getClient().id).toPromise()
+        this.addressService.addAddress(address, this.getClient().id).toPromise()
             .then(response => {
-                this.clientService.fetchAddressesByClientId(this.getClient().id).toPromise()
-                    .then(() => {
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: 'Успешно!',
-                            detail: msg + ' успешно добавлен (ID=' + response.id + ')'
-                        });
-                    })
-                    .then(() => {
-                        this.goBackToAddresses();
-                    });
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Успешно!',
+                    detail: msg + ' успешно добавлен (ID=' + response.id + ')'
+                });
             })
+            .then(() => this.goBackToAddresses());
     }
 
     private goBackToAddresses() {
-        this.clientService.goToUrl([this.getClient().url, 'addresses'])
-            .then(() => {
-            });
+        this.addressService.goToUrl([this.getClient().url, 'addresses']);
     }
 
     confirmDeleting() {
@@ -144,7 +143,7 @@ export class AddEditAddressComponent implements OnInit {
             icon: 'fa fa-trash',
             accept: () => {
                 let msg = 'Адрес (ID=' + this.address.id + ')';
-                this.clientService.deleteAddress(this.address.id, this.getClient().id).toPromise()
+                this.addressService.deleteAddress(this.address.id, this.getClient().id).toPromise()
                     .then(() => {
                         this.messageService.add({
                             severity: 'success',
@@ -153,10 +152,7 @@ export class AddEditAddressComponent implements OnInit {
                         });
                     })
                     .then(() => {
-                        this.clientService.fetchAddressesByClientId(this.getClient().id).toPromise()
-                            .then(() => {
-                                this.goBackToAddresses();
-                            })
+                        this.goBackToAddresses();
                     })
             },
             reject: () => {
@@ -165,21 +161,16 @@ export class AddEditAddressComponent implements OnInit {
     }
 
     private update(address: ClientAddress) {
-        this.clientService.updateAddress(address, this.getClient().id).toPromise()
+        this.addressService.updateAddress(address, this.getClient().id).toPromise()
             .then(response => {
                 let msg = 'Адрес (ID=' + response.id + ') для клиента ' + this.getClient().code;
-                this.clientService.fetchAddressesByClientId(this.getClient().id).toPromise()
-                    .then(() => {
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: 'Успешно!',
-                            detail: msg + ' успешно обновлен'
-                        });
-                    })
-                    .then(() => {
-                        this.goBackToAddresses();
-                    })
-            });
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Успешно!',
+                    detail: msg + ' успешно обновлен'
+                });
+            })
+            .then(() => this.goBackToAddresses());
     }
 
 }

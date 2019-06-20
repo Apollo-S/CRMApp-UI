@@ -4,9 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {AppConst} from "../app-const";
 import {ClientService} from "./client.service";
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class AddressService {
     private clientId: number;
     private addressesUrl: string;
@@ -29,10 +27,6 @@ export class AddressService {
     getAddressById(addressId: number, clientId: number) {
         const url = this.addressesUrl + addressId;
         return this.http.get<Address>(url);
-    }
-
-    fetchCountries() {
-        return this.http.get<Array<Address>>(this.countriesUrl);
     }
 
 }
