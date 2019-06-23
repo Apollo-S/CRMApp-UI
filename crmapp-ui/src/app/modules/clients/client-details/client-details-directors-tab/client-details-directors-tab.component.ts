@@ -3,11 +3,13 @@ import {ClientService} from 'app/services/client.service';
 import {ClientDirector} from "app/models/ClientDirector";
 import {Subscription} from "rxjs";
 import {Client} from "app/models/Client";
+import {ClientDirectorService} from "app/services/client-director.service";
 
 @Component({
     selector: 'app-client-details-directors-tab',
     templateUrl: './client-details-directors-tab.component.html',
-    styleUrls: ['./client-details-directors-tab.component.css']
+    styleUrls: ['./client-details-directors-tab.component.css'],
+    providers: [ClientDirectorService]
 })
 export class ClientDetailsDirectorsTabComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
@@ -16,7 +18,8 @@ export class ClientDetailsDirectorsTabComponent implements OnInit, OnDestroy {
     directors: ClientDirector[] = [];
     loading: boolean;
 
-    constructor(private clientService: ClientService) {
+    constructor(private clientService: ClientService,
+                private directorService: ClientDirectorService) {
         this.initColumns();
     }
 
@@ -26,13 +29,13 @@ export class ClientDetailsDirectorsTabComponent implements OnInit, OnDestroy {
             this.client = client;
             if (client.id !== undefined) {
                 try {
-                    this.clientService.fetchDirectorsByClientId(client.id)
+                    this.directorService.fetchAllByClientId(client.id)
                         .subscribe(directors => {
                             this.directors = directors;
-                            this.loading = false;
                         })
                 } catch (e) {
-                    console.log("Catch block error", e);
+                    console.log("Problem with fetching Directors", e);
+                } finally {
                     this.loading = false;
                 }
             }
