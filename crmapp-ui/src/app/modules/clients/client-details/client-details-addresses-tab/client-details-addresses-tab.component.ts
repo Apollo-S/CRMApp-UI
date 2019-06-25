@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ClientService} from 'app/services/client.service';
 import {Subscription} from "rxjs";
 import {Client} from "app/models/Client";
 import {ClientAddress} from "app/models/ClientAddress";
-import {ClientAddressService} from "../../../../services/client-address.service";
+import {ClientAddressService} from "app/services/client-address.service";
+import {SubscriptionService} from "app/services/subscription.service";
 
 @Component({
     selector: 'app-client-details-addresses-tab',
@@ -18,14 +18,14 @@ export class ClientDetailsAddressesTabComponent implements OnInit, OnDestroy {
     addresses: ClientAddress[] = [];
     loading: boolean;
 
-    constructor(private clientService: ClientService,
+    constructor(private subscriptionService: SubscriptionService,
                 private addressService: ClientAddressService) {
         this.initColumns();
     }
 
     ngOnInit() {
         this.loading = true;
-        this.subscription = this.clientService.getCurrentClient()
+        this.subscription = this.subscriptionService.getCurrentClient()
             .subscribe(client => {
                 this.client = client;
                 if (client.id !== undefined) {
@@ -36,8 +36,12 @@ export class ClientDetailsAddressesTabComponent implements OnInit, OnDestroy {
                                 this.loading = false;
                             })
                     } catch (e) {
+                        console.log(e);
                         this.loading = false;
                     }
+                    // finally {
+                    //     this.loading = false;
+                    // }
                 }
             });
     }

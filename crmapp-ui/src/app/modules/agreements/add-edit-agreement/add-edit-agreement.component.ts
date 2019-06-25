@@ -13,7 +13,8 @@ import {ActivatedRoute} from "@angular/router";
 @Component({
     selector: 'app-add-edit-agreement',
     templateUrl: './add-edit-agreement.component.html',
-    styleUrls: ['./add-edit-agreement.component.css']
+    styleUrls: ['./add-edit-agreement.component.css'],
+    providers: [ClientService]
 })
 export class AddEditAgreementComponent implements OnInit, OnDestroy {
     private subscription: Subscription = new Subscription();

@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ClientService} from 'app/services/client.service';
 import {ClientDirector} from "app/models/ClientDirector";
 import {Subscription} from "rxjs";
 import {Client} from "app/models/Client";
 import {ClientDirectorService} from "app/services/client-director.service";
+import {SubscriptionService} from "app/services/subscription.service";
 
 @Component({
     selector: 'app-client-details-directors-tab',
@@ -18,14 +18,14 @@ export class ClientDetailsDirectorsTabComponent implements OnInit, OnDestroy {
     directors: ClientDirector[] = [];
     loading: boolean;
 
-    constructor(private clientService: ClientService,
+    constructor(private subscriptionService: SubscriptionService,
                 private directorService: ClientDirectorService) {
         this.initColumns();
     }
 
     ngOnInit() {
         this.loading = true;
-        this.subscription = this.clientService.getCurrentClient().subscribe(client => {
+        this.subscription = this.subscriptionService.getCurrentClient().subscribe(client => {
             this.client = client;
             if (client.id !== undefined) {
                 try {

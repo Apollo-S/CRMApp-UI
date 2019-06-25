@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ClientService} from "app/services/client.service";
 import {ActivatedRoute} from "@angular/router";
 import {ConfirmationService, MessageService} from "primeng/api";
 import {UtilService} from "app/services/util.service";
@@ -11,6 +10,7 @@ import {Bank} from "app/models/Bank";
 import {CurrencyTypeService} from "app/services/currency-type.service";
 import {BankService} from "app/services/bank.service";
 import {ClientAccountService} from "app/services/client-account.service";
+import {SubscriptionService} from "app/services/subscription.service";
 
 @Component({
     selector: 'app-add-edit-account',
@@ -28,7 +28,7 @@ export class AddEditAccountComponent implements OnInit {
     currencyTypes: CurrencyType[] = [];
     banks: Bank[] = [];
 
-    constructor(private clientService: ClientService,
+    constructor(private subscriptionService: SubscriptionService,
                 private accountService: ClientAccountService,
                 private curTypeService: CurrencyTypeService,
                 private bankService: BankService,
@@ -105,7 +105,7 @@ export class AddEditAccountComponent implements OnInit {
 
     getClient() {
         let client: Client = new Client();
-        this.clientService.getCurrentClient().subscribe(data => client = data);
+        this.subscriptionService.getCurrentClient().subscribe(data => client = data);
         return client;
     }
 
@@ -123,7 +123,7 @@ export class AddEditAccountComponent implements OnInit {
     }
 
     private goBackToAccounts() {
-        this.clientService.goToUrl([this.getClient().url, 'accounts']);
+        this.accountService.goToUrl([this.getClient().url, 'accounts']);
     }
 
     confirmDeleting() {

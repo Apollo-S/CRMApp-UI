@@ -4,11 +4,13 @@ import {ClientService} from 'app/services/client.service';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {Client} from "app/models/Client";
 import {Subscription} from "rxjs";
+import {SubscriptionService} from "../../../../services/subscription.service";
 
 @Component({
     selector: 'app-client-details-main-tab',
     templateUrl: './client-details-main-tab.component.html',
-    styleUrls: ['./client-details-main-tab.component.css']
+    styleUrls: ['./client-details-main-tab.component.css'],
+    providers: [ClientService]
 })
 export class ClientDetailsMainTabComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
@@ -16,6 +18,7 @@ export class ClientDetailsMainTabComponent implements OnInit, OnDestroy {
     loadingState: boolean;
 
     constructor(private clientService: ClientService,
+                private subscriptionService: SubscriptionService,
                 private router: Router,
                 private confirmationService: ConfirmationService,
                 private messageService: MessageService) {
@@ -24,7 +27,7 @@ export class ClientDetailsMainTabComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         try {
-            this.subscription = this.clientService.getCurrentClient()
+            this.subscription = this.subscriptionService.getCurrentClient()
                 .subscribe(client => {
                     this.client = client;
                     this.loadingState = false;

@@ -14,5 +14,6 @@
     [addButtonTitle]="buttonTitle.add"
     [editButtonTitle]="buttonTitle.edit"
     [additionalButtonTitle]="buttonTitle.additional"
-    (refreshDatasource)="refreshDatasource()"
+    (refreshDatasource)="ngOnInit()"
+    [selectedItem]="selectedItem"
 ></app-dashboard-table>

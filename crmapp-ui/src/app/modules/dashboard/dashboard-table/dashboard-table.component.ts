@@ -25,7 +25,7 @@ export class DashboardTableComponent implements OnInit {
     @Input() editButtonTitle: string;
     @Input() additionalButtonTitle: string;
     @Output() refreshDatasource: EventEmitter<any> = new EventEmitter();
-    selectedItem: any;
+    @Input() selectedItem: any;
 
     constructor(private router: Router) {
     }

@@ -1,13 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {ClientDirector} from "app/models/ClientDirector";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ClientService} from "app/services/client.service";
 import {ActivatedRoute} from "@angular/router";
 import {ConfirmationService, MessageService} from "primeng/api";
 import {UtilService} from "app/services/util.service";
 import {PostService} from "app/services/post.service";
 import {Post} from "app/models/Post";
 import {Client} from "app/models/Client";
+import {SubscriptionService} from "app/services/subscription.service";
+import {ClientDirectorService} from "app/services/client-director.service";
 
 @Component({
     selector: 'app-add-edit-director',
@@ -23,7 +24,8 @@ export class AddEditDirectorComponent implements OnInit {
     directorForm: FormGroup;
     loadingState: boolean;
 
-    constructor(private clientService: ClientService,
+    constructor(private subscriptionService: SubscriptionService,
+                private directorService: ClientDirectorService,
                 private postService: PostService,
                 private formBuilder: FormBuilder,
                 private route: ActivatedRoute,
@@ -39,7 +41,7 @@ export class AddEditDirectorComponent implements OnInit {
         let directorId = +this.route.snapshot.params.id;
         if (directorId) {
             this.loadingState = true;
-            this.clientService.getDirectorById(directorId, this.getClient().id).toPromise()
+            this.directorService.fetchDirectorBy(directorId, this.getClient().id).toPromise()
                 .then(response => {
                     this.director = response;
                     this.directorForm.controls.fullName.setValue(response.fullName);
@@ -91,7 +93,7 @@ export class AddEditDirectorComponent implements OnInit {
 
     getClient() {
         let client: Client = new Client();
-        this.clientService.getCurrentClient().subscribe(data => client = data);
+        this.subscriptionService.getCurrentClient().subscribe(data => client = data);
         return client;
     }
 
@@ -104,24 +106,19 @@ export class AddEditDirectorComponent implements OnInit {
 
     private save(director: ClientDirector) {
         let msg = 'Директор для ' + this.getClient().code;
-        this.clientService.addDirector(director, this.getClient().id).toPromise()
+        this.directorService.addDirector(director, this.getClient().id).toPromise()
             .then(response => {
-                this.clientService.fetchDirectorsByClientId(this.getClient().id).toPromise()
-                    .then(() => {
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: 'Успешно!',
-                            detail: msg + ' успешно добавлен (ID=' + response.id + ')'
-                        });
-                    })
-                    .then(() => {
-                        this.goBackToDirectors();
-                    });
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Успешно!',
+                    detail: msg + ' успешно добавлен (ID=' + response.id + ')'
+                });
             })
+            .then(() => this.goBackToDirectors());
     }
 
     private goBackToDirectors() {
-        this.clientService.goToUrl([this.getClient().url, 'directors'])
+        this.directorService.goToUrl([this.getClient().url, 'directors'])
             .then(() => {
             });
     }
@@ -133,7 +130,7 @@ export class AddEditDirectorComponent implements OnInit {
             icon: 'fa fa-trash',
             accept: () => {
                 let msg = 'Адрес (ID=' + this.director.id + ')';
-                this.clientService.deleteDirector(this.director.id, this.getClient().id).toPromise()
+                this.directorService.deleteDirector(this.director.id, this.getClient().id).toPromise()
                     .then(() => {
                         this.messageService.add({
                             severity: 'success',
@@ -141,12 +138,7 @@ export class AddEditDirectorComponent implements OnInit {
                             detail: msg + ' успешно удален'
                         });
                     })
-                    .then(() => {
-                        this.clientService.fetchDirectorsByClientId(this.getClient().id).toPromise()
-                            .then(() => {
-                                this.goBackToDirectors();
-                            })
-                    })
+                    .then(() => this.goBackToDirectors());
             },
             reject: () => {
             }
@@ -154,21 +146,16 @@ export class AddEditDirectorComponent implements OnInit {
     }
 
     private update(director: ClientDirector) {
-        this.clientService.updateDirector(director, this.getClient().id).toPromise()
+        this.directorService.updateDirector(director, this.getClient().id).toPromise()
             .then(response => {
                 let msg = 'Директор (ID=' + response.id + ') для клиента ' + this.getClient().code;
-                this.clientService.fetchDirectorsByClientId(this.getClient().id).toPromise()
-                    .then(() => {
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: 'Успешно!',
-                            detail: msg + ' успешно обновлен'
-                        });
-                    })
-                    .then(() => {
-                        this.goBackToDirectors();
-                    })
-            });
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Успешно!',
+                    detail: msg + ' успешно обновлен'
+                });
+            })
+            .then(() => this.goBackToDirectors());
     }
 
 }

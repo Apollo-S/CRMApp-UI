@@ -3,12 +3,12 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ConfirmationService, MessageService} from "primeng/api";
 import {UtilService} from "app/services/util.service";
 import {ActivatedRoute} from "@angular/router";
-import {ClientService} from "app/services/client.service";
 import {Client} from "app/models/Client";
 import {ClientAddress} from "app/models/ClientAddress";
 import {CountryService} from "app/services/country.service";
 import {ClientAddressService} from "app/services/client-address.service";
 import {Country} from "app/models/Country";
+import {SubscriptionService} from "app/services/subscription.service";
 
 @Component({
     selector: 'app-add-edit-address',
@@ -25,7 +25,7 @@ export class AddEditAddressComponent implements OnInit {
     countries: Country[] = [];
     loadingState: boolean;
 
-    constructor(private clientService: ClientService,
+    constructor(private subscriptionService: SubscriptionService,
                 private addressService: ClientAddressService,
                 private countryService: CountryService,
                 private formBuilder: FormBuilder,
@@ -115,7 +115,7 @@ export class AddEditAddressComponent implements OnInit {
 
     getClient() {
         let client: Client = new Client();
-        this.clientService.getCurrentClient().subscribe(data => client = data);
+        this.subscriptionService.getCurrentClient().subscribe(data => client = data);
         return client;
     }
 

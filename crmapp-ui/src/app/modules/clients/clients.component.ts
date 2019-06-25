@@ -2,11 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {ClientService} from 'app/services/client.service';
 import {MenuItem} from 'primeng/api';
 import {Client} from "app/models/Client";
+import {SubscriptionService} from "app/services/subscription.service";
 
 @Component({
     selector: 'app-clients',
     templateUrl: './clients.component.html',
-    styleUrls: ['./clients.component.css']
+    styleUrls: ['./clients.component.css'],
+    providers: [ClientService]
 })
 export class ClientsComponent implements OnInit {
     columns = [];
@@ -22,26 +24,30 @@ export class ClientsComponent implements OnInit {
     reorderableColumns = true;
     responsive = true;
     rows = 0;
+    selectedItem: any;
 
-    constructor(public clientService: ClientService) {
+    constructor(public clientService: ClientService,
+                private subscriptionService: SubscriptionService) {
         this.initColumns();
         this.initMenu();
         this.sortField = this.columns[0].field;
     }
 
     ngOnInit() {
-        this.refreshDatasource();
+        this.loading = true;
+        this.refreshDatasource().then(() => {
+            this.loading = false;
+            this.subscriptionService.getCurrentClient().subscribe(
+                (item) => this.selectedItem = item
+            );
+        });
     }
 
     refreshDatasource() {
-        this.loading = true;
-        this.clientService.fetchClients().subscribe(
-            clients => {
-                this.clients = clients;
-                this.loading = false;
-            });
+        return this.clientService.fetchClients().toPromise().then(
+            clients => this.clients = clients);
     }
-    
+
     private initColumns() {
         this.columns = [
             {field: 'id', header: 'ID'},

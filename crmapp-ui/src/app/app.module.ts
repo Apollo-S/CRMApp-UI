@@ -50,7 +50,6 @@ import { MessageService } from 'primeng/api';
 import { AppConst } from './app-const';
 import { AgreementService } from './services/agreement.service';
 import { CategoryService } from './services/category.service';
-import { ClientService } from './services/client.service';
 import { DocumentService } from './services/document.service';
 import { DocumentStatusService } from './services/document-status.service';
 import { DocumentTypeService } from './services/document-type.service';
@@ -121,11 +120,9 @@ import { EmployeeDetailsSicksTabComponent } from './modules/employees/employee-d
 import { AddEditAddressComponent } from './modules/clients/client-details/client-details-addresses-tab/add-edit-address/add-edit-address.component';
 import { AddEditAccountComponent } from './modules/clients/client-details/client-details-accounts-tab/add-edit-account/add-edit-account.component';
 import { AddEditDirectorComponent } from './modules/clients/client-details/client-details-directors-tab/add-edit-director/add-edit-director.component';
-import { AddressService } from "./services/address.service";
 import { AddEditDocumentComponent } from './modules/documents/document-details/add-edit-document/add-edit-document.component';
 import { AddEditAgreementComponent } from './modules/agreements/add-edit-agreement/add-edit-agreement.component';
-import {CurrencyTypeService} from "./services/currency-type.service";
-import {BankService} from "./services/bank.service";
+import { SubscriptionService } from "./services/subscription.service";
 
 @NgModule({
   declarations: [
@@ -234,7 +231,6 @@ import {BankService} from "./services/bank.service";
     AppConst,
     AgreementService,
     CategoryService,
-    ClientService,
     ConfirmationService,
     DocumentService,
     DocumentStatusService,
@@ -248,6 +244,7 @@ import {BankService} from "./services/bank.service";
     PostService,
     VacationService,
     UtilService,
+    SubscriptionService
   ],
   bootstrap: [AppComponent]
 })

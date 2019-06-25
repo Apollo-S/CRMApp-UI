@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ClientAccount} from 'app/models/ClientAccount';
-import {ClientService} from 'app/services/client.service';
 import {Client} from 'app/models/Client';
 import {Subscription} from "rxjs";
-import {ClientAccountService} from "../../../../services/client-account.service";
+import {ClientAccountService} from "app/services/client-account.service";
+import {SubscriptionService} from "app/services/subscription.service";
 
 @Component({
     selector: 'app-client-details-accounts-tab',
@@ -18,14 +18,14 @@ export class ClientDetailsAccountsTabComponent implements OnInit, OnDestroy {
     client: Client = {};
     loading: boolean;
 
-    constructor(private clientService: ClientService,
+    constructor(private subscriptionService: SubscriptionService,
                 private accountService: ClientAccountService) {
         this.initColumns();
     }
 
     ngOnInit() {
         this.loading = true;
-        this.subscription = this.clientService.getCurrentClient().subscribe(client => {
+        this.subscription = this.subscriptionService.getCurrentClient().subscribe(client => {
             this.client = client;
             if (client.id !== undefined) {
                 this.getAccounts().then(() => this.loading = false);

@@ -13,35 +13,35 @@ export abstract class BaseService<T> {
                           protected http: HttpClient) {
     }
 
-    fetchAll(url) {
+    protected fetchAll(url) {
         return this.http.get<T[]>(url, {headers: this.headers})
             .pipe(catchError(this.handleError<T[]>(
                 'Error while fetching all'
             )));
     }
 
-    fetchOne(url) {
+    protected fetchOne(url) {
         return this.http.get<T>(url, {headers: this.headers})
             .pipe(catchError(this.handleError<T>(
                 'Error while fetching'
             )));
     }
 
-    save(url, obj: T) {
+    protected save(url, obj: T) {
         return this.http.post<T>(url, obj, {headers: this.headers})
             .pipe(catchError(this.handleError<T>(
                 'Error while saving object'
             )));
     }
 
-    update(url, obj: T) {
+    protected update(url, obj: T) {
         return this.http.put<T>(url, obj, {headers: this.headers})
             .pipe(catchError(this.handleError<T>(
                 'Error while updating object'
             )));
     }
 
-    delete(url) {
+    protected delete(url) {
         return this.http.delete<T>(url, {headers: this.headers})
             .pipe(catchError(this.handleError<T>(
                 'Error while deleting object'

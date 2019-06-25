@@ -15,7 +15,8 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 @Component({
     selector: 'app-documents',
     templateUrl: './documents.component.html',
-    styleUrls: ['./documents.component.css']
+    styleUrls: ['./documents.component.css'],
+    providers: [ClientService]
 })
 export class DocumentsComponent implements OnInit {
     clients: Client[] = [];

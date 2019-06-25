@@ -8,7 +8,8 @@ import {Subscription} from "rxjs";
 @Component({
     selector: 'app-agreement-details-main-tab',
     templateUrl: './agreement-details-main-tab.component.html',
-    styleUrls: ['./agreement-details-main-tab.component.css']
+    styleUrls: ['./agreement-details-main-tab.component.css'],
+    providers: [ClientService]
 })
 export class AgreementDetailsMainTabComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
