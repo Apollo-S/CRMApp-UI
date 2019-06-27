@@ -13,7 +13,8 @@ import {ClientDirectorService} from "app/services/client-director.service";
 @Component({
     selector: 'app-add-edit-director',
     templateUrl: './add-edit-director.component.html',
-    styleUrls: ['./add-edit-director.component.css']
+    styleUrls: ['./add-edit-director.component.css'],
+    providers: [ClientDirectorService, PostService]
 })
 export class AddEditDirectorComponent implements OnInit {
     director: ClientDirector;
@@ -32,13 +33,13 @@ export class AddEditDirectorComponent implements OnInit {
                 private confirmationService: ConfirmationService,
                 private messageService: MessageService) {
         this.initDirectorForm();
-        this.getPosts();
         this.ru = UtilService.getCalendarLocalSet();
         this.years = UtilService.getCalendarYears(5);
     }
 
     ngOnInit() {
         let directorId = +this.route.snapshot.params.id;
+        this.getPosts();
         if (directorId) {
             this.loadingState = true;
             this.directorService.fetchDirectorBy(directorId, this.getClient().id).toPromise()
@@ -98,10 +99,9 @@ export class AddEditDirectorComponent implements OnInit {
     }
 
     getPosts() {
-        this.postService.getPosts().toPromise()
-            .then(posts => {
-                this.posts = posts;
-            });
+        return this.postService.getPosts().toPromise().then(
+            posts => this.posts = posts
+        );
     }
 
     private save(director: ClientDirector) {

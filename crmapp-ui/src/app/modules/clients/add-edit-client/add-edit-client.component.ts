@@ -6,11 +6,13 @@ import {Client} from "app/models/Client";
 import {Subscription} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
 import {AppConst} from "app/app-const";
+import {SubscriptionService} from "app/services/subscription.service";
 
 @Component({
     selector: 'app-add-edit-client',
     templateUrl: './add-edit-client.component.html',
-    styleUrls: ['./add-edit-client.component.css']
+    styleUrls: ['./add-edit-client.component.css'],
+    providers: [ClientService]
 })
 export class AddEditClientComponent implements OnInit, OnDestroy {
     subscription: Subscription = new Subscription();
@@ -20,7 +22,8 @@ export class AddEditClientComponent implements OnInit, OnDestroy {
     clientForm: FormGroup;
     loadingState: boolean;
 
-    constructor(private clientService: ClientService,
+    constructor(private subscriptionService: SubscriptionService,
+                private clientService: ClientService,
                 private formBuilder: FormBuilder,
                 private messageService: MessageService,
                 private route: ActivatedRoute) {
@@ -31,7 +34,7 @@ export class AddEditClientComponent implements OnInit, OnDestroy {
         this.isNew = (this.route.routeConfig.path === AppConst.ADD_CLIENT_URL);
         this.loadingState = true;
         if (!this.isNew) {
-            this.subscription = this.clientService.getCurrentClient()
+            this.subscription = this.subscriptionService.getCurrentClient()
                 .subscribe(client => {
                     this.client = client;
                     this.clientForm.controls.title.setValue(this.client.title);
@@ -137,7 +140,7 @@ export class AddEditClientComponent implements OnInit, OnDestroy {
                     summary: 'Успешно!',
                     detail: msg + 'успешно обновлен'
                 });
-                this.clientService.setCurrentClient(response);
+                this.subscriptionService.setCurrentClient(response);
             })
             .then(() => this.goBackToClient());
     }
