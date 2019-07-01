@@ -39,21 +39,24 @@ export class AddEditDirectorComponent implements OnInit {
 
     ngOnInit() {
         let directorId = +this.route.snapshot.params.id;
-        this.getPosts();
-        if (directorId) {
-            this.loadingState = true;
-            this.directorService.fetchDirectorBy(directorId, this.getClient().id).toPromise()
-                .then(response => {
-                    this.director = response;
-                    this.directorForm.controls.fullName.setValue(response.fullName);
-                    this.directorForm.controls.shortName.setValue(response.shortName);
-                    this.directorForm.controls.post.setValue(response.post);
-                    this.directorForm.controls.dateStart.setValue(new Date(response.dateStart));
+        this.loadingState = true;
+        this.getPosts()
+            .then(() => {
+                if (directorId) {
+                    this.directorService.fetchDirectorBy(directorId, this.getClient().id).toPromise()
+                        .then(response => {
+                            this.director = response;
+                            this.directorForm.controls.fullName.setValue(response.fullName);
+                            this.directorForm.controls.shortName.setValue(response.shortName);
+                            this.directorForm.controls.post.setValue(response.post);
+                            this.directorForm.controls.dateStart.setValue(new Date(response.dateStart));
+                            this.loadingState = false;
+                        });
+                } else {
+                    this.isNew = true;
                     this.loadingState = false;
-                });
-        } else {
-            this.isNew = true;
-        }
+                }
+            });
     }
 
     onSubmit() {

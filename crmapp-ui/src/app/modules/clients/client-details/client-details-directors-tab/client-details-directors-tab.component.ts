@@ -32,10 +32,10 @@ export class ClientDetailsDirectorsTabComponent implements OnInit, OnDestroy {
                     this.directorService.fetchAllByClientId(client.id)
                         .subscribe(directors => {
                             this.directors = directors;
+                            this.loading = false;
                         })
                 } catch (e) {
                     console.log("Problem with fetching Directors", e);
-                } finally {
                     this.loading = false;
                 }
             }

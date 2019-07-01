@@ -7,6 +7,8 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class LoadingStatusComponent implements OnInit {
 
+  @Input() title: string = "Загрузка...";
+
   constructor() { }
 
   ngOnInit() {
