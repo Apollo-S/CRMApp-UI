@@ -16,7 +16,8 @@ import {DocumentStatusService} from "../../../services/document-status.service";
 @Component({
     selector: 'app-document-details',
     templateUrl: './document-details.component.html',
-    styleUrls: ['./document-details.component.css']
+    styleUrls: ['./document-details.component.css'],
+    providers: [ClientService]
 })
 export class DocumentDetailsComponent implements OnInit {
 

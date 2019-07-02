@@ -9,11 +9,11 @@
                 routerLink="../"
         ></button>
     </div>
-    <div class="ui-g-8">
-        <div class="content content-md" *ngIf="loadingState" style="text-align: center;">
-            <app-loading-status></app-loading-status>
-        </div>
-        <h4 style="font-weight:normal" *ngIf="!loadingState">
+    <div class="ui-g-8" *ngIf="loadingState">
+        <app-loading-status [title]="''"></app-loading-status>
+    </div>
+    <div class="ui-g-8" *ngIf="!loadingState" style="display:inline-block;margin-top:4px">
+        <h4>
             <b>
                 <ins>{{client?.title}}</ins>
             </b>
