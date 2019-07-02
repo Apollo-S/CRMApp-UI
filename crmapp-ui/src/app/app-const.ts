@@ -15,5 +15,6 @@ export class AppConst {
     agreementTypesUrl = '/agreement-types';
     currencyTypesUrl = '/currency-types';
     banksUrl = '/banks';
+    employeesUrl = '/employees';
 
 }
