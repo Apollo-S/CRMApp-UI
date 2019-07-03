@@ -1,8 +1,8 @@
-import { Person } from './Person';
-import { Post } from './Post';
+import {Person} from './Person';
+import {Post} from './Post';
+import {BaseModel} from "./BaseModel";
 
-export class Employee {
-    public id?: number;
+export class Employee extends BaseModel {
     public person?: Person;
     public personShortName?: string;
     public personInn?: string;
@@ -11,5 +11,4 @@ export class Employee {
     public firedDate?: Date;
     public post?: Post;
     public postTitle?: string;
-    public url?: string;
 }

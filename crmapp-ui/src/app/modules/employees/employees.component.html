@@ -1,7 +1,19 @@
-<app-dashboard-table [title]="['Сотрудники']" 
-    [columns]="columns" [datasource]="employees" 
-    [responsive]="true" [reorderableColumns]="true" 
-    [rows]="0" [paginator]="false" [rowHover]="true" 
-    [loading]="true" [menuModel]="items"
-    addButtonTitle="Новый" editButtonTitle="Редакт." additionalButtonTitle="Прочее">
-</app-dashboard-table>
+<app-dashboard-table
+        [title]="title"
+        [columns]="columns"
+        [datasource]="employees"
+        [autoLayout]="autoLayout"
+        [responsive]="responsive"
+        [reorderableColumns]="reorderableColumns"
+        [rows]="rows"
+        [paginator]="paginator"
+        [rowHover]="rowHover"
+        [loading]="loading"
+        [menuModel]="items"
+        [sortField]="sortField"
+        [addButtonTitle]="buttonTitle.add"
+        [editButtonTitle]="buttonTitle.edit"
+        [additionalButtonTitle]="buttonTitle.additional"
+        (refreshDatasource)="ngOnInit()"
+        [selectedItem]="selectedItem"
+></app-dashboard-table>

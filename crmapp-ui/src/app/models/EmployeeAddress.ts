@@ -1,6 +1,7 @@
-export class EmployeeAddress {
-    public id: number;
+import {Address} from "./Address";
+import {Employee} from "./Employee";
+
+export class EmployeeAddress extends Address {
     public employeeId: number;
-    public presentation: string;
-    public dateStart: string;
+    public employee?: Employee;
 }

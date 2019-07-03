@@ -7,16 +7,11 @@ import {BaseService} from "./base.service";
 import {Router} from "@angular/router";
 import {catchError} from "rxjs/operators";
 import {MessageService} from "primeng/api";
-import {BehaviorSubject} from "rxjs";
 
 @Injectable()
 export class ClientService extends BaseService<Client> {
 
-    protected readonly headers: any;
     private readonly clientsUrl: string;
-    private client: Client = {};
-    private loadingState: boolean;
-    private currentClient: BehaviorSubject<Client> = new BehaviorSubject(new Client());
 
     constructor(http: HttpClient,
                 private appConst: AppConst,
@@ -24,12 +19,6 @@ export class ClientService extends BaseService<Client> {
                 messageService: MessageService) {
         super(router, messageService, http);
         this.clientsUrl = appConst.baseUrl + appConst.clientsUrl + '/';
-        this.headers = appConst.headersJSON;
-        this.client.accounts = [];
-        this.client.addresses = [];
-        this.client.agreements = [];
-        this.client.agreements = [];
-        this.loadingState = true;
     }
 
     fetchClients() {
@@ -38,14 +27,6 @@ export class ClientService extends BaseService<Client> {
 
     fetchClientById(id: number) {
         return super.fetchOne(this.clientsUrl + id);
-    }
-
-    getCurrentClient() {
-        return this.currentClient.asObservable();
-    }
-
-    setCurrentClient(value: Client) {
-        this.currentClient.next(value);
     }
 
     addClient(client: Client) {

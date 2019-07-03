@@ -10,6 +10,7 @@ import {AppConst} from "app/app-const";
 export class ClientAccountService extends BaseService<ClientAccount> {
 
     private readonly clientsUrl: string;
+    private accountsUrl = '/accounts/';
 
     constructor(http: HttpClient,
                 router: Router,
@@ -20,27 +21,27 @@ export class ClientAccountService extends BaseService<ClientAccount> {
     }
 
     fetchAllByClientId(clientId: number) {
-        const url = this.clientsUrl + clientId + '/accounts';
+        const url = this.clientsUrl + clientId + this.accountsUrl;
         return super.fetchAll(url);
     }
 
     fetchAccountBy(accountId: number, clientId: number) {
-        const url = this.clientsUrl + clientId + '/accounts/' + accountId;
+        const url = this.clientsUrl + clientId + this.accountsUrl + accountId;
         return super.fetchOne(url);
     }
 
     addAccount(account: ClientAccount, clientId: number) {
-        const url = this.clientsUrl + clientId + '/accounts';
+        const url = this.clientsUrl + clientId + this.accountsUrl;
         return super.save(url, account);
     }
 
     updateAccount(account: ClientAccount, clientId: number) {
-        const url = this.clientsUrl + clientId + '/accounts/' + account.id;
+        const url = this.clientsUrl + clientId + this.accountsUrl + account.id;
         return super.update(url, account);
     }
 
     deleteAccount(accountId: number, clientId: number) {
-        const url = this.clientsUrl + clientId + '/accounts/' + accountId;
+        const url = this.clientsUrl + clientId + this.accountsUrl + accountId;
         return super.delete(url);
     }
 

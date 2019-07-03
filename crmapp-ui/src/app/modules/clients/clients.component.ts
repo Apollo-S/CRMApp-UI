@@ -26,7 +26,7 @@ export class ClientsComponent implements OnInit {
     rows = 0;
     selectedItem: any;
 
-    constructor(public clientService: ClientService,
+    constructor(private clientService: ClientService,
                 private subscriptionService: SubscriptionService) {
         this.initColumns();
         this.initMenu();

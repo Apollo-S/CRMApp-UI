@@ -1,6 +1,7 @@
-export class EmployeeAccount {
-    public id: number;
-    public employeeId: number;
-    public presentation: string;
-    public dateStart: string;
+import {Account} from "./Account";
+import {Employee} from "./Employee";
+
+export class EmployeeAccount extends Account {
+    public employeeId?: number;
+    public employee?: Employee;
 }

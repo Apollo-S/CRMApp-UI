@@ -1,10 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
 import {ClientService} from 'app/services/client.service';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {Client} from "app/models/Client";
 import {Subscription} from "rxjs";
-import {SubscriptionService} from "../../../../services/subscription.service";
+import {SubscriptionService} from "app/services/subscription.service";
 
 @Component({
     selector: 'app-client-details-main-tab',
@@ -19,7 +18,6 @@ export class ClientDetailsMainTabComponent implements OnInit, OnDestroy {
 
     constructor(private clientService: ClientService,
                 private subscriptionService: SubscriptionService,
-                private router: Router,
                 private confirmationService: ConfirmationService,
                 private messageService: MessageService) {
         this.loadingState = true;
@@ -51,17 +49,17 @@ export class ClientDetailsMainTabComponent implements OnInit, OnDestroy {
             icon: 'fa fa-trash',
             accept: () => {
                 this.clientService.deleteClient(this.client.id).toPromise()
-                    .then(
-                    () => {
+                    .then(() => {
                         this.messageService.add({
                             severity: 'success',
                             summary: 'Успешно!',
                             detail: (msg + ' успешно удален')
                         });
-                        this.router.navigate(['/clients']);
+                        this.clientService.goToUrl(['/clients']);
                     })
             },
-            reject: () => {}
+            reject: () => {
+            }
         });
     }
 

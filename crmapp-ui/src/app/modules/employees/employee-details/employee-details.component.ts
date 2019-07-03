@@ -1,54 +1,52 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { EmployeeService } from '../../../services/employee.service';
-import { Employee } from '../../../models/Employee';
-import { Location } from '@angular/common';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {Subscription} from 'rxjs';
+import {EmployeeService} from 'app/services/employee.service';
+import {Employee} from 'app/models/Employee';
+import {SubscriptionService} from "app/services/subscription.service";
 
 @Component({
-  selector: 'app-employee-details',
-  templateUrl: './employee-details.component.html',
-  styleUrls: ['./employee-details.component.css']
+    selector: 'app-employee-details',
+    templateUrl: './employee-details.component.html',
+    styleUrls: ['./employee-details.component.css'],
+    providers: [EmployeeService]
 })
 export class EmployeeDetailsComponent implements OnInit, OnDestroy {
-  private _propertySubscribtion: Subscription;
-  employee: Employee = {};
+    employee: Employee = new Employee();
+    private subscription: Subscription = new Subscription();
+    employeeId: number;
+    loadingState: boolean;
 
-  constructor(private service: EmployeeService,
-              private route: ActivatedRoute, 
-              private location: Location) { }
+    constructor(private employeeService: EmployeeService,
+                private subscriptionService: SubscriptionService,
+                private route: ActivatedRoute) {
+        this.employeeId = +route.snapshot.params.id;
+    }
 
-  ngOnInit() {
-    let employeeId: number;
-    this.route.params
-      .subscribe(
-        (params: Params) => {
-          employeeId = +params['id'];
-          this.getEmployeeById(employeeId);
-        }
-      );
-  }
+    ngOnInit() {
+        this.loadingState = true;
+        this.getEmployee().then(() => {
+            this.loadingState = false;
+        });
+    }
 
-  ngOnDestroy() {
-    this._propertySubscribtion.unsubscribe();
-  }
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
 
-  goBack() {
-    this.location.back();
-  }
-  
-  private getEmployeeById(id: number) {
-    this.service.getEmployeeById(id)
-      .subscribe(
-        employee => {
-          this.employee = employee;
-          this.service.property = this.employee;
-          this._propertySubscribtion = this.service.property$
-            .subscribe(
-              p => this.employee = p
-            );
-        }
-      );
-  }
+    goBack() {
+        this.employeeService.goToUrl(['/employees']);
+    }
+
+    getEmployee() {
+        return this.employeeService.fetchEmployeeById(this.employeeId).toPromise()
+            .then(data => {
+                this.subscriptionService.setCurrentEmployee(data);
+                this.subscription = this.subscriptionService.getCurrentEmployee()
+                    .subscribe(
+                        employee => this.employee = employee
+                    );
+            });
+    }
 
 }

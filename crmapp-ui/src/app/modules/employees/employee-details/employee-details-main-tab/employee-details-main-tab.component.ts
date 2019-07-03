@@ -1,62 +1,65 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Employee } from '../../../../models/Employee';
-import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
-import { EmployeeService } from '../../../../services/employee.service';
-import { MessageService } from 'primeng/components/common/messageservice';
-import { ConfirmationService, Message } from 'primeng/api';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Employee} from 'app/models/Employee';
+import {Subscription} from 'rxjs';
+import {EmployeeService} from 'app/services/employee.service';
+import {ConfirmationService, MessageService} from 'primeng/api';
+import {SubscriptionService} from "app/services/subscription.service";
 
 @Component({
-  selector: 'app-employee-details-main-tab',
-  templateUrl: './employee-details-main-tab.component.html',
-  styleUrls: ['./employee-details-main-tab.component.css']
+    selector: 'app-employee-details-main-tab',
+    templateUrl: './employee-details-main-tab.component.html',
+    styleUrls: ['./employee-details-main-tab.component.css'],
+    providers: [EmployeeService]
 })
 export class EmployeeDetailsMainTabComponent implements OnInit, OnDestroy {
-  private _propertySubscribtion: Subscription;
-  msgs: Message[] = [];
-  employee: Employee = {};
-  
-  constructor(private service: EmployeeService,
-              private router: Router,
-              private confirmationService: ConfirmationService) { }
+    private subscription: Subscription = new Subscription();
+    employee: Employee = new Employee();
+    loadingState: boolean;
 
-  ngOnInit() {
-    this._propertySubscribtion = this.service.property$
-      .subscribe(
-        p => this.employee = p
-      );
-  }
+    constructor(private employeeService: EmployeeService,
+                private messageService: MessageService,
+                private confirmationService: ConfirmationService,
+                private subscriptionService: SubscriptionService) {
+    }
 
-  ngOnDestroy() {
-    this._propertySubscribtion.unsubscribe();
-  }
+    ngOnInit() {
+        this.loadingState = true;
+        try {
+            this.subscription = this.subscriptionService.getCurrentEmployee()
+                .subscribe(employee => {
+                    this.employee = employee;
+                    this.loadingState = false;
+                });
+        } catch (e) {
+            console.log(e);
+            this.loadingState = false;
+        }
+    }
 
-  confirmDeleting() {
-    let msg  = 'Сотрудник \"' + this.employee.personShortName + '(ID=' + this.employee.id + ')\" успешно удален';
-    this.confirmationService.confirm({
-      message: 'Действительно удалить сотрудника?',
-      header: 'Удаление объекта',
-      icon: 'fa fa-trash',
-      accept: () => {
-        this.delete();
-        this.msgs = [{severity:'success', summary:'Успешно', detail: msg}];
-      },
-      reject: () => {}
-    });
-  }
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
 
-  private delete(): void {
-    this.service.deleteEmployee(this.employee)
-      .subscribe(
-        () => this.goBackToEmpoloyees()
-      );
-  }
-
-  private goBackToEmpoloyees(): void {
-    setTimeout(
-      () => {
-        this.router.navigate(['/employees']);
-      }, 1500);
-  }
+    confirmDeleting() {
+        let msg = 'Сотрудник \"' + this.employee.personShortName + '(ID=' + this.employee.id + ')\" успешно удален';
+        this.confirmationService.confirm({
+            message: 'Действительно удалить сотрудника?',
+            header: 'Удаление объекта',
+            icon: 'fa fa-trash',
+            accept: () => {
+                this.employeeService.deleteEmployee(this.employee.id).toPromise()
+                    .then(() => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Успешно!',
+                            detail: (msg + ' успешно удален')
+                        });
+                        this.employeeService.goToUrl(['/employees']);
+                    })
+            },
+            reject: () => {
+            }
+        });
+    }
 
 }

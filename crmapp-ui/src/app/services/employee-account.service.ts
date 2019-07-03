@@ -10,7 +10,7 @@ import {MessageService} from "primeng/api";
 export class EmployeeAccountService extends BaseService<EmployeeAccount> {
 
     private readonly employeesUrl: string;
-    private accounts = '/accounts/';
+    private accountsUrl = '/accounts/';
 
     constructor(http: HttpClient,
                 private appConst: AppConst,
@@ -21,27 +21,27 @@ export class EmployeeAccountService extends BaseService<EmployeeAccount> {
     }
 
     fetchAllBy(employeeId: number) {
-        const url = this.employeesUrl + employeeId + this.accounts;
+        const url = this.employeesUrl + employeeId + this.accountsUrl;
         return super.fetchAll(url);
     }
 
     fetchOneBy(employeeId: number, accountId: number) {
-        const url = this.employeesUrl + employeeId + this.accounts + accountId;
+        const url = this.employeesUrl + employeeId + this.accountsUrl + accountId;
         return super.fetchOne(url);
     }
 
     addOneBy(employeeId: number, account: EmployeeAccount) {
-        const url = this.employeesUrl + employeeId + this.accounts;
+        const url = this.employeesUrl + employeeId + this.accountsUrl;
         return super.save(url, account);
     }
 
     updateOneBy(employeeId: number, account: EmployeeAccount) {
-        const url = this.employeesUrl + employeeId + this.accounts + account.id;
+        const url = this.employeesUrl + employeeId + this.accountsUrl + account.id;
         return super.update(url, account);
     }
 
     deleteBy(employeeId: number, accountId: number) {
-        const url = this.employeesUrl + employeeId + this.accounts + accountId;
+        const url = this.employeesUrl + employeeId + this.accountsUrl + accountId;
         return super.delete(url);
     }
 

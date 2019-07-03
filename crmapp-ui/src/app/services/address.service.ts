@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Address} from "app/models/Address";
 import {HttpClient} from "@angular/common/http";
 import {AppConst} from "../app-const";
-import {ClientService} from "./client.service";
+import {SubscriptionService} from "./subscription.service";
 
 @Injectable()
 export class AddressService {
@@ -12,8 +12,8 @@ export class AddressService {
 
     constructor(private http: HttpClient,
                 private appConst: AppConst,
-                private clientService: ClientService) {
-        this.clientService.getCurrentClient().subscribe(data => {
+                private subscriptionService: SubscriptionService) {
+        this.subscriptionService.getCurrentClient().subscribe(data => {
             this.clientId = data.id;
             this.addressesUrl = appConst.clientsUrl + data.id + '/addresses';
         });
