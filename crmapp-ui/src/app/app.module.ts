@@ -123,6 +123,7 @@ import { AddEditDirectorComponent } from './modules/clients/client-details/clien
 import { AddEditDocumentComponent } from './modules/documents/document-details/add-edit-document/add-edit-document.component';
 import { AddEditAgreementComponent } from './modules/agreements/add-edit-agreement/add-edit-agreement.component';
 import { SubscriptionService } from "./services/subscription.service";
+import { AddEditEmployeeComponent } from './modules/employees/add-edit-employee/add-edit-employee.component';
 
 @NgModule({
   declarations: [
@@ -179,7 +180,8 @@ import { SubscriptionService } from "./services/subscription.service";
     DocumentDetailsComponent,
     AddEditDocumentComponent,
     AddEditClientComponent,
-    AddEditAgreementComponent
+    AddEditAgreementComponent,
+    AddEditEmployeeComponent
   ],
   imports: [
     AppRoutingModule, 
@@ -240,7 +242,6 @@ import { SubscriptionService } from "./services/subscription.service";
     MailInputService,
     MailOutputService,
     MessageService, 
-    PersonService,
     PostService,
     VacationService,
     UtilService,

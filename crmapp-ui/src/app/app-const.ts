@@ -2,11 +2,13 @@ import {HttpHeaders} from "@angular/common/http";
 
 export class AppConst {
 
+    static ADD_CLIENT_URL = 'clients/add';
+    static ADD_AGREEMENT_URL = 'agreements/add';
+    static ADD_EMPLOYEE_URL = 'employees/add';
+
     headersJSON = new HttpHeaders({'Content-Type': 'application/json'});
     baseUrl = '/api';
     clientsUrl = '/clients';
-    static ADD_CLIENT_URL = 'clients/add';
-    static ADD_AGREEMENT_URL = 'agreements/add';
     agreementsUrl = '/agreements';
     documentsUrl = '/documents';
     postsUrl = '/posts';
@@ -16,5 +18,5 @@ export class AppConst {
     currencyTypesUrl = '/currency-types';
     banksUrl = '/banks';
     employeesUrl = '/employees';
-
+    personsUrl = '/api/persons';
 }

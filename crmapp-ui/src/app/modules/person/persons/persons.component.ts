@@ -13,7 +13,7 @@ export class PersonsComponent implements OnInit {
   columns = [];
   items: Array<MenuItem> = [];
 
-  constructor(private service: PersonService) {
+  constructor(private personService: PersonService) {
     this.getPersons();
    }
 
@@ -22,8 +22,8 @@ export class PersonsComponent implements OnInit {
     this.initMenu();
   }
 
-  private getPersons(): any {
-    this.service.getPersons()
+  private getPersons() {
+    this.personService.fetchAll()
       .subscribe(
         persons => this.persons = persons
       );

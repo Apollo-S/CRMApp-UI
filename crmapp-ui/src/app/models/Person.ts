@@ -5,6 +5,7 @@ export class Person extends BaseModel {
     public firstname?: string;
     public lastname?: string;
     public shortName?: string;
+    public fullName?: string;
     public inn?: string;
     public birthDate?: Date;
 }

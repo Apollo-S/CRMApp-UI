@@ -58,7 +58,7 @@ export class AddPersonComponent implements OnInit {
   }
 
   private save(): void {
-    this.service.addPerson(this.person)
+    this.service.addOne(this.person)
       .subscribe(
         response => {
           this.person = response;

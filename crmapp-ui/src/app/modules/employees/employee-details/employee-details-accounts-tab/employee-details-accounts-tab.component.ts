@@ -28,13 +28,13 @@ export class EmployeeDetailsAccountsTabComponent implements OnInit, OnDestroy {
   }
   
   private initSubscription() {
-    this._propertySubscribtion = this.service.property$
-      .subscribe(
-        p => {
-          this.employee = p;
-          this.getAccountsByEmployeeId(p.id);
-        }
-      );
+    // this._propertySubscribtion = this.service.property$
+    //   .subscribe(
+    //     p => {
+    //       this.employee = p;
+    //       this.getAccountsByEmployeeId(p.id);
+    //     }
+    //   );
   }
 
   private getAccountsByEmployeeId(id: number) {

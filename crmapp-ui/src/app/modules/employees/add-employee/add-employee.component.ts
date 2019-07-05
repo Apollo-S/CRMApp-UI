@@ -43,10 +43,10 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   private getPersons() {
-    this.personService.getPersons()
-      .subscribe(
-        persons => this.persons = persons
-      );
+    // this.personService.getPersons()
+    //   .subscribe(
+    //     persons => this.persons = persons
+    //   );
   }
 
   private initUserForm() {

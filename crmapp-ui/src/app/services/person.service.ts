@@ -1,75 +1,42 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, BehaviorSubject, Subject, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
-import { Person } from '../models/Person';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Person} from 'app/models/Person';
+import {AppConst} from "app/app-const";
+import {Router} from "@angular/router";
+import {MessageService} from "primeng/api";
+import {BaseService} from "./base.service";
 
 @Injectable()
-export class PersonService {
+export class PersonService extends BaseService<Person> {
 
-  private personsUrl = '/api/persons';
-  private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    private readonly personsUrl: string;
 
-  constructor(private http: HttpClient) {}
-  
-  getPersons(): Observable<Person[]> {
-    const url = `${this.personsUrl}`;
-    return this.http
-      .get<Person[]>(url, { headers: this.headers })
-      .pipe(
-        catchError(this.handleError('getPersons', []))
-      )
-  }
+    constructor(http: HttpClient,
+                private appConst: AppConst,
+                router: Router,
+                messageService: MessageService) {
+        super(router, messageService, http);
+        this.personsUrl = appConst.baseUrl + appConst.personsUrl + '/';
+    }
 
-  getPersonById(id: number): Observable<Person> {
-    const url = `${this.personsUrl}/${id}`;
-    return this.http
-      .get<Person>(url, { headers: this.headers })
-      .pipe(
-        tap(_ => console.log(`obtained person ID=${id}`)),
-        catchError(this.handleError<Person>('getPersonById'))
-      )  
-  }
+    fetchAll() {
+        return super.fetchAll(this.personsUrl);
+    }
 
-  addPerson(person: Person): Observable<Person> {
-    const url = `${this.personsUrl}`;
-    return this.http
-      .post<Person>(url, person, { headers: this.headers })
-      .pipe(
-        tap(_ => console.log(`added person (alias=${person.shortName})`)),
-        catchError(this.handleError<Person>('addPerson'))
-      )  
-  }
+    fetchOne(id: number) {
+        return super.fetchOne(this.personsUrl + id);
+    }
 
-  updatePerson(person: Person): Observable<Person> {
-    const url = `${this.personsUrl}/${person.id}`;
-    return this.http
-      .put<Person>(url, person, { headers: this.headers })
-      .pipe(
-        tap(_ => console.log(`updated person (ID=${person.id}, alias=${person.shortName})`)),
-        catchError(this.handleError<Person>('updatePerson'))
-      );
-  }
+    addOne(person: Person) {
+        return super.save(this.personsUrl, person);
+    }
 
-  deletePerson(person: Person): Observable<void> {
-    const url = `${this.personsUrl}/${person.id}`;
-    return this.http
-      .delete(url, { headers: this.headers })
-      .pipe(
-        tap(_ => console.log(`deleted person ${person.shortName} (ID=${person.id})`)),
-        catchError(this.handleError<any>('deletePerson'))
-      )
-  }
+    updateOne(person: Person) {
+        return super.update(this.personsUrl + person.id, person);
+    }
 
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-      // TODO: better job of transforming error for user consumption
-      console.log(`${operation} failed: ${error.message}`);
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
-  }
+    deleteOne(id: number) {
+        return super.delete(this.personsUrl + id);
+    }
 
 }

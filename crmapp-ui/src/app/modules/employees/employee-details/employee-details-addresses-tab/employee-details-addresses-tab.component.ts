@@ -28,13 +28,13 @@ export class EmployeeDetailsAddressesTabComponent implements OnInit, OnDestroy {
   }
 
   private initSubscription() {
-    this._propertySubscribtion = this.service.property$
-      .subscribe(
-        p => {
-          this.employee = p;
-          this.getAddressesByEmployeeId(p.id);
-        }
-      );
+    // this._propertySubscribtion = this.service.property$
+    //   .subscribe(
+    //     p => {
+    //       this.employee = p;
+    //       this.getAddressesByEmployeeId(p.id);
+    //     }
+    //   );
   }
 
   private getAddressesByEmployeeId(id: number) {

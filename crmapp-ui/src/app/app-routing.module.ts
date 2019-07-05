@@ -44,6 +44,7 @@ import {DocumentDetailsComponent} from "./modules/documents/document-details/doc
 import {AddEditDocumentComponent} from "./modules/documents/document-details/add-edit-document/add-edit-document.component";
 import {AddEditClientComponent} from "./modules/clients/add-edit-client/add-edit-client.component";
 import {AddEditAgreementComponent} from "./modules/agreements/add-edit-agreement/add-edit-agreement.component";
+import {AddEditEmployeeComponent} from "./modules/employees/add-edit-employee/add-edit-employee.component";
 
 const appRoutes: Routes = [
 
@@ -92,7 +93,7 @@ const appRoutes: Routes = [
                 ]
             },
             {path: 'employees', component: EmployeesComponent},
-            {path: 'employees/add', component: AddEmployeeComponent},
+            {path: 'employees/add', component: AddEditEmployeeComponent},
             {
                 path: 'employees/:id', component: EmployeeDetailsComponent,
                 children: [

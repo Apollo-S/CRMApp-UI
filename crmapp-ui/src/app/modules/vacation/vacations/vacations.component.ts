@@ -53,14 +53,14 @@ export class VacationsComponent implements OnInit {
   }
 
   private getEmployees(): any {
-    this.employeeService.getEmployees()
+    this.employeeService.fetchEmployees()
       .subscribe(
         employees => this.employees = employees
       );
   }
 
   private getEmployeeById(employeeId: number): any {
-    this.employeeService.getEmployeeById(employeeId)
+    this.employeeService.fetchEmployeeById(employeeId)
       .subscribe(
         employee => this.vacation.employee = employee
       );

@@ -4,6 +4,7 @@ import { EmployeeService } from '../../../../services/employee.service';
 import { Vacation } from '../../../../models/Vacation';
 import { Employee } from '../../../../models/Employee';
 import { VacationService } from '../../../../services/vacation.service';
+import {SubscriptionService} from "../../../../services/subscription.service";
 
 @Component({
   selector: 'app-employee-details-vacations-tab',
@@ -17,7 +18,8 @@ export class EmployeeDetailsVacationsTabComponent implements OnInit, OnDestroy {
   columns: any[] = [];
 
   constructor(private vacationService: VacationService,
-              private employeeService: EmployeeService) { }
+              private employeeService: EmployeeService,
+              private subscriptionService: SubscriptionService) { }
 
   ngOnInit() {
     this.initSubscription();
@@ -29,13 +31,13 @@ export class EmployeeDetailsVacationsTabComponent implements OnInit, OnDestroy {
   }
 
   private initSubscription() {
-    this._propertySubscription = this.employeeService.property$
-      .subscribe(
-        p => {
-          this.employee = p;
-          this.getVacationsByEmployeeId(p.id);
-        }
-      );
+    // this._propertySubscription = this.subscriptionService.property$
+    //   .subscribe(
+    //     p => {
+    //       this.employee = p;
+    //       this.getVacationsByEmployeeId(p.id);
+    //     }
+    //   );
   }
 
   private getVacationsByEmployeeId(id: number) {

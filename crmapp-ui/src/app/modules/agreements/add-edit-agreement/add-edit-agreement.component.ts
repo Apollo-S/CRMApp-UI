@@ -9,6 +9,7 @@ import {UtilService} from "app/services/util.service";
 import {MenuItem, MessageService} from "primeng/api";
 import {AppConst} from "app/app-const";
 import {ActivatedRoute} from "@angular/router";
+import {SubscriptionService} from "app/services/subscription.service";
 
 @Component({
     selector: 'app-add-edit-agreement',
@@ -28,6 +29,7 @@ export class AddEditAgreementComponent implements OnInit, OnDestroy {
     ru: any;
 
     constructor(private clientService: ClientService,
+                private subscriptionService: SubscriptionService,
                 private agreementService: AgreementService,
                 private formBuilder: FormBuilder,
                 private messageService: MessageService,
@@ -52,7 +54,7 @@ export class AddEditAgreementComponent implements OnInit, OnDestroy {
                     });
             } else {
                 this.initDisabledTabs();
-                this.clientService.getCurrentClient().subscribe(
+                this.subscriptionService.getCurrentClient().subscribe(
                     client => {
                         this.agreementForm.controls.client.setValue(client);
                         this.agreementForm.controls.dateStart.setValue(new Date());

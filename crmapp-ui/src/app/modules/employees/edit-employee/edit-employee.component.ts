@@ -31,7 +31,7 @@ export class EditEmployeeComponent implements OnInit {
   }
 
   private getEmployeeById(id: number) {
-    this.employeeService.getEmployeeById(this.employeeId)
+    this.employeeService.fetchEmployeeById(this.employeeId)
       .subscribe(employee => this.employee = employee);
   }
   
