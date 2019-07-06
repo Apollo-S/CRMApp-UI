@@ -57,7 +57,6 @@ import { EmployeeService } from './services/employee.service';
 import { MailDocumentTypeService } from './services/mail-document-type.service';
 import { MailInputService } from './services/mail-input.service';
 import { MailOutputService } from './services/mail-output.service';
-import { PersonService } from './services/person.service';
 import { PostService } from './services/post.service';
 import { VacationService } from './services/vacation.service';
 import { UtilService } from './services/util.service';

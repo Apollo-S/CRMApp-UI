@@ -5,6 +5,7 @@ export class AppConst {
     static ADD_CLIENT_URL = 'clients/add';
     static ADD_AGREEMENT_URL = 'agreements/add';
     static ADD_EMPLOYEE_URL = 'employees/add';
+    static ADD_PERSON_URL = 'persons/add';
 
     headersJSON = new HttpHeaders({'Content-Type': 'application/json'});
     baseUrl = '/api';
@@ -18,5 +19,5 @@ export class AppConst {
     currencyTypesUrl = '/currency-types';
     banksUrl = '/banks';
     employeesUrl = '/employees';
-    personsUrl = '/api/persons';
+    personsUrl = '/persons';
 }

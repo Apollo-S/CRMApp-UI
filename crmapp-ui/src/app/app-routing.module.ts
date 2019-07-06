@@ -19,8 +19,6 @@ import {AgreementDetailsDocumentsTabComponent} from './modules/agreements/agreem
 import {DocumentsComponent} from './modules/documents/documents.component';
 
 import {EmployeesComponent} from './modules/employees/employees.component';
-import {AddEmployeeComponent} from './modules/employees/add-employee/add-employee.component';
-import {EditEmployeeComponent} from './modules/employees/edit-employee/edit-employee.component';
 import {EmployeeDetailsComponent} from './modules/employees/employee-details/employee-details.component';
 import {EmployeeDetailsMainTabComponent} from './modules/employees/employee-details/employee-details-main-tab/employee-details-main-tab.component';
 import {EmployeeDetailsAddressesTabComponent} from './modules/employees/employee-details/employee-details-addresses-tab/employee-details-addresses-tab.component';
@@ -41,7 +39,6 @@ import {AddEditAddressComponent} from "./modules/clients/client-details/client-d
 import {AddEditAccountComponent} from "./modules/clients/client-details/client-details-accounts-tab/add-edit-account/add-edit-account.component";
 import {AddEditDirectorComponent} from "./modules/clients/client-details/client-details-directors-tab/add-edit-director/add-edit-director.component";
 import {DocumentDetailsComponent} from "./modules/documents/document-details/document-details.component";
-import {AddEditDocumentComponent} from "./modules/documents/document-details/add-edit-document/add-edit-document.component";
 import {AddEditClientComponent} from "./modules/clients/add-edit-client/add-edit-client.component";
 import {AddEditAgreementComponent} from "./modules/agreements/add-edit-agreement/add-edit-agreement.component";
 import {AddEditEmployeeComponent} from "./modules/employees/add-edit-employee/add-edit-employee.component";
@@ -99,7 +96,7 @@ const appRoutes: Routes = [
                 children: [
                     {path: '', redirectTo: 'main', pathMatch: 'full'},
                     {path: 'main', component: EmployeeDetailsMainTabComponent},
-                    {path: 'main/edit', component: EditEmployeeComponent},
+                    {path: 'main/edit', component: AddEditEmployeeComponent},
                     {path: 'addresses', component: EmployeeDetailsAddressesTabComponent},
                     {path: 'accounts', component: EmployeeDetailsAccountsTabComponent},
                     {path: 'vacations', component: EmployeeDetailsVacationsTabComponent},
