@@ -19,6 +19,7 @@ export class EmployeeDetailsTabsComponent implements OnInit {
     private initTabs(): any {
         this.tabs = [
             {label: 'Основные данные', icon: 'fa fa-address-card-o', routerLink: 'main'},
+            {label: 'Должности', icon: 'fa fa-address-card-o', routerLink: 'posts'},
             {label: 'Адресы', icon: 'fa fa-building-o', routerLink: 'addresses'},
             {label: 'Банковские реквизиты', icon: 'fa fa-bank', routerLink: 'accounts'},
             {label: 'Отпуски', icon: 'fa fa-user-o', routerLink: 'vacations'},

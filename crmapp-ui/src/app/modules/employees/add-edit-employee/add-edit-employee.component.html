@@ -78,6 +78,46 @@
                             ></p-message>
                         </div>
                     </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-3">
+                            <b>Должность:</b>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <p-dropdown
+                                    [options]="posts"
+                                    [showClear]="false"
+                                    [autoWidth]="false"
+                                    placeholder="..."
+                                    optionLabel="title"
+                                    [formControlName]="'post'"
+                            ></p-dropdown>
+                        </div>
+                        <div class="ui-grid-col-3">
+                            <p-message
+                                    severity="error"
+                                    text="{{message.postEmpty}}"
+                                    *ngIf="employeeForm.controls.post.invalid"
+                            ></p-message>
+                        </div>
+                    </div>
+<!--                    <div class="ui-grid-row">-->
+<!--                        -->
+<!--                    </div>-->
+<!--                    <div class="ui-grid-row">-->
+<!--                        -->
+<!--                    </div>-->
+
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-3">
+                            <b>Предприниматель:</b>
+                        </div>
+                        <div class="ui-grid-col-6">
+                            <p-checkbox
+                                    binary="true"
+                                    [formControlName]="'entrepreneur'"
+                            ></p-checkbox>
+                        </div>
+                    </div>
                 </div>
             </p-card>
         </div>

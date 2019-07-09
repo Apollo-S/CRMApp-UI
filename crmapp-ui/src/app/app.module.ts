@@ -123,6 +123,7 @@ import { AddEditDocumentComponent } from './modules/documents/document-details/a
 import { AddEditAgreementComponent } from './modules/agreements/add-edit-agreement/add-edit-agreement.component';
 import { SubscriptionService } from "./services/subscription.service";
 import { AddEditEmployeeComponent } from './modules/employees/add-edit-employee/add-edit-employee.component';
+import { EmployeeDetailsPostsTabComponent } from './modules/employees/employee-details/employee-details-posts-tab/employee-details-posts-tab.component';
 
 @NgModule({
   declarations: [
@@ -180,7 +181,8 @@ import { AddEditEmployeeComponent } from './modules/employees/add-edit-employee/
     AddEditDocumentComponent,
     AddEditClientComponent,
     AddEditAgreementComponent,
-    AddEditEmployeeComponent
+    AddEditEmployeeComponent,
+    EmployeeDetailsPostsTabComponent
   ],
   imports: [
     AppRoutingModule, 
