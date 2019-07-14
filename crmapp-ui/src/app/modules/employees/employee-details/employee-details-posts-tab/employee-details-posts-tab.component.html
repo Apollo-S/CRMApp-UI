@@ -1,3 +1,17 @@
-<p>
-  employee-details-posts-tab works!
-</p>
+<app-client-employee-details-template-table
+        [columns]="columns"
+        [datasource]="posts"
+        [responsive]="responsive"
+        [reorderableColumns]="reorderableColumns"
+        [rows]="rows"
+        [paginator]="paginator"
+        [rowHover]="rowHover"
+        [loading]="loading"
+        [sortField]="sortField"
+        [routerLinkUrl]="['add']"
+        [autoLayout]="autoLayout"
+        [addButtonTitle]="buttonTitle.add"
+        [editButtonTitle]="buttonTitle.edit"
+        (refreshDatasource)="refreshDatasource()"
+></app-client-employee-details-template-table>
+

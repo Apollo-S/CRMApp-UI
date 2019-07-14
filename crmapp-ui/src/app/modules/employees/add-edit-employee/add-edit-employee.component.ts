@@ -35,6 +35,10 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
     };
     ru: any;
     years: any;
+    formControlName: {
+        person: 'person',
+        post: 'post'
+    };
 
     constructor(private subscriptionService: SubscriptionService,
                 private employeeService: EmployeeService,

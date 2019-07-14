@@ -25,9 +25,9 @@ import {EmployeeDetailsAddressesTabComponent} from './modules/employees/employee
 import {EmployeeDetailsAccountsTabComponent} from './modules/employees/employee-details/employee-details-accounts-tab/employee-details-accounts-tab.component';
 
 import {VacationsComponent} from './modules/vacation/vacations/vacations.component';
-import {PersonsComponent} from "./modules/person/persons/persons.component";
-import {AddPersonComponent} from "./modules/person/add-person/add-person.component";
-import {PersonDetailsComponent} from "./modules/person/person-details/person-details.component";
+import {PersonsComponent} from "./modules/persons/persons.component";
+import {AddPersonComponent} from "./modules/persons/add-person/add-person.component";
+import {PersonDetailsComponent} from "./modules/persons/person-details/person-details.component";
 import {MainPageComponent} from "./modules/main-page/main-page.component";
 import {MailOutputsComponent} from "./modules/mail-outputs/mail-outputs.component";
 import {AgreementDetailsMainTabComponent} from "./modules/agreements/agreement-details/agreement-details-main-tab/agreement-details-main-tab.component";
@@ -42,6 +42,7 @@ import {DocumentDetailsComponent} from "./modules/documents/document-details/doc
 import {AddEditClientComponent} from "./modules/clients/add-edit-client/add-edit-client.component";
 import {AddEditAgreementComponent} from "./modules/agreements/add-edit-agreement/add-edit-agreement.component";
 import {AddEditEmployeeComponent} from "./modules/employees/add-edit-employee/add-edit-employee.component";
+import {EmployeeDetailsPostsTabComponent} from "./modules/employees/employee-details/employee-details-posts-tab/employee-details-posts-tab.component";
 
 const appRoutes: Routes = [
 
@@ -97,6 +98,7 @@ const appRoutes: Routes = [
                     {path: '', redirectTo: 'main', pathMatch: 'full'},
                     {path: 'main', component: EmployeeDetailsMainTabComponent},
                     {path: 'main/edit', component: AddEditEmployeeComponent},
+                    {path: 'posts', component: EmployeeDetailsPostsTabComponent},
                     {path: 'addresses', component: EmployeeDetailsAddressesTabComponent},
                     {path: 'accounts', component: EmployeeDetailsAccountsTabComponent},
                     {path: 'vacations', component: EmployeeDetailsVacationsTabComponent},

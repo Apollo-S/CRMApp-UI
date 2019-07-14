@@ -100,10 +100,10 @@ import { EmployeeDetailsAccountsTabComponent } from './modules/employees/employe
 
 import { VacationsComponent } from './modules/vacation/vacations/vacations.component';
 import { VacationDetailsComponent } from './modules/vacation/vacation-details/vacation-details.component';
-import { PersonsComponent } from './modules/person/persons/persons.component';
-import { AddPersonComponent } from './modules/person/add-person/add-person.component';
-import { EditPersonComponent } from './modules/person/edit-person/edit-person.component';
-import { PersonDetailsComponent } from './modules/person/person-details/person-details.component';
+import { PersonsComponent } from './modules/persons/persons.component';
+import { AddPersonComponent } from './modules/persons/add-person/add-person.component';
+import { EditPersonComponent } from './modules/persons/edit-person/edit-person.component';
+import { PersonDetailsComponent } from './modules/persons/person-details/person-details.component';
 import { LoadingStatusComponent } from './components/loading-status/loading-status.component';
 import { NavbarMenuBarComponent } from './modules/navbar/navbar-menu-bar/navbar-menu-bar.component';
 import { MainPageComponent } from './modules/main-page/main-page.component';
