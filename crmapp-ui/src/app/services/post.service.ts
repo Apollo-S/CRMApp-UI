@@ -11,7 +11,6 @@ import {MessageService} from "primeng/api";
 export class PostService extends BaseService<Post> {
 
     private readonly postsUrl;
-    protected readonly headers;
 
     constructor(http: HttpClient,
                 private appConst: AppConst,
@@ -19,23 +18,14 @@ export class PostService extends BaseService<Post> {
                 messageService: MessageService) {
         super(router, messageService, http);
         this.postsUrl = appConst.baseUrl + appConst.postsUrl + '/';
-        this.headers = appConst.headersJSON;
     }
 
     getPosts() {
-        const url = this.postsUrl;
-        return this.http.get<Post[]>(url, {headers: this.headers})
-            .pipe(catchError(this.handleError<Post[]>(
-                'Ошибка при загрузке должностей!'
-            )));
+        return super.fetchAll(this.postsUrl);
     }
 
     getPostById(postId: number) {
-        const url = this.postsUrl + postId;
-        return this.http.get(url, {headers: this.headers})
-            .pipe(catchError(this.handleError<Post>(
-                'Ошибка при загрузке должности с ID=' + postId + '!'
-            )));
+        return super.fetchOne(this.postsUrl + postId);
     }
 
 }

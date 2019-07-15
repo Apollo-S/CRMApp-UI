@@ -1,12 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {Post} from "../../../../models/Post";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Post} from "app/models/Post";
+import {Subscription} from "rxjs";
+import {PostService} from "app/services/post.service";
 
 @Component({
     selector: 'app-employee-details-posts-tab',
     templateUrl: './employee-details-posts-tab.component.html',
-    styleUrls: ['./employee-details-posts-tab.component.css']
+    styleUrls: ['./employee-details-posts-tab.component.css'],
+    providers: [PostService]
 })
-export class EmployeeDetailsPostsTabComponent implements OnInit {
+export class EmployeeDetailsPostsTabComponent implements OnInit, OnDestroy {
+    private subscribtion: Subscription = new Subscription();
     columns = [];
     posts: Post[] = [];
     responsive: any;
@@ -18,17 +22,38 @@ export class EmployeeDetailsPostsTabComponent implements OnInit {
     sortField: any;
     autoLayout: any;
     buttonTitle: {
-        add: 'Новый адрес',
+        add: 'Добавить',
         edit: 'Изменить'
     };
+    routerLinkUrl = ['add'];
 
-    constructor() {
+    constructor(private postService: PostService) {
+        this.initColumns();
+        this.sortField = this.columns[0].field;
     }
 
     ngOnInit() {
+        this.fetchData();
+    }
+
+    ngOnDestroy() {
+        this.subscribtion.unsubscribe();
     }
 
     refreshDatasource() {
-
     }
+
+    async fetchData() {
+        let postsPromise = this.postService.getPosts().toPromise();
+        this.posts = await postsPromise;
+    }
+
+    private initColumns() {
+        this.columns = [
+            {field: 'id', header: 'ID'},
+            {field: 'post', header: 'Должность'},
+            {field: 'dateStart', header: 'Действует с'}
+        ];
+    }
+
 }

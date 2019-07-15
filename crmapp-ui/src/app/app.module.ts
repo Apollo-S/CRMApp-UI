@@ -243,7 +243,7 @@ import { EmployeeDetailsPostsTabComponent } from './modules/employees/employee-d
     MailInputService,
     MailOutputService,
     MessageService, 
-    PostService,
+    // PostService,
     VacationService,
     UtilService,
     SubscriptionService
