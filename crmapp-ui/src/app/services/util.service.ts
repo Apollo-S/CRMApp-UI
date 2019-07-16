@@ -1,39 +1,62 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class UtilService {
 
-  constructor() { }
+    constructor() {
+    }
 
-  static getCalendarYears(countOfYears: number): string {
-    let currentYear = new Date().getFullYear();
-    return ((currentYear - countOfYears).toString()) + ':' + currentYear.toString();
-  }
+    static getCalendarYears(countOfYears: number): string {
+        let currentYear = new Date().getFullYear();
+        return ((currentYear - countOfYears).toString()) + ':' + currentYear.toString();
+    }
 
-  static getCalendarLocalSet(): any  {
-    return {
-      firstDayOfWeek: 1,
-      dayNames: ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"],
-      dayNamesShort: ["Вос", "Пон", "Втор", "Ср", "Чет", "Пят", "Суб"],
-      dayNamesMin: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
-      monthNames: [ "Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь" ],
-      monthNamesShort: [ "Янв", "Фев", "Мар", "Апр", "Май", "Июн","Июл", "Авг", "Сен", "Окт", "Ноя", "Дек" ],
-      today: 'Сегодня',
-      clear: 'Очистить'
-    };
-  }
+    static getCalendarLocalSet(): any {
+        return {
+            firstDayOfWeek: 1,
+            dayNames: ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"],
+            dayNamesShort: ["Вос", "Пон", "Втор", "Ср", "Чет", "Пят", "Суб"],
+            dayNamesMin: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+            monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+            monthNamesShort: ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
+            today: 'Сегодня',
+            clear: 'Очистить'
+        };
+    }
 
-  static calcDifferenceBetweenDates(dateOne: Date, dateTwo: Date): number {
-    let result: number = 0;
-    result = (new Date(dateOne).getTime() - new Date(dateTwo).getTime());
-    result = result / (1000 * 3600 * 24);
-    return Math.ceil(result);
-  }
+    static calcDifferenceBetweenDates(dateOne: Date, dateTwo: Date): number {
+        let result: number = 0;
+        result = (new Date(dateOne).getTime() - new Date(dateTwo).getTime());
+        result = result / (1000 * 3600 * 24);
+        return Math.ceil(result);
+    }
 
-  static addDaysToDate(date: Date, daysQuantity: number): Date {
-    let result: number = daysQuantity * (1000 * 3600 * 24);
-    result = result + new Date(date).getTime();
-    return new Date(result);
-  }
+    static addDaysToDate(date: Date, daysQuantity: number): Date {
+        let result: number = daysQuantity * (1000 * 3600 * 24);
+        result = result + new Date(date).getTime();
+        return new Date(result);
+    }
+
+    static resolveFieldData(data: any, field: string) {
+        if (data && field) {
+            if (field.indexOf('.') == -1) {
+                return data[field];
+            }
+            else {
+                let fields: string[] = field.split('.');
+                let value = data;
+                for (var i = 0, len = fields.length; i < len; ++i) {
+                    if (value == null) {
+                        return null;
+                    }
+                    value = value[fields[i]];
+                }
+                return value;
+            }
+        }
+        else {
+            return null;
+        }
+    }
 
 }

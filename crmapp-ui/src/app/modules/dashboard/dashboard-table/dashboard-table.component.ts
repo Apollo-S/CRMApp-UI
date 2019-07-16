@@ -1,6 +1,7 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Router} from '@angular/router';
 import {MenuItem} from 'primeng/api';
+import {UtilService} from "app/services/util.service";
 
 @Component({
     selector: 'app-dashboard-table',
@@ -8,7 +9,7 @@ import {MenuItem} from 'primeng/api';
     styleUrls: ['./dashboard-table.component.css']
 })
 export class DashboardTableComponent implements OnInit {
-
+    @Input() selectionMode: string = 'single';
     @Input() title: string;
     @Input() columns: Array<any>;
     @Input() datasource: Array<any>;
@@ -21,11 +22,16 @@ export class DashboardTableComponent implements OnInit {
     @Input() menuModel: Array<MenuItem>;
     @Input() sortField: string;
     @Input() autoLayout: boolean;
-    @Input() addButtonTitle: string;
-    @Input() editButtonTitle: string;
-    @Input() additionalButtonTitle: string;
+    @Input() addButtonTitle: string = 'Добавить';
+    @Input() editButtonTitle: string = 'Редакт.';
+    @Input() additionalButtonTitle: string = 'Прочее';
+    @Input() updateButtonTitle: string = 'Обновить';
     @Output() refreshDatasource: EventEmitter<any> = new EventEmitter();
     @Input() selectedItem: any;
+    @Input() datePattern = 'dd.MM.y';
+    @Input() sortOrder = 1;
+    dataKey = 'id';
+    buttonState: boolean;
 
     constructor(private router: Router) {
     }
@@ -47,4 +53,11 @@ export class DashboardTableComponent implements OnInit {
         this.refreshDatasource.emit(true);
     }
 
+    resolveFieldData(data: any, field: string) {
+        return UtilService.resolveFieldData(data, field);
+    }
+
+    changeButtonState() {
+        this.buttonState = !this.buttonState;
+    }
 }
