@@ -69,7 +69,7 @@ import { NavbarBottomComponent } from './modules/navbar/navbar-bottom/navbar-bot
 import { SidebarComponent } from './modules/sidebar/sidebar.component';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
 import { DashboardMenuComponent } from './modules/dashboard/dashboard-menu/dashboard-menu.component';
-import { DashboardTableComponent } from './modules/dashboard/dashboard-table/dashboard-table.component';
+import { CommonTableViewAllComponent } from './components/common-table-view-all/common-table-view-all.component';
 import { PageNotFoundComponent } from './modules/page-not-found/page-not-found.component';
 
 import { ClientsComponent } from './modules/clients/clients.component';
@@ -137,7 +137,7 @@ import { EmployeeDetailsPostsTabComponent } from './modules/employees/employee-d
     SidebarComponent,
     DashboardComponent,
     DashboardMenuComponent,
-    DashboardTableComponent,
+    CommonTableViewAllComponent,
     PageNotFoundComponent,
     EmployeesComponent,
     DocumentsComponent,

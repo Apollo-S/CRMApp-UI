@@ -51,9 +51,10 @@ export class EmployeesComponent implements OnInit {
 
     private initColumns() {
         this.columns = [
-            {field: 'personShortName', header: 'ФИО'},
-            {field: 'personInn', header: 'ИНН'},
-            {field: 'postTitle', header: 'Должность'}
+            {field: 'id', header: 'ID'},
+            {field: 'person.fullName', header: 'ФИО'},
+            {field: 'person.inn', header: 'ИНН'},
+            {field: 'hireDate', header: 'Принят', dateField: true},
         ];
     }
 

@@ -4,11 +4,11 @@ import {MenuItem} from 'primeng/api';
 import {UtilService} from "app/services/util.service";
 
 @Component({
-    selector: 'app-dashboard-table',
-    templateUrl: './dashboard-table.component.html',
-    styleUrls: ['./dashboard-table.component.css']
+    selector: 'common-table-view-all',
+    templateUrl: './common-table-view-all.component.html',
+    styleUrls: ['./common-table-view-all.component.css']
 })
-export class DashboardTableComponent implements OnInit {
+export class CommonTableViewAllComponent implements OnInit {
     @Input() selectionMode: string = 'single';
     @Input() title: string;
     @Input() columns: Array<any>;

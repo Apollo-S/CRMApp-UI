@@ -41,7 +41,7 @@ export class EmployeeDetailsMainTabComponent implements OnInit, OnDestroy {
     }
 
     confirmDeleting() {
-        let msg = 'Сотрудник \"' + this.employee.personShortName + '(ID=' + this.employee.id + ')\" успешно удален';
+        let msg = 'Сотрудник \"' + this.employee.person.shortName + '(ID=' + this.employee.id + ')\" успешно удален';
         this.confirmationService.confirm({
             message: 'Действительно удалить сотрудника?',
             header: 'Удаление объекта',
