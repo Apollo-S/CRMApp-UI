@@ -57,7 +57,12 @@ export class CommonTableViewAllComponent implements OnInit {
         return UtilService.resolveFieldData(data, field);
     }
 
-    changeButtonState() {
-        this.buttonState = !this.buttonState;
+    onRowSelect() {
+        this.buttonState = true;
     }
+
+    onRowUnselect() {
+        this.buttonState = false;
+    }
+
 }

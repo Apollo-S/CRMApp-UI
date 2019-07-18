@@ -3,7 +3,7 @@
         <div class="ui-helper-clearfix">
             <span class="ui-panel-title" style="display:inline-block;margin-top:6px">
                 <h4><b>{{title}}</b></h4>
-            </span>  
+            </span>
         </div>
     </p-header>
 
@@ -22,7 +22,10 @@
         [selectionMode]="selectionMode"
         [(selection)]="selectedItem"
         [loading]="loading"
-        [dataKey]="dataKey">
+        [dataKey]="dataKey"
+        (onRowSelect)="onRowSelect()"
+        (onRowUnselect)="onRowUnselect()"
+    >
         <ng-template pTemplate="caption">
             <div>
                 <button
@@ -91,7 +94,6 @@
         <ng-template pTemplate="body" let-datasource let-rowData let-columns="columns" >
             <tr [pSelectableRow]="rowData">
                 <td *ngFor="let column of columns" style="text-align:center"
-                    (click)="changeButtonState()"
                     (dblclick)="goToEntry(datasource?.url)">
                     <span class="ui-column-title">{{column.header}}</span>
                     <div *ngIf="column.dateField">
