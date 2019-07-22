@@ -28,4 +28,6 @@ export class PostService extends BaseService<Post> {
         return super.fetchOne(this.postsUrl + postId);
     }
 
+
+
 }

@@ -7,5 +7,5 @@ export class Employee extends BaseModel {
     public entrepreneur?: boolean;
     public hireDate?: Date;
     public firedDate?: Date;
-    public post?: Post;
+    public activePost?: Post;
 }

@@ -54,7 +54,7 @@ export class ClientDetailsAddressesTabComponent implements OnInit, OnDestroy {
         this.columns = [
             {field: 'id', header: 'ID'},
             {field: 'presentation', header: 'Адрес'},
-            {field: 'dateStart', header: 'Действует с'}
+            {field: 'dateStart', header: 'Действует с', dateField: true}
         ];
     }
 

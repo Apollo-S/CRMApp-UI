@@ -31,6 +31,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        this.subscriptionService.setCurrentClient(new Client());
         this.subscription.unsubscribe();
     }
 

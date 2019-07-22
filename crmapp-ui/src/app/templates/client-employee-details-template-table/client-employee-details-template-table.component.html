@@ -10,7 +10,7 @@
                 [columns]="columns"
                 [responsive]="responsive"
                 [sortField]="sortField"
-                [sortOrder]="1"
+                [sortOrder]="sortOrder"
                 [value]="datasource"
                 [reorderableColumns]="reorderableColumns"
                 [autoLayout]="autoLayout"
@@ -20,7 +20,8 @@
                 [selectionMode]="'single'"
                 [dataKey]="'id'"
                 [(selection)]="selectedItem"
-                [loading]="loading">
+                [loading]="loading"
+            >
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 2.25em"></th>
@@ -38,13 +39,11 @@
                         </td>
                         <td *ngFor="let column of columns" style="text-align:center"
                             (dblclick)="goToEntry(datasource?.url)">
-                            <div *ngIf="column.field!=='dateStart'">
-                                <span class="ui-column-title">{{column.header}}</span>
-                                {{rowData[column.field]}}
+                            <div *ngIf="!column.dateField">
+                                {{resolveFieldData(rowData, column.field)}}
                             </div>
-                            <div *ngIf="column.field==='dateStart'">
-                                <span class="ui-column-title">{{column.header}}</span>
-                                {{rowData[column.field] | date: 'dd.MM.y'}}
+                            <div *ngIf="column.dateField">
+                                {{resolveFieldData(rowData, column.field) | date: pattern}}
                             </div>
                         </td>
                     </tr>

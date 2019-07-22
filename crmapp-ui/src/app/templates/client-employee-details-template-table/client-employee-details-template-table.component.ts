@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {UtilService} from "../../services/util.service";
 
 @Component({
     selector: 'app-client-employee-details-template-table',
@@ -7,7 +8,7 @@ import {Router} from '@angular/router';
     styleUrls: ['./client-employee-details-template-table.component.css']
 })
 export class ClientEmployeeDetailsTemplateTableComponent implements OnInit {
-
+    @Input() sortOrder: number = 1;
     @Input() addButtonTitle: string;
     @Input() editButtonTitle: string;
     @Input() columns: any[];
@@ -22,6 +23,7 @@ export class ClientEmployeeDetailsTemplateTableComponent implements OnInit {
     @Input() autoLayout: boolean;
     @Input() routerLinkUrl: string[];
     selectedItem: any;
+    pattern = 'dd.MM.y';
 
     constructor(private router: Router) {
     }
@@ -33,4 +35,7 @@ export class ClientEmployeeDetailsTemplateTableComponent implements OnInit {
         this.router.navigate([url]);
     }
 
+    resolveFieldData(rowData, field: any) {
+        return UtilService.resolveFieldData(rowData, field);
+    }
 }

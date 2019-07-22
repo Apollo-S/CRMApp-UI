@@ -4,31 +4,47 @@ import {Subscription} from 'rxjs';
 import {EmployeeService} from 'app/services/employee.service';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {SubscriptionService} from "app/services/subscription.service";
+import {EmployeePostService} from "app/services/employee-post.service";
+import {Post} from "app/models/Post";
 
 @Component({
     selector: 'app-employee-details-main-tab',
     templateUrl: './employee-details-main-tab.component.html',
     styleUrls: ['./employee-details-main-tab.component.css'],
-    providers: [EmployeeService]
+    providers: [EmployeeService, EmployeePostService]
 })
 export class EmployeeDetailsMainTabComponent implements OnInit, OnDestroy {
     private subscription: Subscription = new Subscription();
     employee: Employee = new Employee();
     loadingState: boolean;
+    activePost: Post = new Post();
 
     constructor(private employeeService: EmployeeService,
+                private employeePostService: EmployeePostService,
                 private messageService: MessageService,
                 private confirmationService: ConfirmationService,
                 private subscriptionService: SubscriptionService) {
+        this.loadingState = true;
     }
 
     ngOnInit() {
-        this.loadingState = true;
         try {
             this.subscription = this.subscriptionService.getCurrentEmployee()
                 .subscribe(employee => {
                     this.employee = employee;
-                    this.loadingState = false;
+                    if (employee.id !== undefined) {
+                        this.employeePostService.fetchAllBy(employee.id).subscribe(
+                            posts => {
+                                debugger
+                                if (posts) {
+                                    posts.forEach(item => {
+                                        if (item.active) this.activePost = item.post;
+                                    });
+                                }
+                                this.loadingState = false;
+                            }
+                        )
+                    }
                 });
         } catch (e) {
             console.log(e);

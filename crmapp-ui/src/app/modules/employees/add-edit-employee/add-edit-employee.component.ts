@@ -63,7 +63,7 @@ export class AddEditEmployeeComponent implements OnInit, OnDestroy {
                         this.employeeForm.controls.person.setValue(employee.person);
                         this.employeeForm.controls.hireDate.setValue(new Date(employee.hireDate));
                         this.employeeForm.controls.entrepreneur.setValue(employee.entrepreneur);
-                        this.employeeForm.controls.post.setValue(employee.post);
+                        this.employeeForm.controls.post.setValue(employee.activePost); // TODO
                         this.loadingState = false;
                     });
             } else {

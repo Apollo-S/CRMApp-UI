@@ -9,7 +9,10 @@
                 (click)="goBack()"
         ></button>
     </div>
-    <div class="ui-g-8">
+    <div class="ui-g-8" *ngIf="loadingState">
+        <app-loading-status [title]="''"></app-loading-status>
+    </div>
+    <div class="ui-g-8" *ngIf="!loadingState">
         <h4 style="font-weight:normal">
             <b>
                 <ins>{{employee?.person?.shortName}}</ins>

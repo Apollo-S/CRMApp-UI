@@ -31,6 +31,7 @@ export class EmployeeDetailsComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        this.subscriptionService.setCurrentEmployee(new Employee());
         this.subscription.unsubscribe();
     }
 
