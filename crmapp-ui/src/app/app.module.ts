@@ -45,6 +45,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TreeModule }  from 'primeng/tree';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
+import { DynamicDialogModule } from 'primeng/dynamicdialog';
 
 // Custom Service Imports
 import { AppConst } from './app-const';

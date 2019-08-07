@@ -1,55 +1,78 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { EmployeeAddress } from '../../../../models/EmployeeAddress';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { EmployeeService } from '../../../../services/employee.service';
-import { Employee } from '../../../../models/Employee';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {EmployeeAddress} from 'app/models/EmployeeAddress';
+import {Subscription} from 'rxjs';
+import {EmployeeService} from 'app/services/employee.service';
+import {Employee} from 'app/models/Employee';
+import {EmployeeAddressService} from "../../../../services/employee-address.service";
+import {SubscriptionService} from "../../../../services/subscription.service";
 
 @Component({
-  selector: 'app-employee-details-addresses-tab',
-  templateUrl: './employee-details-addresses-tab.component.html',
-  styleUrls: ['./employee-details-addresses-tab.component.css']
+    selector: 'app-employee-details-addresses-tab',
+    templateUrl: './employee-details-addresses-tab.component.html',
+    styleUrls: ['./employee-details-addresses-tab.component.css'],
+    providers: [EmployeeService, EmployeeAddressService]
 })
 export class EmployeeDetailsAddressesTabComponent implements OnInit, OnDestroy {
-  private _propertySubscribtion: Subscription;
-  columns: any[] = [];
-  addresses: EmployeeAddress[] = [];
-  employee: Employee = {};
+    private subscription: Subscription = new Subscription();
+    columns = [];
+    addresses: EmployeeAddress[] = [];
+    employee: Employee = new Employee();
+    responsive: any;
+    loading: boolean;
 
-  constructor(private service: EmployeeService) { }
+    options = {
+        sortField: 'id',
+        sortOrder: 1,
+        buttonTitle: {add: 'Новый адрес', edit: 'Изменить'},
+        responsive: false,
+        reorderableColumns: false,
+        rowHover: true,
+        paginator: false,
+        rows: 0,
+        autoLayout: false,
+        routerLinkUrl: ['add'],
+    };
 
-  ngOnInit() {
-    this.initSubscription();
-    this.initColumns();
-  }
+    constructor(private subscriptionService: SubscriptionService,
+                private employeeService: EmployeeService,
+                private addressService: EmployeeAddressService) {
+        this.initColumns();
+    }
 
-  ngOnDestroy() {
-    this._propertySubscribtion.unsubscribe();
-  }
+    ngOnInit() {
+        this.loading = true;
+        this.subscription = this.subscriptionService.getCurrentEmployee()
+            .subscribe(employee => {
+                this.employee = employee;
+                if (employee.id !== undefined) {
+                    try {
+                        this.addressService.fetchAllBy(employee.id)
+                            .subscribe(addresses => {
+                                this.addresses = addresses;
+                                this.loading = false;
+                            })
+                    } catch (e) {
+                        console.log(e);
+                        this.loading = false;
+                    }
+                }
+            });
+    }
 
-  private initSubscription() {
-    // this._propertySubscribtion = this.service.property$
-    //   .subscribe(
-    //     p => {
-    //       this.employee = p;
-    //       this.getAddressesByEmployeeId(p.id);
-    //     }
-    //   );
-  }
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
 
-  private getAddressesByEmployeeId(id: number) {
-    this.service.getAddressesByEmployeeId(id)
-      .subscribe(
-        addresses => this.addresses = addresses
-      );
-  }
+    refreshDatasource() {
+        this.ngOnInit();
+    }
 
-  private initColumns(): void {
-    this.columns = [
-      { field: 'id', header: 'ID' },
-      { field: 'presentation', header: 'Адрес' },
-      { field: 'dateStart', header: 'Действует с' }      
-    ];
-  }
+    initColumns() {
+        this.columns = [
+            {field: 'id', header: 'ID'},
+            {field: 'address.presentation', header: 'Адрес'},
+            {field: 'dateStart', header: 'Действует с'}
+        ];
+    }
 
 }

@@ -19,7 +19,7 @@ export class ClientEmployeeDetailsTemplateTableComponent implements OnInit {
     @Input() paginator: boolean;
     @Input() rows: number;
     @Input() loading: boolean;
-    @Input() sortField: string;
+    @Input() sortField: string = 'id';
     @Input() autoLayout: boolean;
     @Input() routerLinkUrl: string[];
     selectedItem: any;
