@@ -192,7 +192,7 @@ import { EmployeeDetailsPostsTabComponent } from './modules/employees/employee-d
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-
+    DynamicDialogModule,
     BreadcrumbModule,
     ButtonModule, 
     CalendarModule,
@@ -244,7 +244,6 @@ import { EmployeeDetailsPostsTabComponent } from './modules/employees/employee-d
     MailInputService,
     MailOutputService,
     MessageService, 
-    // PostService,
     VacationService,
     UtilService,
     SubscriptionService
